@@ -2,13 +2,13 @@
 
 Date: 2026-08-23
 
-Status: **database cutover complete; Vercel production deployment verification failed**.
+Status: **migration 005 and final Vercel production verification passed**.
 
 The Supabase secret was configured without entering source control. All server
 paths passed before migration 005, the migration was applied transactionally,
 and all local production HTTP checks passed again after anon access was closed.
-However, the supplied Vercel URL is serving an older application snapshot and
-is not currently using the verified server-secret implementation.
+The current Vercel deployment now passes the same security, SEO, browser, and
+bounded-access checks through the public production origin.
 
 ## 1. Previous architecture and access audit
 
@@ -142,7 +142,7 @@ both immediately before and after the live RLS cutover.
 
 The post-build scanner checks both forbidden credential markers and the exact
 configured secret/database values when present. The current production build
-passed: 25 client static files checked, zero findings. The source-boundary tests
+passed: 26 client static files checked, zero findings. The source-boundary tests
 also confirm that the Client Component contains no Supabase import or env name.
 
 ## 13. Production verification
@@ -152,7 +152,7 @@ Completed locally against the production build after migration 005:
 - 33/33 unit tests;
 - TypeScript and ESLint;
 - Next.js 16.3.2 production build;
-- exact-value client-bundle security scan (25 static files, zero findings);
+- exact-value client-bundle security scan (26 static files, zero findings);
 - Search, filters, pagination and current-page CSV abuse smoke;
 - browser interaction smoke;
 - sitemap with 7,878 event URLs plus homepage;
@@ -165,36 +165,27 @@ Direct smoke of `https://crypto-market-reactions-nu.vercel.app` on 2026-08-23:
 | Check | Result |
 |---|---|
 | Homepage | PASS — HTTP 200 |
-| Search API | **FAIL — HTTP 502** |
-| Pagination data | **FAIL — depends on the same HTTP 502 API** |
-| Current-page CSV | **FAIL — route returns HTTP 404** |
-| Known valid event page | **FAIL — HTTP 500** |
-| `/sitemap.xml` | **FAIL — HTTP 404** |
-| `/robots.txt` | **FAIL — HTTP 404** |
-| Homepage canonical/query noindex | **FAIL — metadata absent** |
-| Invalid event slug | **FAIL — HTTP 500 instead of 404** |
+| Search API | PASS — HTTP 200, default 25, maximum 50 rows |
+| Pagination | PASS — page 2 HTTP 200 with bounded rows |
+| Current-page CSV | PASS — HTTP 200, `text/csv`, maximum 50 rows |
+| Event pages | PASS — 100 random identities and 20 detailed pages |
+| `/sitemap.xml` | PASS — HTTP 200, 7,879 unique URLs total |
+| `/robots.txt` | PASS — HTTP 200, events allowed and API disallowed |
+| Canonical/query noindex | PASS — clean self-canonicals and query noindex |
+| Invalid event slug | PASS — five tested slugs returned HTTP 404 |
 | Direct anon Supabase SELECT | PASS — HTTP 401, still blocked |
-| Server-side secret access | **FAIL in Vercel; PASS in local production build** |
+| Server-side secret access | PASS — Search, CSV, events and sitemap read successfully |
+| Mobile browser | PASS — 390px homepage/event page without horizontal overflow |
+| Theme/filter interactions | PASS — light default, persistent dark, collapsible filters |
 
-The production HTML also lacks the new `Download current page CSV` control and
-25-row page-size option. These version markers, together with the missing SEO
-routes, show that the redeploy did not contain the current workspace code. The
-502/500 responses are consistent with that older server code continuing to use
-the now-blocked anon key.
+Oversized `limit=1000`, `limit=100000`, and `pageSize=999999` requests were
+clamped to 50. Invalid pagination was rejected, unsupported negative offset was
+safely ignored, and list/CSV responses did not expose event-detail or internal
+fields. Production canonical origin is
+`https://crypto-market-reactions-nu.vercel.app`.
 
-Required remediation:
-
-1. transfer/deploy the current `eth_news_trading_bot/frontend` source, including
-   `/api/events/export`, sitemap/robots, `lib/env.ts`, and migration-era tests;
-2. confirm Vercel Root Directory is `frontend` (or preserve the equivalent
-   monorepo build configuration);
-3. retain `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, and `SITE_URL` in the Production
-   environment and redeploy without restoring anon access;
-4. set `SMOKE_BASE_URL` and `SITE_URL` to the production origin, rerun
-   `npm run smoke:security` and `npm run smoke:seo`, then repeat browser smoke.
-
-Do not roll back migration 005 as a workaround. That would restore unrestricted
-direct dataset extraction.
+Migration 005 must remain applied. Restoring anon SELECT would re-enable direct
+bulk extraction and is not required for any verified website or SEO route.
 
 ## 14. Known limitations
 

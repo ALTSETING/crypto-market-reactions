@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 
 const chrome = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const port = 9333;
+const baseUrl = (process.env.SMOKE_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 const initialUrl =
-  "http://localhost:3000/?asset=ETH&sort=growth&horizon=average&marketDataOnly=true";
+  `${baseUrl}/?asset=ETH&sort=growth&horizon=average&marketDataOnly=true`;
 const profile = resolve(process.env.TEMP ?? ".", `cmrd-browser-smoke-${process.pid}`);
 const reports = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "reports");
 const browser = spawn(
