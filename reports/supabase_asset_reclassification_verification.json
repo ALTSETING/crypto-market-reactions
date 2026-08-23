@@ -6,8 +6,8 @@
     "local_classification_matches": true,
     "generic_coinbase_absent_from_sol": true,
     "rls_enabled": true,
-    "anon_select_only": true,
-    "readonly_policy_present": true,
+    "client_roles_have_no_table_grants": true,
+    "no_public_policies": true,
     "expected_indexes_present": true,
     "fts_generated": true,
     "fts_query_returns_rows": true
@@ -29,11 +29,14 @@
   "indexes": [
     "events_pkey",
     "events_slug_key",
+    "ix_events_btc_average_reaction",
     "ix_events_category",
+    "ix_events_eth_average_reaction",
     "ix_events_primary_asset",
     "ix_events_published_at",
     "ix_events_related_assets_gin",
     "ix_events_search_vector_gin",
+    "ix_events_sol_average_reaction",
     "ix_events_source"
   ]
 }

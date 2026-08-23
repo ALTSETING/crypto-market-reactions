@@ -7,7 +7,7 @@ export class EnvironmentConfigurationError extends Error {
   }
 }
 
-function isServiceRoleJwt(value: string): boolean {
+function isElevatedServerKey(value: string): boolean {
   if (value.startsWith("sb_secret_")) return true;
   if (!value.startsWith("eyJ")) return false;
 
@@ -25,14 +25,16 @@ function isServiceRoleJwt(value: string): boolean {
 
 export function getSupabaseEnvironment(): {
   url: string;
-  anonKey: string;
+  serverKey: string;
 } {
   const url = process.env.SUPABASE_URL?.trim();
-  const anonKey = process.env.SUPABASE_ANON_KEY?.trim();
+  const serverKey =
+    process.env.SUPABASE_SECRET_KEY?.trim() ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
-  if (!url || !anonKey) {
+  if (!url || !serverKey) {
     throw new EnvironmentConfigurationError(
-      "Server configuration is incomplete. SUPABASE_URL and SUPABASE_ANON_KEY are required.",
+      "Server configuration is incomplete. SUPABASE_URL and a Supabase server secret are required.",
     );
   }
 
@@ -46,11 +48,11 @@ export function getSupabaseEnvironment(): {
   if (parsed.protocol !== "https:" && parsed.hostname !== "localhost") {
     throw new EnvironmentConfigurationError("SUPABASE_URL must use HTTPS.");
   }
-  if (isServiceRoleJwt(anonKey)) {
+  if (!isElevatedServerKey(serverKey)) {
     throw new EnvironmentConfigurationError(
-      "SUPABASE_ANON_KEY must not contain a service-role or secret key.",
+      "Use SUPABASE_SECRET_KEY (preferred) or a legacy SUPABASE_SERVICE_ROLE_KEY.",
     );
   }
 
-  return { url: parsed.toString().replace(/\/$/, ""), anonKey };
+  return { url: parsed.toString().replace(/\/$/, ""), serverKey };
 }

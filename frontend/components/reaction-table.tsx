@@ -7,9 +7,12 @@ function reactionValue(event: EventDetail, asset: Asset, horizon: Horizon): numb
 }
 
 export function ReactionTable({ event }: { event: EventDetail }) {
-  const availableAssets = ASSETS.filter((asset) =>
-    HORIZONS.some((horizon) => reactionValue(event, asset, horizon) !== null),
-  );
+  const availableAssets = ASSETS.filter((asset) => {
+    const availableValues = HORIZONS.filter(
+      (horizon) => reactionValue(event, asset, horizon) !== null,
+    ).length;
+    return availableValues > 0 && (asset !== "SOL" || availableValues >= 3);
+  });
 
   if (availableAssets.length === 0) {
     return <p className="text-sm text-slate-400">No verified reaction metrics are available.</p>;
@@ -28,11 +31,11 @@ export function ReactionTable({ event }: { event: EventDetail }) {
           `${asset.toLowerCase()}_reference_latency_minutes` as keyof EventDetail
         ] as number | null;
         return (
-          <section className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5" key={asset}>
+          <section className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5" key={asset}>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="text-sm font-bold tracking-[0.15em] text-white">{asset}</h3>
               {(referenceTime || latency !== null) && (
-                <p className="text-xs text-slate-500">
+                <p className="break-words text-xs text-slate-500">
                   {referenceTime && <>Reference {formatDate(referenceTime, true)} UTC</>}
                   {latency !== null && <> · latency {latency}m</>}
                 </p>

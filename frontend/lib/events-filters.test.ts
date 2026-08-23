@@ -53,6 +53,6 @@ describe("event filter URL state", () => {
 
   it("clears every filter and restores parser defaults", () => {
     const parsed = parseEventsQuery(clearAllEventFilters());
-    expect(parsed).toMatchObject({ asset: null, sort: "newest", page: 1, pageSize: 20 });
+    expect(parsed).toMatchObject({ asset: null, sort: "newest", page: 1, pageSize: 25 });
   });
 });

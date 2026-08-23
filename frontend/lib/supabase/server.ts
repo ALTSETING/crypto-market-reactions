@@ -9,8 +9,8 @@ let cachedClient: SupabaseClient | undefined;
 export function getSupabaseServerClient(): SupabaseClient {
   if (cachedClient) return cachedClient;
 
-  const { url, anonKey } = getSupabaseEnvironment();
-  cachedClient = createClient(url, anonKey, {
+  const { url, serverKey } = getSupabaseEnvironment();
+  cachedClient = createClient(url, serverKey, {
     auth: {
       autoRefreshToken: false,
       detectSessionInUrl: false,

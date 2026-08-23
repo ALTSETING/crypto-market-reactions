@@ -128,6 +128,33 @@ try {
   const mobile = await pageState(cdp);
   const mobileScreenshot = await screenshot(cdp, "homework6-mobile.png");
 
+  const initialTheme = await evaluate(
+    cdp,
+    `({ theme: document.documentElement.dataset.theme, stored: localStorage.getItem('site-theme') })`,
+  );
+  const filtersInitiallyCollapsed = await evaluate(
+    cdp,
+    `document.querySelector('[aria-controls="event-filters"]')?.getAttribute('aria-expanded') === 'false' && !document.querySelector('#event-filters')`,
+  );
+  await evaluate(cdp, `document.querySelector('[aria-label="Switch to dark theme"]')?.click()`);
+  await delay(250);
+  const darkTheme = await evaluate(
+    cdp,
+    `({ theme: document.documentElement.dataset.theme, stored: localStorage.getItem('site-theme') })`,
+  );
+  const darkScreenshot = await screenshot(cdp, "theme-dark-mobile.png");
+  await cdp.send("Page.reload");
+  await delay(1000);
+  const persistedDarkTheme = await evaluate(cdp, `document.documentElement.dataset.theme`);
+  await evaluate(cdp, `document.querySelector('[aria-label="Switch to light theme"]')?.click()`);
+  await delay(250);
+  await evaluate(cdp, `document.querySelector('[aria-controls="event-filters"]')?.click()`);
+  await delay(250);
+  const filtersExpanded = await evaluate(
+    cdp,
+    `document.querySelector('[aria-controls="event-filters"]')?.getAttribute('aria-expanded') === 'true' && Boolean(document.querySelector('#event-filters'))`,
+  );
+
   await evaluate(
     cdp,
     `([...document.querySelectorAll('button')].find((button) => button.textContent.trim() === 'Top losers')?.click(), true)`,
@@ -177,10 +204,42 @@ try {
   await cdp.send("Page.navigate", { url: initialUrl });
   await delay(3000);
   const desktopScreenshot = await screenshot(cdp, "homework6-desktop.png");
+  const eventHref = await evaluate(
+    cdp,
+    `document.querySelector('a[href^="/events/"]')?.getAttribute('href')`,
+  );
+  if (!eventHref) throw new Error("No event link was available for the mobile detail check.");
+  await cdp.send("Emulation.setDeviceMetricsOverride", {
+    width: 390,
+    height: 844,
+    deviceScaleFactor: 1,
+    mobile: true,
+  });
+  await cdp.send("Page.navigate", { url: new URL(eventHref, initialUrl).toString() });
+  await delay(2500);
+  const eventMobile = await evaluate(
+    cdp,
+    `({
+      innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+      heading: document.querySelector('h1')?.textContent.trim(),
+      reactions: document.body.innerText.includes('Price reactions'),
+      error: document.body.innerText.includes('This page could not be loaded')
+    })`,
+  );
+  const eventMobileScreenshot = await screenshot(cdp, "event-mobile.png");
 
   const checks = {
     mobile_no_horizontal_scroll: mobile.scrollWidth <= mobile.innerWidth,
     mobile_loaded: Boolean(mobile.result) && !mobile.error,
+    light_theme_is_default: initialTheme.theme === "light" && initialTheme.stored === null,
+    dark_theme_switches_and_persists:
+      darkTheme.theme === "dark" && darkTheme.stored === "dark" && persistedDarkTheme === "dark",
+    filters_collapsed_by_default: filtersInitiallyCollapsed,
+    filters_can_expand: filtersExpanded,
+    event_mobile_no_horizontal_scroll: eventMobile.scrollWidth <= eventMobile.innerWidth,
+    event_mobile_loaded:
+      Boolean(eventMobile.heading) && eventMobile.reactions && !eventMobile.error,
     average_metric_visible: mobile.metric?.startsWith("Average ETH reaction") ?? false,
     top_losers_url:
       quickAction.url.includes("sort=decline") &&
@@ -197,7 +256,7 @@ try {
   if (Object.values(checks).some((value) => !value)) {
     throw new Error(`Browser smoke test failed: ${JSON.stringify({ checks, mobile, quickAction, horizon })}`);
   }
-  console.log(JSON.stringify({ checks, mobile, quickAction, horizon, screenshots: { mobileScreenshot, desktopScreenshot } }, null, 2));
+  console.log(JSON.stringify({ checks, mobile, quickAction, horizon, eventMobile, screenshots: { mobileScreenshot, darkScreenshot, desktopScreenshot, eventMobileScreenshot } }, null, 2));
 } finally {
   cdp?.close();
   browser.kill();

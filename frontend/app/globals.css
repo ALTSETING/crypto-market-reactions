@@ -1,9 +1,43 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light;
+  --background: #f5f7fb;
+  --foreground: #334155;
+  --text-strong: #0f172a;
+  --text-medium: #334155;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #ffffff;
+  --surface-soft: rgba(15, 23, 42, 0.045);
+  --border: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.2);
+  --grid: rgba(15, 23, 42, 0.035);
+  --positive: #047857;
+  --negative: #be123c;
+  --info: #0369a1;
+  --accent: #047857;
+}
+
+html[data-theme="dark"] {
   color-scheme: dark;
   --background: #070b12;
   --foreground: #f1f5f9;
+  --text-strong: #f8fafc;
+  --text-medium: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --surface: rgba(15, 23, 42, 0.72);
+  --surface-strong: rgba(2, 6, 23, 0.78);
+  --surface-soft: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --grid: rgba(255, 255, 255, 0.018);
+  --positive: #6ee7b7;
+  --negative: #fda4af;
+  --info: #bae6fd;
+  --accent: #6ee7b7;
 }
 
 * {
@@ -17,12 +51,14 @@ html {
 body {
   margin: 0;
   background:
-    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
     var(--background);
   background-size: 48px 48px;
   color: var(--foreground);
   font-family: var(--font-geist), Arial, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 180ms ease, color 180ms ease;
 }
 
 button,
@@ -33,5 +69,59 @@ select {
 
 ::selection {
   background: rgba(52, 211, 153, 0.25);
-  color: white;
+  color: var(--text-strong);
+}
+
+/* Theme-aware aliases for the existing Tailwind palette. */
+.text-white { color: var(--text-strong); }
+.text-slate-200,
+.text-slate-300 { color: var(--text-medium); }
+.text-slate-400,
+.text-slate-500 { color: var(--text-muted); }
+.text-slate-600 { color: var(--text-faint); }
+.text-emerald-200,
+.text-emerald-300,
+.text-emerald-400 { color: var(--positive); }
+.text-rose-100,
+.text-rose-200,
+.text-rose-300 { color: var(--negative); }
+.text-sky-200 { color: var(--info); }
+
+.border-white\/8,
+.border-white\/10,
+.border-white\/15 { border-color: var(--border); }
+.border-white\/20,
+.border-white\/25,
+.border-slate-700 { border-color: var(--border-strong); }
+
+.bg-slate-900,
+.bg-slate-900\/35,
+.bg-slate-900\/40,
+.bg-slate-900\/45,
+.bg-slate-900\/50,
+.bg-slate-900\/55 { background-color: var(--surface); }
+.bg-slate-950\/40,
+.bg-slate-950\/45,
+.bg-slate-950\/55,
+.bg-slate-950\/70,
+.bg-slate-950\/75,
+.bg-slate-950\/80 { background-color: var(--surface-strong); }
+.bg-white\/5,
+.bg-white\/\[0\.025\],
+.bg-white\/\[0\.035\],
+.bg-white\/\[0\.04\] { background-color: var(--surface-soft); }
+
+[class~="hover:text-white"]:hover { color: var(--text-strong); }
+[class~="hover:border-white/20"]:hover,
+[class~="hover:border-white/25"]:hover { border-color: var(--border-strong); }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

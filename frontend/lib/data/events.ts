@@ -3,7 +3,16 @@ import "server-only";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { reactionColumn } from "@/lib/reactions";
 import { isValidEventSlug, nextUtcDate } from "@/lib/validation/events-query";
-import type { EventDetail, EventListItem, EventsPage, EventsQuery } from "@/types/events";
+import type {
+  EventDetail,
+  EventListItem,
+  EventsPage,
+  EventsQuery,
+  SitemapEvent,
+} from "@/types/events";
+
+const SITEMAP_BATCH_SIZE = 1_000;
+const SITEMAP_URL_LIMIT = 50_000;
 
 export const EVENT_LIST_SELECT = [
   "event_id",
@@ -135,4 +144,43 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
     throw new EventsDataError();
   }
   return data as unknown as EventDetail | null;
+}
+
+export async function getSitemapEvents(): Promise<SitemapEvent[]> {
+  const supabase = getSupabaseServerClient();
+  const events: SitemapEvent[] = [];
+
+  for (let from = 0; from < SITEMAP_URL_LIMIT; from += SITEMAP_BATCH_SIZE) {
+    const { data, error } = await supabase
+      .from("events")
+      .select("slug,updated_at")
+      .order("event_id", { ascending: true })
+      .range(from, from + SITEMAP_BATCH_SIZE - 1);
+
+    if (error) {
+      console.error("Supabase sitemap query failed", {
+        code: error.code,
+        message: error.message,
+        from,
+      });
+      throw new EventsDataError("The event sitemap is temporarily unavailable.");
+    }
+
+    const batch = (data ?? []) as unknown as SitemapEvent[];
+    events.push(...batch);
+    if (batch.length < SITEMAP_BATCH_SIZE) break;
+  }
+
+  if (events.length >= SITEMAP_URL_LIMIT) {
+    throw new EventsDataError("The event sitemap has reached its single-file URL limit.");
+  }
+
+  const uniqueSlugs = new Set<string>();
+  for (const event of events) {
+    if (!isValidEventSlug(event.slug) || uniqueSlugs.has(event.slug)) {
+      throw new EventsDataError("The event sitemap contains an invalid or duplicate slug.");
+    }
+    uniqueSlugs.add(event.slug);
+  }
+  return events;
 }

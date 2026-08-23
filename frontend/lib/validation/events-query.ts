@@ -94,7 +94,7 @@ export function parseEventsQuery(params: URLSearchParams): EventsQuery {
   if (page > MAX_PAGE) throw new QueryValidationError(`page must not exceed ${MAX_PAGE}.`);
 
   const pageSizeParam = params.get("pageSize") ?? params.get("limit");
-  const requestedPageSize = parsePositiveInteger(pageSizeParam, 20, "pageSize");
+  const requestedPageSize = parsePositiveInteger(pageSizeParam, 25, "pageSize");
   const pageSize = Math.min(requestedPageSize, 50);
   const from = parseDate(params.get("from"), "from");
   const to = parseDate(params.get("to"), "to");

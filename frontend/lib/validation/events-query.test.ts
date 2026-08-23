@@ -11,12 +11,14 @@ describe("parseEventsQuery", () => {
       horizon: "average",
       marketDataOnly: false,
       page: 1,
-      pageSize: 20,
+      pageSize: 25,
     });
   });
 
   it("caps pageSize=1000 at 50", () => {
     expect(parseEventsQuery(new URLSearchParams("pageSize=1000")).pageSize).toBe(50);
+    expect(parseEventsQuery(new URLSearchParams("limit=100000")).pageSize).toBe(50);
+    expect(parseEventsQuery(new URLSearchParams("pageSize=999999")).pageSize).toBe(50);
   });
 
   it("accepts combined filters", () => {
@@ -29,6 +31,11 @@ describe("parseEventsQuery", () => {
 
   it("rejects malformed and excessive values", () => {
     expect(() => parseEventsQuery(new URLSearchParams("page=-1"))).toThrow(QueryValidationError);
+    expect(() => parseEventsQuery(new URLSearchParams("page=0"))).toThrow(QueryValidationError);
+    expect(() => parseEventsQuery(new URLSearchParams("page=invalid"))).toThrow(
+      QueryValidationError,
+    );
+    expect(() => parseEventsQuery(new URLSearchParams("limit=-1"))).toThrow(QueryValidationError);
     expect(() => parseEventsQuery(new URLSearchParams("asset=XRP"))).toThrow(QueryValidationError);
     expect(() => parseEventsQuery(new URLSearchParams("from=2025-02-30"))).toThrow(
       QueryValidationError,

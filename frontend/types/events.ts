@@ -82,6 +82,11 @@ export interface EventsPage {
   totalPages: number;
 }
 
+export interface SitemapEvent {
+  slug: string;
+  updated_at: string;
+}
+
 export interface ApiErrorBody {
   error: string;
   code: string;

@@ -22,7 +22,7 @@ interface EventCardProps {
 
 export function EventCard({ event, selectedAsset, selectedHorizon }: EventCardProps) {
   return (
-    <article className="group rounded-2xl border border-white/10 bg-slate-950/55 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition hover:border-emerald-400/30 hover:bg-slate-950/75 sm:p-6">
+    <article className="group min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.12)] transition hover:border-emerald-400/30 hover:bg-slate-950/75 sm:p-6">
       <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-400">
         <time dateTime={event.published_at}>{formatDate(event.published_at, true)} UTC</time>
         <span aria-hidden="true">•</span>
@@ -32,7 +32,7 @@ export function EventCard({ event, selectedAsset, selectedHorizon }: EventCardPr
         </span>
       </div>
 
-      <h2 className="mt-4 max-w-4xl text-lg font-semibold leading-snug text-white sm:text-xl">
+      <h2 className="mt-4 max-w-4xl break-words text-base font-semibold leading-snug text-white min-[390px]:text-lg sm:text-xl">
         <Link
           className="outline-none transition group-hover:text-emerald-200 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300"
           href={`/events/${event.slug}`}
@@ -67,14 +67,14 @@ export function EventCard({ event, selectedAsset, selectedHorizon }: EventCardPr
         </div>
       )}
 
-      <div className="mt-5 flex items-center justify-between border-t border-white/8 pt-4">
+      <div className="mt-5 flex flex-col items-start gap-3 border-t border-white/8 pt-4 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
         <span className="text-xs text-slate-500">
           {selectedAsset
             ? `${selectedAsset} · ${HORIZON_LABELS[selectedHorizon]}`
             : "Reference returns · 1h / 24h"}
         </span>
         <Link
-          className="text-sm font-semibold text-emerald-300 outline-none transition hover:text-emerald-200 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300"
+          className="inline-flex min-h-10 items-center text-sm font-semibold text-emerald-300 outline-none transition hover:text-emerald-200 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300"
           href={`/events/${event.slug}`}
         >
           View event <span aria-hidden="true">→</span>

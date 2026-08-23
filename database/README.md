@@ -6,6 +6,8 @@ This directory contains a standalone SQL migration for the future Crypto Market 
 
 - `migrations/001_create_events.sql` — table, constraints, generated full-text document and indexes.
 - `migrations/003_allow_empty_related_assets.sql` — permits crypto-relevant events without evidence for a supported asset.
+- `migrations/005_close_public_events_access.sql` — removes browser-role access
+  after the Next.js server has a working secret/service-role credential.
 - `checks/verify_events.sql` — post-import counts, coverage checks and example queries.
 - `../scripts/database/import_events.py` — schema validation, slug preparation and idempotent COPY/upsert.
 
@@ -139,3 +141,15 @@ No public write policy is created. The `authenticated` role receives no table
 privileges until the product has an explicit authenticated access design.
 Never expose `DATABASE_URL`, a database password, or the Supabase service-role
 key in browser code.
+
+The public-read migration above documents the earlier MVP state. The protected
+server-only architecture must finish with `005_close_public_events_access.sql`:
+
+```powershell
+python -m scripts.database.apply_sql_migration database/migrations/005_close_public_events_access.sql
+```
+
+Apply migration 005 only after `SUPABASE_SECRET_KEY` is configured and Search,
+event pages, and sitemap have passed using that credential. It keeps RLS
+enabled, drops all anon read policies, revokes every table privilege from
+`anon` and `authenticated`, and preserves SELECT for `service_role`.
