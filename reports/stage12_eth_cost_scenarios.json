@@ -1,0 +1,24 @@
+{
+  "dataset_version": "stage12_eth_v1",
+  "costs_not_subtracted_from_targets": true,
+  "scenarios": {
+    "low": {
+      "assumed_fee_bps": 2,
+      "assumed_slippage_bps": 2,
+      "latency_minutes": 1,
+      "round_trip_cost_bps": 8
+    },
+    "base": {
+      "assumed_fee_bps": 5,
+      "assumed_slippage_bps": 5,
+      "latency_minutes": 1,
+      "round_trip_cost_bps": 20
+    },
+    "stress": {
+      "assumed_fee_bps": 10,
+      "assumed_slippage_bps": 15,
+      "latency_minutes": 2,
+      "round_trip_cost_bps": 50
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "phase": "submitted",
+  "submitted_at": "2026-07-19T03:24:02.334554+00:00",
+  "batch_id": "batch_6a5c435daa7c819091514c4915d3a009",
+  "input_file_id": "file-HbrpPzfwDFmBbx7Q55YLVX",
+  "status": "completed",
+  "retry_selected": 28,
+  "submitted": 28,
+  "model": "gpt-5-mini",
+  "prompt_version": "high_impact_semantic_v2_1",
+  "max_output_tokens": 400,
+  "estimated_retry_cost_usd": 0.01941375,
+  "maximum_retry_cost_usd": 0.02870975,
+  "prior_batch_id": "batch_6a5c3f61149881909855d38bff25e326",
+  "jsonl_sha256": "7e76f76652eb7d3021d1345d049ad1087a17ff59ce4c61aefeb5ec40ae9c89ee",
+  "automatic_third_batch": false,
+  "duplicate_batch_guard": true,
+  "checked_at": "2026-07-19T03:29:37.336902+00:00",
+  "request_counts": {
+    "completed": 28,
+    "failed": 0,
+    "total": 28
+  },
+  "output_file_id": "file-XC5HRaJASjGkewBqRZTEyd",
+  "error_file_id": null
+}

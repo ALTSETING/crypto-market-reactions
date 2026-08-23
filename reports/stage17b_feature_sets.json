@@ -1,0 +1,196 @@
+{
+  "stage": "17B",
+  "status": "PASS",
+  "feature_sets": {
+    "semantic_only": [
+      "source_event_type",
+      "source_information_status",
+      "ai_asset_relevance",
+      "ai_content_valence_score",
+      "ai_importance",
+      "ai_novelty",
+      "ai_specificity",
+      "ai_actionability",
+      "ai_execution_certainty",
+      "ai_institutional_relevance",
+      "ai_regulatory_strength",
+      "ai_technical_significance",
+      "ai_fundamental_relevance",
+      "ai_directness",
+      "metadata_source",
+      "metadata_asset",
+      "ai_content_valence",
+      "verified_primary_source"
+    ],
+    "market_only": [
+      "pre_return_5m",
+      "pre_return_20m",
+      "pre_return_60m",
+      "pre_return_180m",
+      "pre_return_720m",
+      "pre_btc_return_5m",
+      "pre_btc_return_20m",
+      "pre_btc_return_60m",
+      "pre_btc_return_180m",
+      "pre_btc_return_720m",
+      "pre_realized_vol_20m",
+      "pre_realized_vol_60m",
+      "pre_realized_vol_180m",
+      "pre_realized_vol_720m",
+      "pre_volume_z60",
+      "pre_volume_vs_avg60",
+      "pre_trend_regime",
+      "pre_relative_strength_1h",
+      "pre_rolling_corr_btc",
+      "pre_rolling_beta_btc",
+      "context_btc_state",
+      "context_asset_state",
+      "context_volatility",
+      "context_relative_strength",
+      "metadata_asset"
+    ],
+    "semantic_plus_market": [
+      "source_event_type",
+      "source_information_status",
+      "ai_asset_relevance",
+      "ai_content_valence_score",
+      "ai_importance",
+      "ai_novelty",
+      "ai_specificity",
+      "ai_actionability",
+      "ai_execution_certainty",
+      "ai_institutional_relevance",
+      "ai_regulatory_strength",
+      "ai_technical_significance",
+      "ai_fundamental_relevance",
+      "ai_directness",
+      "metadata_source",
+      "metadata_asset",
+      "ai_content_valence",
+      "verified_primary_source",
+      "pre_return_5m",
+      "pre_return_20m",
+      "pre_return_60m",
+      "pre_return_180m",
+      "pre_return_720m",
+      "pre_btc_return_5m",
+      "pre_btc_return_20m",
+      "pre_btc_return_60m",
+      "pre_btc_return_180m",
+      "pre_btc_return_720m",
+      "pre_realized_vol_20m",
+      "pre_realized_vol_60m",
+      "pre_realized_vol_180m",
+      "pre_realized_vol_720m",
+      "pre_volume_z60",
+      "pre_volume_vs_avg60",
+      "pre_trend_regime",
+      "pre_relative_strength_1h",
+      "pre_rolling_corr_btc",
+      "pre_rolling_beta_btc",
+      "context_btc_state",
+      "context_asset_state",
+      "context_volatility",
+      "context_relative_strength"
+    ]
+  },
+  "feature_counts": {
+    "semantic_only": 18,
+    "market_only": 25,
+    "semantic_plus_market": 42
+  },
+  "semantic_only_not_the_only_feature_set": true,
+  "future_or_reaction_features": [],
+  "surprise_level_excluded": true,
+  "leakage": 0,
+  "predictive_ai_fields": 0,
+  "discovery_splits": [
+    "train",
+    "validation"
+  ],
+  "discovery_rows": 534,
+  "discovery_events": 434,
+  "old_stage17_test_rows_used": 0,
+  "old_stage17_test_events_used": 0,
+  "old_stage17_test_status_preserved": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+  "old_stage17_lock_sha256": "5e81bf106834c3a8edf640cad718e2c113106059460198ffc34aa6dfa60831f9",
+  "stage17_artifact_count": 61,
+  "stage17_aggregate_sha256_before": "e59dafb6e1634164ff514b4ee49cd6369657ec1b4e5db10aa6f8bc28592a0404",
+  "horizons_checked": [
+    "20m",
+    "40m",
+    "1h",
+    "3h",
+    "5h",
+    "8h",
+    "12h"
+  ],
+  "primary_horizons": [
+    "1h",
+    "3h",
+    "12h"
+  ],
+  "neutral_thresholds": [
+    0.1,
+    0.25,
+    0.5
+  ],
+  "primary_latency_minutes": 1,
+  "sensitivity_latencies": [
+    0,
+    2,
+    3,
+    5
+  ],
+  "models": [
+    "logistic_regression",
+    "class_weighted_logistic",
+    "shallow_decision_tree",
+    "shallow_random_forest",
+    "gradient_boosting",
+    "explicit_subgroup_rule"
+  ],
+  "model_parameters": {
+    "logistic_regression": {
+      "max_iter": 2500,
+      "class_weight": null
+    },
+    "class_weighted_logistic": {
+      "max_iter": 2500,
+      "class_weight": "balanced"
+    },
+    "shallow_decision_tree": {
+      "max_depth": 3,
+      "min_samples_leaf": 15,
+      "class_weight": "balanced"
+    },
+    "shallow_random_forest": {
+      "n_estimators": 120,
+      "max_depth": 4,
+      "min_samples_leaf": 8,
+      "class_weight": "balanced"
+    },
+    "gradient_boosting": {
+      "n_estimators": 80,
+      "learning_rate": 0.05,
+      "max_depth": 2
+    }
+  },
+  "rules_generated": 500,
+  "maximum_rules": 500,
+  "maximum_conditions_per_rule": 2,
+  "threshold_source": "train_only",
+  "oos_availability": {
+    "old_opened_test_rows": 134,
+    "old_opened_test_events": 116,
+    "old_opened_test_max_published_at": "2026-07-01T00:00:00+00:00",
+    "new_untouched_events": 0,
+    "new_untouched_event_asset_rows": 0,
+    "new_min_published_at": null,
+    "new_max_published_at": null,
+    "available": false
+  },
+  "openai_api_requests": 0,
+  "paper_trading": false,
+  "real_trading": false
+}

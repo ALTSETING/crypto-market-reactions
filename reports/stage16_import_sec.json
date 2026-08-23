@@ -1,0 +1,25 @@
+{
+  "source": "sec",
+  "start": "2020-01-01",
+  "end": "2026-07-01",
+  "resume": true,
+  "dry_run": false,
+  "fetched": 500,
+  "accepted": 462,
+  "rejected": 38,
+  "rejection_reasons": {
+    "below_crypto_relevance_threshold": 38
+  },
+  "in_batch_duplicates": 0,
+  "inserted": 0,
+  "updated": 0,
+  "duplicates": 500,
+  "assets_inserted": 0,
+  "asset_counts": {
+    "BTC": 387,
+    "ETH": 149,
+    "SOL": 74
+  },
+  "earliest": "2021-05-13T00:00:00+00:00",
+  "latest": "2026-07-01T12:47:58+00:00"
+}

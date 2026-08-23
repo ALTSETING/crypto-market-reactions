@@ -1,0 +1,36 @@
+{
+  "counts": {
+    "news_articles": 11030,
+    "news_assets": 22138,
+    "news_analysis": 7115,
+    "news_market_reactions": 22109,
+    "high_impact_events": 752,
+    "high_impact_event_assets": 862,
+    "high_impact_event_analysis": 714,
+    "high_impact_market_reactions": 3340,
+    "market_candles": 12368894
+  },
+  "candles": [
+    {
+      "symbol": "BTCUSDT",
+      "n": 4636622,
+      "first": "2017-08-17T04:00:00+00:00",
+      "last": "2026-07-01T23:59:00+00:00",
+      "checksum": "21096698940473"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "n": 4636621,
+      "first": "2017-08-17T04:00:00+00:00",
+      "last": "2026-07-01T23:59:00+00:00",
+      "checksum": "32295742716233"
+    },
+    {
+      "symbol": "SOLUSDT",
+      "n": 3095651,
+      "first": "2020-08-11T06:00:00+00:00",
+      "last": "2026-07-01T23:59:00+00:00",
+      "checksum": "23228334776879"
+    }
+  ]
+}

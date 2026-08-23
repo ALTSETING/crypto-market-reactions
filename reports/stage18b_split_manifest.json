@@ -1,0 +1,30 @@
+{
+  "protocol_a": "CORRECTED_RETROSPECTIVE_EVALUATION",
+  "protocol_b": "NESTED_WALK_FORWARD_5_FOLDS",
+  "random_split": false,
+  "event_split_leakage": 0,
+  "splits": {
+    "train": 5295,
+    "validation": 1135,
+    "test": 1135,
+    "historical_external": 313
+  },
+  "date_ranges": {
+    "historical_external": {
+      "start": "2017-01-03T10:48:14+00:00",
+      "end": "2022-01-29T02:03:57+00:00"
+    },
+    "test": {
+      "start": "2026-04-18T04:54:49.914000+00:00",
+      "end": "2026-07-01T00:00:00+00:00"
+    },
+    "train": {
+      "start": "2020-01-11T00:48:29+00:00",
+      "end": "2026-02-12T00:47:55+00:00"
+    },
+    "validation": {
+      "start": "2026-02-12T02:13:43.221000+00:00",
+      "end": "2026-04-18T03:51:35.907000+00:00"
+    }
+  }
+}

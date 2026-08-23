@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "mode": "offline_dry_run_comparison",
+  "events": 714,
+  "api_requests": 0,
+  "jsonl_created": false,
+  "jsonl_uploaded": false,
+  "batch_submitted": false,
+  "include_reason": false,
+  "max_body_tokens": 900,
+  "v2": {
+    "prompt_version": "high_impact_semantic_v2",
+    "input_tokens": {
+      "total": 1095032,
+      "average": 1533.6582633053222,
+      "median": 1274.0,
+      "p95": 2550.850000000001,
+      "max": 4726
+    },
+    "estimated_output_tokens_per_event": 285,
+    "estimated_output_tokens_total": 203490,
+    "estimated_batch_cost_usd": {
+      "gpt-5-nano": 0.1361476,
+      "gpt-5-mini": 0.6807380000000001
+    },
+    "schema_valid": true,
+    "field_counts": {
+      "top_level": 28,
+      "asset_block": 6,
+      "total": 34
+    }
+  },
+  "v2_1": {
+    "prompt_version": "high_impact_semantic_v2_1",
+    "input_tokens": {
+      "total": 772647,
+      "average": 1082.138655462185,
+      "median": 897.0,
+      "p95": 1811.0,
+      "max": 1929
+    },
+    "estimated_output_tokens_per_event": 234,
+    "estimated_output_tokens_total": 167076,
+    "estimated_batch_cost_usd": {
+      "gpt-5-nano": 0.10546275,
+      "gpt-5-mini": 0.52731375
+    },
+    "schema_valid": true,
+    "field_counts": {
+      "top_level": 25,
+      "asset_block": 5,
+      "total": 30
+    }
+  },
+  "delta_v2_1_minus_v2": {
+    "input_tokens_total": -322385,
+    "average_input_tokens": -451.51960784313724,
+    "median_input_tokens": -377.0,
+    "p95_input_tokens": -739.8500000000008,
+    "max_input_tokens": -2797,
+    "estimated_output_tokens_total": -36414,
+    "estimated_batch_cost_usd": {
+      "gpt-5-nano": -0.030684850000000014,
+      "gpt-5-mini": -0.15342425000000004
+    }
+  },
+  "removed_top_level_fields": [
+    "ecosystem_impact",
+    "historical_uniqueness",
+    "market_attention",
+    "new_information_ratio"
+  ],
+  "removed_asset_fields": [
+    "reason"
+  ],
+  "added_fields": [
+    "surprise_evidence"
+  ],
+  "changed_fields": {
+    "first_disclosure": {
+      "from": "boolean",
+      "to": "yes|no|unclear"
+    },
+    "surprise_level": {
+      "from": "integer",
+      "to": "integer|null"
+    },
+    "surprise_evidence": {
+      "from": "absent",
+      "to": "sufficient|insufficient"
+    }
+  },
+  "redundancy_decisions": {
+    "new_information_ratio": {
+      "decision": "removed",
+      "reason": "Strong semantic overlap with novelty; a reliable ratio needs a comparison corpus, not one isolated message.",
+      "evidence_type": "schema_identifiability_review"
+    },
+    "ecosystem_impact": {
+      "decision": "removed",
+      "reason": "Overlaps importance plus economic, technical, adoption, and fundamental significance scores.",
+      "evidence_type": "schema_identifiability_review"
+    },
+    "empirical_correlation_available": false,
+    "note": "Stage 16 v2 has offline dry-run metadata only; no model outputs exist, so empirical score correlations were not fabricated."
+  }
+}

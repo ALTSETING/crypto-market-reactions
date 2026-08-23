@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "generated_at": "2026-07-13T12:07:00.559249+00:00",
+  "filters": {
+    "start": "2023-01-01",
+    "end": "2026-07-01",
+    "source": null,
+    "symbols": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT"
+    ]
+  },
+  "summary": {
+    "articles": 11009,
+    "article_assets": 22109,
+    "reactions": 22109,
+    "missing_reactions": 0,
+    "future_dates": 0,
+    "published_after_modified": 0,
+    "short_articles": 0,
+    "duplicate_urls": 0,
+    "duplicate_canonical_urls": 0,
+    "duplicate_content_hashes": 0,
+    "anomalous_returns": 0,
+    "missing_candle_points": 0
+  },
+  "distributions": {
+    "articles_per_source": {
+      "audit": 1,
+      "coindesk": 4639,
+      "cointelegraph": 1898,
+      "decrypt": 4471
+    },
+    "articles_per_asset": {
+      "BTC": 9588,
+      "ETH": 7058,
+      "SOL": 5463
+    },
+    "time_source": {
+      "audit": 1,
+      "json_ld": 9107,
+      "meta_tag": 2,
+      "trafilatura": 1899
+    },
+    "time_confidence": {
+      "0.70-0.899": 1899,
+      "0.95-1.00": 9110
+    },
+    "articles_per_month": {
+      "2023-01": 1,
+      "2023-06": 1,
+      "2024-01": 1,
+      "2024-02": 1,
+      "2024-07": 1,
+      "2024-10": 2,
+      "2024-11": 5,
+      "2024-12": 11,
+      "2025-01": 1,
+      "2025-02": 103,
+      "2025-03": 429,
+      "2025-04": 159,
+      "2025-05": 703,
+      "2025-06": 368,
+      "2025-07": 468,
+      "2025-08": 832,
+      "2025-09": 847,
+      "2025-10": 658,
+      "2025-11": 664,
+      "2025-12": 340,
+      "2026-01": 850,
+      "2026-02": 987,
+      "2026-03": 1047,
+      "2026-04": 916,
+      "2026-05": 864,
+      "2026-06": 750
+    }
+  }
+}

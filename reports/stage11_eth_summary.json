@@ -1,0 +1,751 @@
+{
+  "phase_status": "LOCAL_STEPS_1_6_PASS",
+  "overall_stage11_status": "PENDING_USER_CONFIRMATION_FOR_PAID_ENRICHMENT",
+  "created_at": "2026-07-18T02:53:04.756970+00:00",
+  "api_requests_made": 0,
+  "paid_enrichment_run": false,
+  "dataset_b_created": false,
+  "real_trading_run": false,
+  "paper_trading_run": false,
+  "build": {
+    "source_rows": 7065,
+    "event_rows": 6858,
+    "dataset_rows": 6851,
+    "features": 120,
+    "targets": 106,
+    "beta_fallbacks": 0,
+    "missing_events": [
+      {
+        "news_id": 17,
+        "event_key": "20ac46fad08b47dea568b944e4fff37e",
+        "published_at": "2018-09-13T18:33:53+00:00",
+        "reason": "published_before_candle_coverage"
+      },
+      {
+        "news_id": 20,
+        "event_key": "c3f32223388941db85754b0da8aa906c",
+        "published_at": "2026-07-10T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      },
+      {
+        "news_id": 22,
+        "event_key": "d7b2850b2ce74cdda105a5bbb14c944a",
+        "published_at": "2026-07-10T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      },
+      {
+        "news_id": 2,
+        "event_key": "bea5da72dd2144da975ba559ebb964a4",
+        "published_at": "2026-07-11T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      },
+      {
+        "news_id": 5,
+        "event_key": "fc10a0ac097d4a17bd75aed809c54be5",
+        "published_at": "2026-07-12T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      },
+      {
+        "news_id": 6,
+        "event_key": "5be0bf5c6ae543829254f0409e0c832f",
+        "published_at": "2026-07-12T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      },
+      {
+        "news_id": 9,
+        "event_key": "1f935ef8f8f8483eaf196fb7b981e799",
+        "published_at": "2026-07-13T00:00:00+00:00",
+        "reason": "published_after_candle_coverage"
+      }
+    ]
+  },
+  "ablation": {
+    "rows": 388,
+    "resumed": true
+  },
+  "walkforward": {
+    "rows": 198,
+    "folds": 3,
+    "resumed": true
+  },
+  "ablation_comparison": {
+    "test_comparisons": 44,
+    "test_c_beats_a": 22,
+    "test_c_win_rate": 0.5,
+    "walkforward_comparisons": 66,
+    "walkforward_c_beats_a": 21,
+    "walkforward_c_win_rate": 0.3181818181818182,
+    "details": [
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_15m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3808795689529634,
+        "market_plus_ai": 0.3802825105577399,
+        "ai_increment": -0.0005970583952235042,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_1h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3745152552038779,
+        "market_plus_ai": 0.395800129065178,
+        "ai_increment": 0.02128487386130007,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_24h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3281118889326682,
+        "market_plus_ai": 0.3057322549444082,
+        "ai_increment": -0.022379633988259984,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_30m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.397898516717462,
+        "market_plus_ai": 0.4333121731375852,
+        "ai_increment": 0.035413656420123174,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_4h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3773417389020226,
+        "market_plus_ai": 0.3886599247001138,
+        "ai_increment": 0.011318185798091185,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abnormal_direction_5m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.332591493570722,
+        "market_plus_ai": 0.3318496538081107,
+        "ai_increment": -0.0007418397626112738,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_15m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.071384993116708,
+        "market_plus_ai": 0.0738621924453772,
+        "ai_increment": -0.034701962142368016,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_1h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.1479166964224801,
+        "market_plus_ai": 0.1454734362796834,
+        "ai_increment": 0.016517811727069995,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_24h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.9103545414706736,
+        "market_plus_ai": 0.8957619389510121,
+        "ai_increment": 0.016029581723278123,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_30m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0986805847134673,
+        "market_plus_ai": 0.096882759546378,
+        "ai_increment": 0.018218631074284137,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_4h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.3120577311966503,
+        "market_plus_ai": 0.3115047410969169,
+        "ai_increment": 0.001772076268108672,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_abs_abnormal_return_5m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0420291568345137,
+        "market_plus_ai": 0.0419607771017624,
+        "ai_increment": 0.0016269594229676553,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_future_realized_vol_15m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.083341024838892,
+        "market_plus_ai": 0.0831290259982981,
+        "ai_increment": 0.0025437513037991763,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_future_realized_vol_1h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.1497482907999339,
+        "market_plus_ai": 0.1506599521495918,
+        "ai_increment": -0.006087958298474926,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_future_realized_vol_24h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.6939862956738965,
+        "market_plus_ai": 0.6882945181595577,
+        "ai_increment": 0.008201570477428222,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_future_realized_vol_4h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.3001746463340655,
+        "market_plus_ai": 0.3083371323236294,
+        "ai_increment": -0.027192456422451702,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_15m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5,
+        "market_plus_ai": 0.5,
+        "ai_increment": 0.0,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_1h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.4988978692138133,
+        "market_plus_ai": 0.4974283614988978,
+        "ai_increment": -0.0014695077149154967,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_24h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5794584908651559,
+        "market_plus_ai": 0.5833077118933123,
+        "ai_increment": 0.0038492210281564354,
+        "c_beats_a": true
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_30m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.4989019033674963,
+        "market_plus_ai": 0.4989019033674963,
+        "ai_increment": 0.0,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_4h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5827846630518978,
+        "market_plus_ai": 0.5620981797056546,
+        "ai_increment": -0.020686483346243234,
+        "c_beats_a": false
+      },
+      {
+        "model": "hist_gradient_boosting",
+        "target": "target_strong_abnormal_5m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 1.0,
+        "market_plus_ai": 1.0,
+        "ai_increment": 0.0,
+        "c_beats_a": false
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_15m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.4291903305664773,
+        "market_plus_ai": 0.4522353283821173,
+        "ai_increment": 0.023044997815639956,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_1h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3798230606456261,
+        "market_plus_ai": 0.3742646286374619,
+        "ai_increment": -0.005558432008164194,
+        "c_beats_a": false
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_24h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3495119457693552,
+        "market_plus_ai": 0.3533143745476031,
+        "ai_increment": 0.003802428778247935,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_30m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3895094790780832,
+        "market_plus_ai": 0.4022349957697756,
+        "ai_increment": 0.012725516691692418,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_4h_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.3758768934419053,
+        "market_plus_ai": 0.381656597495841,
+        "ai_increment": 0.005779704053935741,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_abnormal_direction_5m_band_025",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.4768203606482539,
+        "market_plus_ai": 0.425785589287073,
+        "ai_increment": -0.0510347713611809,
+        "c_beats_a": false
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_15m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.4930656934306569,
+        "market_plus_ai": 0.4934306569343065,
+        "ai_increment": 0.0003649635036495624,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_1h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5378765613519472,
+        "market_plus_ai": 0.5860396767083027,
+        "ai_increment": 0.048163115356355535,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_24h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.58214634005736,
+        "market_plus_ai": 0.5750471994965387,
+        "ai_increment": -0.007099140560821282,
+        "c_beats_a": false
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_30m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5612005856515373,
+        "market_plus_ai": 0.665592972181552,
+        "ai_increment": 0.1043923865300147,
+        "c_beats_a": true
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_4h_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.5566227730441519,
+        "market_plus_ai": 0.5484895429899302,
+        "ai_increment": -0.008133230054221618,
+        "c_beats_a": false
+      },
+      {
+        "model": "logistic_regression",
+        "target": "target_strong_abnormal_5m_100",
+        "task": "classification",
+        "metric": "balanced_accuracy",
+        "market_only": 0.9912472647702408,
+        "market_plus_ai": 0.9978118161925602,
+        "ai_increment": 0.006564551422319376,
+        "c_beats_a": true
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_15m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0693647759793436,
+        "market_plus_ai": 0.0687994398955963,
+        "ai_increment": 0.008150189714670944,
+        "c_beats_a": true
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_1h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.1314843161899362,
+        "market_plus_ai": 0.1338983336887324,
+        "ai_increment": -0.018359737258009073,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_24h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.7388068368713203,
+        "market_plus_ai": 0.7652848989173369,
+        "ai_increment": -0.03583895102831634,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_30m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0871356121071298,
+        "market_plus_ai": 0.0893616695715276,
+        "ai_increment": -0.025547045697698636,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_4h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.2832978276602177,
+        "market_plus_ai": 0.2892954977340569,
+        "ai_increment": -0.0211709003326092,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_abs_abnormal_return_5m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0403808685271065,
+        "market_plus_ai": 0.0430594008678544,
+        "ai_increment": -0.06633171693545618,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_future_realized_vol_15m",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.0913620541341438,
+        "market_plus_ai": 0.0960543885752487,
+        "ai_increment": -0.051359773875216286,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_future_realized_vol_1h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.1802997200225379,
+        "market_plus_ai": 0.1806070430389972,
+        "ai_increment": -0.0017045118895407075,
+        "c_beats_a": false
+      },
+      {
+        "model": "ridge",
+        "target": "target_future_realized_vol_24h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.7239204670130887,
+        "market_plus_ai": 0.7140660711129158,
+        "ai_increment": 0.013612539428305356,
+        "c_beats_a": true
+      },
+      {
+        "model": "ridge",
+        "target": "target_future_realized_vol_4h",
+        "task": "regression",
+        "metric": "mae_reduction_fraction",
+        "market_only": 0.4078923531669247,
+        "market_plus_ai": 0.4058843498376486,
+        "ai_increment": 0.0049228756403146825,
+        "c_beats_a": true
+      }
+    ]
+  },
+  "enrichment_dry_run": {
+    "status": "DRY_RUN_PASS",
+    "api_requests_made": 0,
+    "model": "gpt-5-mini-2025-08-07",
+    "prompt_version": "eth_market_context_v1",
+    "event_count": 6858,
+    "estimated_input_tokens": 5302852,
+    "estimated_output_tokens_upper_bound": 1234440,
+    "standard_cost_usd_upper_bound": 3.794593,
+    "batch_cost_usd_upper_bound": 1.8972965,
+    "ab_test_30_standard_cost_usd_upper_bound": 0.01551225,
+    "pricing_standard_per_million": {
+      "input": 0.25,
+      "output": 2.0
+    },
+    "pricing_batch_per_million": {
+      "input": 0.125,
+      "output": 1.0
+    },
+    "max_article_tokens": 900,
+    "max_output_tokens": 180,
+    "json_schema": {
+      "type": "object",
+      "properties": {
+        "surprise_direction": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "negative",
+            "neutral",
+            "mixed"
+          ]
+        },
+        "surprise_magnitude": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "expected_by_market": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "already_priced_in": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "information_freshness": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "primary_source_probability": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "actionable_novelty": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "event_specificity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "confidence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "surprise_direction",
+        "surprise_magnitude",
+        "expected_by_market",
+        "already_priced_in",
+        "information_freshness",
+        "primary_source_probability",
+        "actionable_novelty",
+        "event_specificity",
+        "confidence"
+      ],
+      "additionalProperties": false
+    },
+    "system_prompt": "Assess only how surprising and newly actionable this event was for ETH at publication time, using article facts only. Do not infer from later markets or events. Return strict JSON only. Scores are 0-100: surprise_magnitude deviation from typical expectations; expected_by_market prior broad anticipation; already_priced_in likely prior price incorporation; information_freshness new versus repeated information; primary_source_probability proximity to an original report; actionable_novelty likelihood of changing a trader's position; event_specificity concrete event versus commentary; confidence label certainty. No explanation or summary.",
+    "leakage_count": 0
+  },
+  "required_local_reports": [
+    "stage11_eth_event_selection.csv",
+    "stage11_eth_abnormal_returns.parquet",
+    "stage11_eth_market_features.parquet",
+    "stage11_eth_dataset_a.parquet",
+    "stage11_eth_dataset_a_sample.csv",
+    "stage11_eth_dataset_schema.json",
+    "stage11_eth_feature_list.csv",
+    "stage11_eth_splits.json",
+    "stage11_eth_ablation_metrics.csv",
+    "stage11_eth_walkforward_metrics.csv",
+    "stage11_eth_target_metrics.csv",
+    "stage11_eth_feature_importance.csv",
+    "stage11_eth_enrichment_selection.json",
+    "stage11_eth_enrichment_cost_estimate.json",
+    "stage11_eth_enrichment_input_preview.json",
+    "stage11_eth_enrichment_model_comparison.json"
+  ],
+  "limitations": [
+    "Seven Stage 9 events lie outside complete candle coverage and are documented.",
+    "Dataset B and model D require paid enrichment and were not created.",
+    "Signal simulation, full robustness, and final predictive claim are deferred until after the enrichment decision.",
+    "Local A/B/C results are baseline experiments, not a production model or trading proof."
+  ],
+  "pytest": {
+    "status": "PASS",
+    "passed": 46,
+    "failed": 0,
+    "summary": "46 passed in 8.22s"
+  },
+  "local_audit": {
+    "db_counts": {
+      "news_articles": 11030,
+      "news_assets": 22138,
+      "news_market_reactions": 22109,
+      "market_candles": 5520720,
+      "news_analysis": 7115,
+      "news_market_context_analysis": 0
+    },
+    "event_selection_rows": 6858,
+    "event_keys_unique": 6858,
+    "event_selection_rule_match": true,
+    "dataset_shape": [
+      6851,
+      234
+    ],
+    "dataset_event_keys_unique": 6851,
+    "split_counts": {
+      "train": 4110,
+      "test": 1371,
+      "validation": 1370
+    },
+    "chronological_boundaries_ok": true,
+    "walkforward_no_overlap_and_ordered": true,
+    "feature_count": 120,
+    "target_count": 106,
+    "target_leakage_columns": [],
+    "raw_text_columns_present": [],
+    "feature_cutoff_violations": 0,
+    "baseline_integrity_violations": 0,
+    "abnormal_formula_max_error": {
+      "5m": 0.0,
+      "15m": 0.0,
+      "30m": 0.0,
+      "1h": 0.0,
+      "4h": 0.0,
+      "24h": 0.0
+    },
+    "market_adjusted_formula_max_error": {
+      "5m": 0.0,
+      "15m": 0.0,
+      "30m": 0.0,
+      "1h": 0.0,
+      "4h": 0.0,
+      "24h": 0.0
+    },
+    "stored_eth_reaction_max_difference": {
+      "5m": 4.999140877232078e-07,
+      "15m": 4.996215842850704e-07,
+      "30m": 4.998337514994233e-07,
+      "1h": 4.999502689756463e-07,
+      "4h": 4.99922919394713e-07,
+      "24h": 4.999060241317466e-07
+    },
+    "beta_fallbacks": 0,
+    "ablation_rows": 388,
+    "walkforward_rows": 198,
+    "walkforward_folds": 3,
+    "enrichment_event_count": 6858,
+    "enrichment_api_requests": 0,
+    "enrichment_leakage": 0,
+    "required_local_reports_complete": true,
+    "dataset_b_exists": false
+  },
+  "walkforward_family_summary": [
+    {
+      "target_family": "abnormal_direction",
+      "comparisons": 18,
+      "mean_ai_increment": -0.0011235774055111608,
+      "wins": 9,
+      "win_rate": 0.5
+    },
+    {
+      "target_family": "absolute_abnormal_return",
+      "comparisons": 18,
+      "mean_ai_increment": -0.014898051066610015,
+      "wins": 1,
+      "win_rate": 0.05555555555555555
+    },
+    {
+      "target_family": "future_volatility",
+      "comparisons": 12,
+      "mean_ai_increment": -0.011706514322885898,
+      "wins": 3,
+      "win_rate": 0.25
+    },
+    {
+      "target_family": "strong_abnormal_move",
+      "comparisons": 18,
+      "mean_ai_increment": -0.01023803365021259,
+      "wins": 8,
+      "win_rate": 0.4444444444444444
+    }
+  ],
+  "gate": {
+    "paid_openai_calls_allowed": false,
+    "api_requests_made": 0,
+    "next_action": "STOP_AND_REQUEST_SEPARATE_CONFIRMATION_FOR_MAX_30_EVENT_AB_TEST",
+    "dataset_b_created": false,
+    "model_d_run": false
+  },
+  "deferred_by_instruction": [
+    "paid enrichment A/B",
+    "full enrichment batch",
+    "Dataset B",
+    "model D",
+    "offline signal simulation",
+    "full robustness and significance phase"
+  ],
+  "predictive_hypothesis_local_abc": "NOT_SUPPORTED"
+}

@@ -1,0 +1,28 @@
+{
+  "A": {
+    "input_hash": "b07099300e4702e938bd2ceaad42b5769a4e2fc5ec0ed91babc54fe169cf70f4",
+    "model_hash": "b05bb9ab1e779579639854ec71663ea337dea04be3986daac3cd2340adbe5468",
+    "probability_hashes": [
+      "d9f353e83b726e19801478697c05a96ac00d1a629181b6f719dbfba963f13333",
+      "d9f353e83b726e19801478697c05a96ac00d1a629181b6f719dbfba963f13333",
+      "d9f353e83b726e19801478697c05a96ac00d1a629181b6f719dbfba963f13333"
+    ],
+    "identical_hashes": true,
+    "maximum_probability_difference": 0.0,
+    "persisted_signal_match_rate": 1.0,
+    "rows": 384
+  },
+  "B": {
+    "input_hash": "5d858fd2b4434f98b101d35ad19a98fc4e528008169752f3da8318a5c6c6c4e2",
+    "model_hash": "7ef9d2b89c6d1a08a8be9138ffc9c7c97949473dbea5beb0335cbeb91ef7fade",
+    "probability_hashes": [
+      "8677b8666f50e4f130a0edbec7640ab939188e551308137090244df0a8d7dbcc",
+      "8677b8666f50e4f130a0edbec7640ab939188e551308137090244df0a8d7dbcc",
+      "8677b8666f50e4f130a0edbec7640ab939188e551308137090244df0a8d7dbcc"
+    ],
+    "identical_hashes": true,
+    "maximum_probability_difference": 0.0,
+    "persisted_signal_match_rate": 1.0,
+    "rows": 1111
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "features": [
+    "metadata_source",
+    "metadata_hour_utc",
+    "metadata_day_of_week",
+    "metadata_is_weekend",
+    "metadata_month",
+    "metadata_session_asia",
+    "metadata_session_europe",
+    "metadata_session_us",
+    "metadata_time_confidence",
+    "metadata_article_count_in_event",
+    "metadata_seconds_from_minute_boundary",
+    "ai_sentiment",
+    "ai_importance",
+    "ai_novelty",
+    "ai_credibility",
+    "ai_confidence",
+    "ai_eth_relevance",
+    "ai_direction",
+    "ai_category",
+    "ai_horizon",
+    "metadata_title_similarity_to_prior_7d",
+    "metadata_similar_event_count_prior_7d",
+    "metadata_similar_event_count_prior_30d"
+  ]
+}

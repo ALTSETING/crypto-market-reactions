@@ -1,0 +1,125 @@
+{
+  "stage": "13A",
+  "status": "PASS",
+  "audit_type": "read_only_timing_audit_no_ml",
+  "created_at": "2026-07-18T21:30:27.703786+00:00",
+  "database": "crypto_news",
+  "stage12_dataset_version": "stage12_eth_v1",
+  "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc",
+  "events_expected": 6851,
+  "events_analyzed": 6851,
+  "missing_events": [],
+  "stage12_unchanged": true,
+  "methodology": {
+    "baseline": "first full 1m candle after published_at minute",
+    "post_return": "baseline open to open at baseline+N",
+    "pre_return": "open at baseline-N to baseline open",
+    "return_unit": "percent",
+    "abnormal": "ETH return minus pre-news rolling beta times BTC return",
+    "volume_shock": "post volume divided by expected volume from prior 60 completed minutes",
+    "direction_neutral_band_percent": 0.1
+  },
+  "median_abs_abnormal_return": {
+    "1m": 0.026991473671903424,
+    "2m": 0.03782097787796013,
+    "3m": 0.04643660424869456,
+    "5m": 0.05868725807356423,
+    "10m": 0.08372122171478658,
+    "15m": 0.09895019449741194,
+    "30m": 0.13930011906514805,
+    "1h": 0.19287559067423724,
+    "4h": 0.4257283012754318,
+    "24h": 0.940834981377288
+  },
+  "median_abs_pre_move_5m": 0.10115592744271984,
+  "median_abs_post_move_5m": 0.10923205960948756,
+  "late_publication_rates": {
+    "threshold_0.10pct": 0.2839001605605021,
+    "threshold_0.25pct": 0.12786454532185082,
+    "threshold_0.50pct": 0.030798423587797403,
+    "threshold_1.00pct": 0.005400671434827032
+  },
+  "reaction_class_distribution": {
+    "threshold_0.10pct": {
+      "both": 2076,
+      "no_reaction": 1824,
+      "post_reacted": 1574,
+      "pre_reacted": 1377
+    },
+    "threshold_0.25pct": {
+      "no_reaction": 4744,
+      "post_reacted": 931,
+      "pre_reacted": 771,
+      "both": 405
+    },
+    "threshold_0.50pct": {
+      "no_reaction": 6327,
+      "post_reacted": 259,
+      "pre_reacted": 195,
+      "both": 70
+    },
+    "threshold_1.00pct": {
+      "no_reaction": 6769,
+      "post_reacted": 42,
+      "pre_reacted": 35,
+      "both": 5
+    }
+  },
+  "source_with_fastest_apparent_publication": "cointelegraph",
+  "split_median_abs_abnormal_5m": {
+    "test": 0.03998791668461724,
+    "train": 0.069276137759272,
+    "validation": 0.05611078663189932
+  },
+  "ai_balanced_accuracy": {
+    "early_1m_5m_abnormal_mean": 0.3229183802363168,
+    "prior_15m_24h_abnormal_mean": 0.33394731243485787
+  },
+  "event_group_timing": {
+    "article_count_vs_abs_pre_move_5m_spearman": 0.02061703936876369,
+    "second_article_delay_vs_abs_pre_move_5m_spearman": 0.32936926924145604,
+    "multi_article_events_with_delay": 60,
+    "article_count_buckets": {
+      "1": {
+        "events": 6791,
+        "median_abs_pre_move_5m": 0.10115592744271984,
+        "median_abs_post_move_5m": 0.10939240523216709,
+        "late_publication_rate_010": 0.28331615373288177
+      },
+      "2": {
+        "events": 32,
+        "median_abs_pre_move_5m": 0.09620898402332712,
+        "median_abs_post_move_5m": 0.07874994707449678,
+        "late_publication_rate_010": 0.3125
+      },
+      "3-5": {
+        "events": 16,
+        "median_abs_pre_move_5m": 0.16258539200607602,
+        "median_abs_post_move_5m": 0.11072222041484392,
+        "late_publication_rate_010": 0.5
+      },
+      "6+": {
+        "events": 12,
+        "median_abs_pre_move_5m": 0.15215701395401293,
+        "median_abs_post_move_5m": 0.13863439281466272,
+        "late_publication_rate_010": 0.25
+      }
+    }
+  },
+  "decision_checks": {
+    "early_1_5m_stronger_than_15m_1h": false,
+    "ai_direction_better_early": false,
+    "chronological_split_stability": true,
+    "not_explained_only_by_pre_move": true,
+    "source_controls_preserve_effect": true
+  },
+  "early_reaction_supported": false,
+  "timing_conclusion": "EARLY_REACTION_NOT_SUPPORTED",
+  "late_timestamp_conclusion": "PUBLISHED_AT_OFTEN_LAGS_MARKET_MOVE",
+  "pytest": "PASS",
+  "pytest_summary": "100 passed, 6 warnings in 8.68s",
+  "ml_run": false,
+  "paper_trading_run": false,
+  "real_trading_run": false,
+  "openai_api_requests": 0
+}

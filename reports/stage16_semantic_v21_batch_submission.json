@@ -1,0 +1,28 @@
+{
+  "phase": "submitted",
+  "submitted_at": "2026-07-19T03:07:01.806480+00:00",
+  "batch_id": "batch_6a5c3f61149881909855d38bff25e326",
+  "input_file_id": "file-XUVPtDzZszWGKmJjXt55Qd",
+  "status": "completed",
+  "selected": 714,
+  "submitted": 714,
+  "model": "gpt-5-mini",
+  "prompt_version": "high_impact_semantic_v2_1",
+  "max_cost_usd": 0.7,
+  "estimated_batch_cost_usd": 0.52774475,
+  "maximum_cost_at_output_token_cap_usd": 0.69339275,
+  "jsonl_path": "reports\\stage16_semantic_v21_batch_input.jsonl",
+  "jsonl_bytes": 3442453,
+  "jsonl_sha256": "920e1cba1334ff3d9d08af982403e81b6e00f8e5aae4b8a2b69e2fc58a92e203",
+  "custom_ids_sha256": "5333752f58acd942d9a1db7592db476a1bc397147fd2dde116aef37ebf35690e",
+  "automatic_retry_batch": false,
+  "duplicate_batch_guard": true,
+  "checked_at": "2026-07-19T03:16:49.603652+00:00",
+  "request_counts": {
+    "completed": 714,
+    "failed": 0,
+    "total": 714
+  },
+  "output_file_id": "file-2YFtUAqhuorv3piLkZrQoC",
+  "error_file_id": null
+}

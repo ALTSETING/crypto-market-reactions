@@ -1,0 +1,384 @@
+{
+  "stage": "16B",
+  "status": "PASS_SOURCE_ARCHIVE__NO_MARKET_COVERAGE",
+  "mode": "free_historical_backfill_pre_ai",
+  "resumed_from_source_cache": true,
+  "current_stage16": {
+    "earliest_event_timestamp": "2020-01-11T00:48:29+00:00",
+    "latest_event_timestamp": "2026-07-01T00:00:00+00:00",
+    "unique_events": 714,
+    "event_asset_rows": 862,
+    "asset_earliest": {
+      "BTC": "2021-05-13T00:00:00+00:00",
+      "ETH": "2020-01-11T00:48:29+00:00",
+      "SOL": "2022-02-03T00:00:00+00:00"
+    },
+    "unique_events_by_year": {
+      "2020": 29,
+      "2021": 59,
+      "2022": 76,
+      "2023": 99,
+      "2024": 139,
+      "2025": 208,
+      "2026": 104
+    },
+    "event_asset_rows_by_year": {
+      "2020": 29,
+      "2021": 59,
+      "2022": 106,
+      "2023": 133,
+      "2024": 171,
+      "2025": 244,
+      "2026": 120
+    },
+    "fully_covered_rows_by_year": {
+      "2020": 0,
+      "2021": 0,
+      "2022": 0,
+      "2023": 133,
+      "2024": 171,
+      "2025": 244,
+      "2026": 120
+    },
+    "source_by_year": [
+      {
+        "source": "ethereum_foundation",
+        "year": 2026,
+        "rows": 7
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2020,
+        "rows": 29
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2021,
+        "rows": 38
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2022,
+        "rows": 21
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2023,
+        "rows": 36
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2024,
+        "rows": 33
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2025,
+        "rows": 52
+      },
+      {
+        "source": "ethereum_github",
+        "year": 2026,
+        "rows": 36
+      },
+      {
+        "source": "sec",
+        "year": 2021,
+        "rows": 21
+      },
+      {
+        "source": "sec",
+        "year": 2022,
+        "rows": 85
+      },
+      {
+        "source": "sec",
+        "year": 2023,
+        "rows": 97
+      },
+      {
+        "source": "sec",
+        "year": 2024,
+        "rows": 138
+      },
+      {
+        "source": "sec",
+        "year": 2025,
+        "rows": 192
+      },
+      {
+        "source": "sec",
+        "year": 2026,
+        "rows": 77
+      }
+    ],
+    "asset_by_year": [
+      {
+        "asset": "BTC",
+        "year": 2021,
+        "rows": 19
+      },
+      {
+        "asset": "BTC",
+        "year": 2022,
+        "rows": 42
+      },
+      {
+        "asset": "BTC",
+        "year": 2023,
+        "rows": 51
+      },
+      {
+        "asset": "BTC",
+        "year": 2024,
+        "rows": 83
+      },
+      {
+        "asset": "BTC",
+        "year": 2025,
+        "rows": 136
+      },
+      {
+        "asset": "BTC",
+        "year": 2026,
+        "rows": 56
+      },
+      {
+        "asset": "ETH",
+        "year": 2020,
+        "rows": 29
+      },
+      {
+        "asset": "ETH",
+        "year": 2021,
+        "rows": 40
+      },
+      {
+        "asset": "ETH",
+        "year": 2022,
+        "rows": 49
+      },
+      {
+        "asset": "ETH",
+        "year": 2023,
+        "rows": 65
+      },
+      {
+        "asset": "ETH",
+        "year": 2024,
+        "rows": 72
+      },
+      {
+        "asset": "ETH",
+        "year": 2025,
+        "rows": 90
+      },
+      {
+        "asset": "ETH",
+        "year": 2026,
+        "rows": 56
+      },
+      {
+        "asset": "SOL",
+        "year": 2022,
+        "rows": 15
+      },
+      {
+        "asset": "SOL",
+        "year": 2023,
+        "rows": 17
+      },
+      {
+        "asset": "SOL",
+        "year": 2024,
+        "rows": 16
+      },
+      {
+        "asset": "SOL",
+        "year": 2025,
+        "rows": 18
+      },
+      {
+        "asset": "SOL",
+        "year": 2026,
+        "rows": 8
+      }
+    ]
+  },
+  "retrieved_source_records": 2909,
+  "accepted_source_records_before_dedup": 364,
+  "new_unique_events": 326,
+  "new_event_asset_rows": 326,
+  "fully_covered_rows": 0,
+  "market_data_unavailable_rows": 326,
+  "counts_by_year": {
+    "2017": 83,
+    "2018": 49,
+    "2019": 127,
+    "2020": 31,
+    "2021": 22,
+    "2022": 14
+  },
+  "counts_by_source": {
+    "eth_github": 170,
+    "btc_github": 67,
+    "sec": 47,
+    "sol_github": 27,
+    "ethereum_foundation": 15
+  },
+  "counts_by_asset": {
+    "ETH": 198,
+    "BTC": 92,
+    "SOL": 36
+  },
+  "counts_by_event_type": {
+    "protocol_update": 158,
+    "product_launch": 85,
+    "security_event": 34,
+    "other": 33,
+    "legal_action": 12,
+    "official_decision": 3,
+    "institutional": 1
+  },
+  "duplicates": 10,
+  "rejected_events": 2545,
+  "missing_candle_coverage": 326,
+  "earliest_usable_date": {
+    "BTC": "2023-01-01T12:00:00+00:00",
+    "ETH": "2023-01-01T12:00:00+00:00",
+    "SOL": "2023-01-01T12:00:00+00:00"
+  },
+  "market_gap_runs": {
+    "BTC": 1,
+    "ETH": 1,
+    "SOL": 1
+  },
+  "estimated_ai": {
+    "events_for_ai": 326,
+    "model": "gpt-5-mini",
+    "prompt_version": "high_impact_semantic_v2_1",
+    "max_body_tokens": 900,
+    "input_tokens": {
+      "total": 370787,
+      "average": 1137.3834355828221,
+      "median": 947.0,
+      "p95": 1755.0,
+      "max": 1807
+    },
+    "estimated_output_tokens_per_event": 234,
+    "estimated_output_tokens_total": 76284,
+    "estimated_batch_cost_usd": 0.122632375,
+    "pricing": {
+      "input_per_million_usd": 0.125,
+      "output_per_million_usd": 1.0,
+      "source": "https://developers.openai.com/api/docs/pricing",
+      "checked_at": "2026-07-19"
+    },
+    "openai_api_requests": 0
+  },
+  "source_availability": [
+    {
+      "source": "ethereum_foundation",
+      "channel": "official_blog_archive",
+      "url": "https://blog.ethereum.org/archive",
+      "status": "available",
+      "retrieved_archive_links": 283,
+      "downloaded_candidate_pages": 50,
+      "errors": 0,
+      "earliest_requested": "2013-12-01",
+      "latest_requested": "2020-01-10",
+      "free_or_paid": "free",
+      "estimated_cost_usd": 0.0,
+      "notes": "English canonical URLs only; translations excluded."
+    },
+    {
+      "source": "sec",
+      "channel": "EDGAR full-text index + submissions bulk archive",
+      "url": "https://www.sec.gov/Archives/edgar/daily-index/bulkdata/submissions.zip",
+      "status": "available_bounded",
+      "query_count": 60,
+      "search_hits_unique": 2207,
+      "metadata_prefilter_candidates": 1060,
+      "documents_downloaded": 350,
+      "document_download_cap": 350,
+      "accepted_before_dedup": 38,
+      "queries_capped": 40,
+      "bulk_archive_bytes": 1552447352,
+      "bulk_archive_entries": 983003,
+      "bulk_ciks_requested": 21,
+      "bulk_ciks_found": 21,
+      "bulk_accessions_enriched": 38,
+      "free_or_paid": "free",
+      "estimated_cost_usd": 0.0,
+      "notes": "HTTP Range read of official 1.55GB ZIP; only matched CIK JSON entries downloaded because local disk guard prevented full extraction.",
+      "bulk_acceptance_timestamps_available": 38
+    },
+    {
+      "source": "github",
+      "channel": "allowlisted official repositories",
+      "url": "https://api.github.com",
+      "status": "available_bounded",
+      "repositories": 6,
+      "repository_metadata": 6,
+      "releases_retrieved": 505,
+      "tags_retrieved": 586,
+      "commits_retrieved": 500,
+      "security_advisories_retrieved": 17,
+      "issues_announcement_retrieved": 0,
+      "issues_security_retrieved": 115,
+      "merged_pull_requests_retrieved": 400,
+      "accepted_before_dedup": 279,
+      "errors": 0,
+      "authenticated": false,
+      "free_or_paid": "free",
+      "estimated_cost_usd": 0.0,
+      "notes": "One bounded historical page per channel/repository; tags without a verified timestamp remain metadata and are not promoted to market events."
+    }
+  ],
+  "dedup_priority": "existing Stage 16 events",
+  "database_mutations": 0,
+  "openai_api_requests": 0,
+  "ml_runs": 0,
+  "paper_trading": false,
+  "real_trading": false,
+  "old_stage17_test_rows_read": 0,
+  "synthetic_candles": 0,
+  "long_gap_interpolation": 0,
+  "regime_threshold_policy": "All future regime thresholds must be fit on train only; unavailable regimes remain null.",
+  "protected_stage8_17": {
+    "files": 319,
+    "aggregate_sha256_before": "20fa811025a7485f568a0f24404e90ffac89e2e6e1af5d044ab20ffb4de30c67",
+    "aggregate_sha256_after": "20fa811025a7485f568a0f24404e90ffac89e2e6e1af5d044ab20ffb4de30c67",
+    "changed_files": [],
+    "changed_table_counts": {},
+    "unchanged": true
+  },
+  "pytest": {
+    "returncode": 0,
+    "passed": 237,
+    "stdout_tail": "........................................................................ [ 30%]\n........................................................................ [ 60%]\n........................................................................ [ 91%]\n.....................                                                    [100%]\n============================== warnings summary ===============================\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\n  C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\joblib\\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\n  As an alternative, you can create a new view using np.reshape (with copy=False if needed).\n    array.shape = self.shape\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n237 passed, 6 warnings in 8.92s\n",
+    "stderr_tail": ""
+  },
+  "reports": [
+    "stage16b_current_date_range.json",
+    "stage16b_current_events_by_year.csv",
+    "stage16b_source_availability.csv",
+    "stage16b_market_data_availability.csv",
+    "stage16b_candidates_by_year.csv",
+    "stage16b_candidates_by_source.csv",
+    "stage16b_candidates_by_asset.csv",
+    "stage16b_rejections.csv",
+    "stage16b_duplicates.csv",
+    "stage16b_event_groups.csv",
+    "stage16b_candle_coverage.csv",
+    "stage16b_backfill_summary.json",
+    "stage16b_pre_ai_assessment.md"
+  ],
+  "data_files": [
+    "data/stage16b/source_records.parquet",
+    "data/stage16b/canonical_events.parquet",
+    "data/stage16b/event_source_records.parquet",
+    "data/stage16b/event_asset_coverage.parquet"
+  ],
+  "next_stage_started": false
+}

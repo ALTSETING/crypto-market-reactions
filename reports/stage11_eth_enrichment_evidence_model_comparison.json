@@ -1,0 +1,80 @@
+{
+  "status": "V1_V2_COMPARISON_COMPLETE",
+  "model": "gpt-5-mini-2025-08-07",
+  "baseline_prompt_version": "eth_market_context_v1",
+  "candidate_prompt_version": "eth_market_context_v2",
+  "paired_successes": 30,
+  "null_rates": {
+    "expected_by_market": 1.0,
+    "already_priced_in": 1.0,
+    "primary_source_probability": 0.9333
+  },
+  "evidence_distribution": {
+    "expected_by_market_evidence": {
+      "insufficient": 30
+    },
+    "already_priced_in_evidence": {
+      "insufficient": 30
+    },
+    "primary_source_evidence": {
+      "insufficient": 28,
+      "sufficient": 2
+    }
+  },
+  "score_stability": {
+    "surprise_magnitude": {
+      "comparable_pairs": 30,
+      "mean_absolute_difference": 11.667
+    },
+    "expected_by_market": {
+      "comparable_pairs": 0,
+      "mean_absolute_difference": null
+    },
+    "already_priced_in": {
+      "comparable_pairs": 0,
+      "mean_absolute_difference": null
+    },
+    "information_freshness": {
+      "comparable_pairs": 30,
+      "mean_absolute_difference": 16
+    },
+    "primary_source_probability": {
+      "comparable_pairs": 2,
+      "mean_absolute_difference": 15
+    },
+    "actionable_novelty": {
+      "comparable_pairs": 30,
+      "mean_absolute_difference": 10
+    },
+    "event_specificity": {
+      "comparable_pairs": 30,
+      "mean_absolute_difference": 13.333
+    },
+    "confidence": {
+      "comparable_pairs": 30,
+      "mean_absolute_difference": 26.5
+    }
+  },
+  "contradictions": {
+    "insufficient_with_numeric_score": 0,
+    "sufficient_with_null_score": 0,
+    "high_priced_in_and_high_freshness": 0,
+    "generic_but_highly_actionable": 0
+  },
+  "human_review_readiness": "READY_FOR_REVIEW_NOT_YET_REVIEWED",
+  "full_batch_gate": "NO-GO_PENDING_HUMAN_REVIEW_AND_NEW_CONFIRMATION",
+  "success": 30,
+  "failed": 0,
+  "schema_success_rate": 1.0,
+  "input_tokens": 28388,
+  "output_tokens": 3340,
+  "retries": 0,
+  "tracked_actual_cost_usd": 0.013777,
+  "untracked_prior_failure_cost_upper_bound_usd": 0.0013825,
+  "conservative_total_cost_usd": 0.0151595,
+  "api_requests_made_this_run": 0,
+  "resume_verified": true,
+  "leakage_count": 0,
+  "duplicate_requests": 0,
+  "raw_response_persisted": true
+}

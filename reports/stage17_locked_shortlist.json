@@ -1,0 +1,7 @@
+{
+  "status": "INSUFFICIENT_VALIDATED_CANDIDATES",
+  "created_before_test_evaluation": true,
+  "primary_latency_minutes": 1,
+  "candidates": [],
+  "candidate_count": 0
+}

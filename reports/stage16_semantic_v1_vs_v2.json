@@ -1,0 +1,72 @@
+{
+  "mode": "local_dry_run_ab",
+  "api_requests": 0,
+  "same_events": true,
+  "events": 714,
+  "model": "gpt-5-mini",
+  "v1": {
+    "prompt_version": "high_impact_semantic_v1",
+    "representative_output_tokens_per_event": 125,
+    "schema_strict": true,
+    "events": 714,
+    "input_tokens": 651638,
+    "output_tokens": 89250,
+    "mean_input_tokens": 912.6582633053222,
+    "median_input_tokens": 653.0,
+    "p95_input_tokens": 1929.8500000000008,
+    "max_input_tokens": 4105,
+    "batch_costs": {
+      "gpt-5-nano": 0.0682819,
+      "gpt-5-mini": 0.34140950000000003
+    }
+  },
+  "v2": {
+    "prompt_version": "high_impact_semantic_v2",
+    "representative_output_tokens_per_event": 285,
+    "schema_strict": true,
+    "events": 714,
+    "input_tokens": 1095032,
+    "output_tokens": 203490,
+    "mean_input_tokens": 1533.6582633053222,
+    "median_input_tokens": 1274.0,
+    "p95_input_tokens": 2550.850000000001,
+    "max_input_tokens": 4726,
+    "batch_costs": {
+      "gpt-5-nano": 0.1361476,
+      "gpt-5-mini": 0.6807380000000001
+    }
+  },
+  "delta": {
+    "input_tokens": 443394,
+    "output_tokens": 114240,
+    "batch_costs": {
+      "gpt-5-nano": 0.0678657,
+      "gpt-5-mini": 0.33932850000000003
+    }
+  },
+  "new_top_level_fields": [
+    "actionability",
+    "adoption_significance",
+    "economic_significance",
+    "ecosystem_impact",
+    "evidence_quality",
+    "execution_certainty",
+    "first_disclosure",
+    "fundamental_relevance",
+    "historical_uniqueness",
+    "institutional_relevance",
+    "market_attention",
+    "market_scope",
+    "new_information_ratio",
+    "regulatory_strength",
+    "retail_relevance",
+    "security_significance",
+    "surprise_level",
+    "technical_significance",
+    "temporary_vs_structural",
+    "urgency"
+  ],
+  "new_asset_fields": [
+    "reason"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "target_name": "target_realized_vol_1h",
+  "dataset_variant": "market_plus_ai",
+  "model_family": "hist_gradient_boosting",
+  "configuration": "hist_gradient_boosting__l2_regularization-0_learning_rate-0.05_max_iter-150_max_leaf_nodes-15_min_samples_leaf-20",
+  "parameters": "{\"l2_regularization\": 0, \"learning_rate\": 0.05, \"max_iter\": 150, \"max_leaf_nodes\": 15, \"min_samples_leaf\": 20}",
+  "target_transform": "log1p",
+  "split": "test",
+  "mae": 0.1511834588283755,
+  "rmse": 0.20413257292792616,
+  "r2": 0.4958989968984526,
+  "spearman": 0.7295881297078692,
+  "pearson": 0.718876550389045,
+  "median_absolute_error": 0.12035695379872136,
+  "rank_consistency": 0.7690151321652727,
+  "top_decile_lift": 1.8090865900799948,
+  "top_quartile_detection": 0.6997084548104956
+}

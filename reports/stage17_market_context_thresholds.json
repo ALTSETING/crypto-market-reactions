@@ -1,0 +1,34 @@
+{
+  "fit_split": "train",
+  "thresholds": [
+    {
+      "name": "btc_return_1h",
+      "value": [
+        -0.10126426704282894,
+        0.1476476132777904
+      ]
+    },
+    {
+      "name": "asset_return_20m",
+      "value": [
+        -0.0881654798236653,
+        0.1169150984066672
+      ]
+    },
+    {
+      "name": "volatility_60m",
+      "value": [
+        0.3473269696614856,
+        0.5367509072987375
+      ]
+    },
+    {
+      "name": "relative_strength",
+      "value": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "validation_or_test_used": false
+}

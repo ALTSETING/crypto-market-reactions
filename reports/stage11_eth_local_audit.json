@@ -1,0 +1,64 @@
+{
+  "db_counts": {
+    "news_articles": 11030,
+    "news_assets": 22138,
+    "news_market_reactions": 22109,
+    "market_candles": 5520720,
+    "news_analysis": 7115,
+    "news_market_context_analysis": 0
+  },
+  "event_selection_rows": 6858,
+  "event_keys_unique": 6858,
+  "event_selection_rule_match": true,
+  "dataset_shape": [
+    6851,
+    234
+  ],
+  "dataset_event_keys_unique": 6851,
+  "split_counts": {
+    "train": 4110,
+    "test": 1371,
+    "validation": 1370
+  },
+  "chronological_boundaries_ok": true,
+  "walkforward_no_overlap_and_ordered": true,
+  "feature_count": 120,
+  "target_count": 106,
+  "target_leakage_columns": [],
+  "raw_text_columns_present": [],
+  "feature_cutoff_violations": 0,
+  "baseline_integrity_violations": 0,
+  "abnormal_formula_max_error": {
+    "5m": 0.0,
+    "15m": 0.0,
+    "30m": 0.0,
+    "1h": 0.0,
+    "4h": 0.0,
+    "24h": 0.0
+  },
+  "market_adjusted_formula_max_error": {
+    "5m": 0.0,
+    "15m": 0.0,
+    "30m": 0.0,
+    "1h": 0.0,
+    "4h": 0.0,
+    "24h": 0.0
+  },
+  "stored_eth_reaction_max_difference": {
+    "5m": 4.999140877232078e-07,
+    "15m": 4.996215842850704e-07,
+    "30m": 4.998337514994233e-07,
+    "1h": 4.999502689756463e-07,
+    "4h": 4.99922919394713e-07,
+    "24h": 4.999060241317466e-07
+  },
+  "beta_fallbacks": 0,
+  "ablation_rows": 388,
+  "walkforward_rows": 198,
+  "walkforward_folds": 3,
+  "enrichment_event_count": 6858,
+  "enrichment_api_requests": 0,
+  "enrichment_leakage": 0,
+  "required_local_reports_complete": true,
+  "dataset_b_exists": false
+}

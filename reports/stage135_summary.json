@@ -1,0 +1,600 @@
+{
+  "stage": "13.5",
+  "generated_at": "2026-07-18T22:14:42.063420+00:00",
+  "status": "PASS",
+  "predictive_improvement": "NOT_SUPPORTED",
+  "scope": "free local phase only; no paid API, OpenAI, trading, or deployment",
+  "early_reaction": {
+    "unique_events": 6851,
+    "latencies_minutes": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "rows": 27404,
+    "coverage": 1.0,
+    "horizons_minutes": [
+      1,
+      2,
+      3,
+      5,
+      10,
+      15
+    ],
+    "excursion_horizons_minutes": [
+      1,
+      3,
+      5,
+      10,
+      15
+    ]
+  },
+  "publication_delay": {
+    "late_publication_rate": {
+      "0.1": 0.3466647204787622,
+      "0.25": 0.1404174573055028,
+      "0.5": 0.0334257772587943,
+      "1.0": 0.0058385637133265
+    },
+    "matched_primary_events": 0,
+    "median_publication_delay_seconds": null,
+    "median_delay_status": "not_estimable: no high-confidence primary/media match in the tested live sample",
+    "source_timing_rank": [
+      "cointelegraph",
+      "coindesk",
+      "decrypt"
+    ]
+  },
+  "primary_sources": {
+    "events_collected": 10,
+    "timeline_rows": 6851,
+    "adapter_live_tests": [
+      {
+        "source": "ethereum_foundation",
+        "tested": true,
+        "fetched": 9,
+        "eth_relevant": 9,
+        "error": ""
+      },
+      {
+        "source": "sec",
+        "tested": true,
+        "fetched": 20,
+        "eth_relevant": 1,
+        "error": ""
+      },
+      {
+        "source": "binance_announcements",
+        "tested": true,
+        "fetched": 0,
+        "eth_relevant": 0,
+        "error": ""
+      }
+    ],
+    "binance_blocker": "official announcement HTML returned HTTP 202 with an empty body; undocumented /bapi is robots-disallowed and was not used"
+  },
+  "futures": {
+    "rows": {
+      "futures_funding_rates": 7668,
+      "futures_open_interest": 6962,
+      "futures_long_short_ratios": 20886,
+      "futures_taker_volume": 6962
+    },
+    "coverage": [
+      {
+        "symbol": "ETHUSDT",
+        "metric": "funding",
+        "interval_minutes": 480,
+        "rows": 3834,
+        "start": "2023-01-01T00:00:00+00:00",
+        "end": "2026-07-01T16:00:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "full endpoint range"
+      },
+      {
+        "symbol": "ETHUSDT",
+        "metric": "open_interest",
+        "interval_minutes": 5,
+        "rows": 3481,
+        "start": "2026-06-19T21:55:00+00:00",
+        "end": "2026-07-01T23:55:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      },
+      {
+        "symbol": "ETHUSDT",
+        "metric": "long_short",
+        "interval_minutes": 5,
+        "rows": 10443,
+        "start": "2026-06-19T21:55:00+00:00",
+        "end": "2026-07-01T23:55:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      },
+      {
+        "symbol": "ETHUSDT",
+        "metric": "taker_volume",
+        "interval_minutes": 5,
+        "rows": 3481,
+        "start": "2026-06-19T21:50:00+00:00",
+        "end": "2026-07-01T23:50:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "metric": "funding",
+        "interval_minutes": 480,
+        "rows": 3834,
+        "start": "2023-01-01T00:00:00+00:00",
+        "end": "2026-07-01T16:00:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "full endpoint range"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "metric": "open_interest",
+        "interval_minutes": 5,
+        "rows": 3481,
+        "start": "2026-06-19T21:55:00+00:00",
+        "end": "2026-07-01T23:55:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "metric": "long_short",
+        "interval_minutes": 5,
+        "rows": 10443,
+        "start": "2026-06-19T21:55:00+00:00",
+        "end": "2026-07-01T23:55:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "metric": "taker_volume",
+        "interval_minutes": 5,
+        "rows": 3481,
+        "start": "2026-06-19T21:50:00+00:00",
+        "end": "2026-07-01T23:50:00+00:00",
+        "duplicates": 0,
+        "missing_percentage": 0.0,
+        "api_history_limit": "latest 30 days"
+      }
+    ],
+    "feature_coverage": [
+      {
+        "feature": "pre_funding_current",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "pre_funding_mark_price",
+        "non_null": 6849,
+        "coverage": 0.9997080718143336
+      },
+      {
+        "feature": "pre_funding_previous",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "pre_funding_change",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "pre_funding_zscore_7d",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "pre_oi_current",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_oi_value",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_oi_change_5m",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_oi_change_15m",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_oi_change_1h",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_oi_change_4h",
+        "non_null": 131,
+        "coverage": 0.0191212961611443
+      },
+      {
+        "feature": "pre_oi_zscore_7d",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_long_short_ratio",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_long_short_change_1h",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_top_trader_ratio",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_taker_buy_sell_ratio",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_taker_net_flow_5m",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_taker_net_flow_15m",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_taker_net_flow_1h",
+        "non_null": 133,
+        "coverage": 0.0194132243468106
+      },
+      {
+        "feature": "pre_funding_extreme_positive",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "pre_funding_extreme_negative",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "crowded_long",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "crowded_short",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "price_up_oi_up",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "price_up_oi_down",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "price_down_oi_up",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "price_down_oi_down",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "possible_short_squeeze",
+        "non_null": 6851,
+        "coverage": 1.0
+      },
+      {
+        "feature": "possible_long_squeeze",
+        "non_null": 6851,
+        "coverage": 1.0
+      }
+    ],
+    "resume_second_run_new_rows": 0,
+    "missing_periods": {
+      "funding": "none inside imported 2023-01-01 through 2026-07-01 range",
+      "oi_ratios_taker": "2023-01-01 through 2026-06-19 unavailable from the official endpoint because statistics retain only the latest 30 days; only 133/6851 events (1.9413%) have these 5m features"
+    }
+  },
+  "availability": {
+    "etf": "blocked: no verified stable official free historical daily-flow API",
+    "onchain": "dry-run ready: Etherscan free key required; expected API cost $0; optional paid tier starts around $41.65/month",
+    "macro": "dry-run ready: FRED registered key required; expected API cost $0; vintage/release cutoff required"
+  },
+  "dataset": {
+    "dataset_version": "stage135_eth_v1",
+    "row_count": 6851,
+    "variants": {
+      "market_core": {
+        "rows": 6851,
+        "features": 101
+      },
+      "market_futures": {
+        "rows": 6851,
+        "features": 130
+      },
+      "market_futures_primary_timing": {
+        "rows": 6851,
+        "features": 139
+      }
+    },
+    "targets": [
+      "target_abs_abnormal_return_1h",
+      "target_realized_vol_15m",
+      "target_realized_vol_1h",
+      "target_realized_vol_5m",
+      "target_abs_abnormal_return_1m",
+      "target_abs_abnormal_return_3m",
+      "target_abs_abnormal_return_5m",
+      "target_abs_abnormal_return_15m",
+      "target_post_news_move_stronger_than_pre_move",
+      "target_new_information_reaction",
+      "target_late_article"
+    ],
+    "split_counts": {
+      "train": 4110,
+      "test": 1371,
+      "validation": 1370
+    },
+    "event_split_overlap": 0,
+    "post_news_features_in_predictors": 0,
+    "cutoff_violations": 0,
+    "file_hashes_sha256": {
+      "data/stage135/market_core.parquet": "c1dde5918861766ab8f68294a936ceb06a997bf427f803e4355d6da5db2452c3",
+      "data/stage135/market_futures.parquet": "5695d06b0295f811a49d3f2b10404c59968e864693a3e16a6dc03a920a32c3df",
+      "data/stage135/market_futures_primary_timing.parquet": "5db453b7b297e26a6ff177bbf325ff8a788e7d1d36910af4a5b6c4854fe780f3",
+      "data/stage135/targets.parquet": "56005d9e5d5d77ca2feaeceae8ff0268a521df45bc251ec14532f95033a7d277"
+    },
+    "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc",
+    "features_added_vs_market_core": {
+      "market_futures": 29,
+      "market_futures_primary_timing": 38
+    },
+    "full_variants_D_E": "not built because ETF/on-chain/macro providers are blocked or key-gated in this free phase"
+  },
+  "ablation": {
+    "test_metrics": [
+      {
+        "target": "target_abs_abnormal_return_5m",
+        "variant": "market_core",
+        "mae": 0.0393644480522895,
+        "rmse": 0.0587904884191195,
+        "r2": 0.0640477106401766,
+        "spearman": 0.2355202755355505,
+        "pearson": 0.2949163076964757,
+        "top_decile_lift": 1.9276665572640037
+      },
+      {
+        "target": "target_abs_abnormal_return_5m",
+        "variant": "market_futures",
+        "mae": 0.040299319360876,
+        "rmse": 0.0591944425582286,
+        "r2": 0.0511415169133905,
+        "spearman": 0.2096480783930319,
+        "pearson": 0.2803449987149949,
+        "top_decile_lift": 1.7894282100426158
+      },
+      {
+        "target": "target_abs_abnormal_return_5m",
+        "variant": "market_futures_primary_timing",
+        "mae": 0.0405529242512791,
+        "rmse": 0.0595178197157861,
+        "r2": 0.0407460381604973,
+        "spearman": 0.1991245125209321,
+        "pearson": 0.2691842846066793,
+        "top_decile_lift": 1.8113601932557768
+      },
+      {
+        "target": "target_realized_vol_5m",
+        "variant": "market_core",
+        "mae": 0.0556116097960202,
+        "rmse": 0.0821907092522979,
+        "r2": 0.3644864007353798,
+        "spearman": 0.6028032416790949,
+        "pearson": 0.6082823185490499,
+        "top_decile_lift": 1.997301761648821
+      },
+      {
+        "target": "target_realized_vol_5m",
+        "variant": "market_futures",
+        "mae": 0.0565245958831657,
+        "rmse": 0.0825313254307251,
+        "r2": 0.3592080728797836,
+        "spearman": 0.5999639007278285,
+        "pearson": 0.6050785854902753,
+        "top_decile_lift": 2.0035040877369963
+      },
+      {
+        "target": "target_realized_vol_5m",
+        "variant": "market_futures_primary_timing",
+        "mae": 0.0566187460588721,
+        "rmse": 0.0828608426094734,
+        "r2": 0.3540809657394046,
+        "spearman": 0.5990414384372847,
+        "pearson": 0.6016431703831114,
+        "top_decile_lift": 1.9924561328389483
+      },
+      {
+        "target": "target_abs_abnormal_return_1h",
+        "variant": "market_core",
+        "mae": 0.1263053548038733,
+        "rmse": 0.1980115252803089,
+        "r2": 0.058762200139811,
+        "spearman": 0.2122468490840013,
+        "pearson": 0.2575132054882911,
+        "top_decile_lift": 1.7339903137158563
+      },
+      {
+        "target": "target_abs_abnormal_return_1h",
+        "variant": "market_futures",
+        "mae": 0.126749674397443,
+        "rmse": 0.1982079354409387,
+        "r2": 0.0568940224769639,
+        "spearman": 0.2098146945557542,
+        "pearson": 0.2554258594090157,
+        "top_decile_lift": 1.7604757839056175
+      },
+      {
+        "target": "target_abs_abnormal_return_1h",
+        "variant": "market_futures_primary_timing",
+        "mae": 0.1274830302376924,
+        "rmse": 0.1984711528051272,
+        "r2": 0.0543874961881389,
+        "spearman": 0.2053943568855256,
+        "pearson": 0.2527316930024149,
+        "top_decile_lift": 1.7626224174564615
+      },
+      {
+        "target": "target_realized_vol_1h",
+        "variant": "market_core",
+        "mae": 0.1563676899577004,
+        "rmse": 0.2151900029450145,
+        "r2": 0.4398077122205928,
+        "spearman": 0.6992217526280649,
+        "pearson": 0.6742301923560642,
+        "top_decile_lift": 1.7906892734984017
+      },
+      {
+        "target": "target_realized_vol_1h",
+        "variant": "market_futures",
+        "mae": 0.1628511467897772,
+        "rmse": 0.2177767466314221,
+        "r2": 0.4262589105497937,
+        "spearman": 0.6990763566789652,
+        "pearson": 0.6755067307294012,
+        "top_decile_lift": 1.743665216430109
+      },
+      {
+        "target": "target_realized_vol_1h",
+        "variant": "market_futures_primary_timing",
+        "mae": 0.1628912281117641,
+        "rmse": 0.2181944017558355,
+        "r2": 0.424056143829552,
+        "spearman": 0.6958377641837693,
+        "pearson": 0.67301115119574,
+        "top_decile_lift": 1.7445290095295758
+      }
+    ],
+    "incremental": [
+      {
+        "target": "target_abs_abnormal_return_5m",
+        "variant": "market_futures",
+        "test_mae_improvement": -0.0009348713085865,
+        "test_spearman_increment": -0.0258721971425185,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_abs_abnormal_return_5m",
+        "variant": "market_futures_primary_timing",
+        "test_mae_improvement": -0.0011884761989895,
+        "test_spearman_increment": -0.0363957630146183,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_realized_vol_5m",
+        "variant": "market_futures",
+        "test_mae_improvement": -0.0009129860871454,
+        "test_spearman_increment": -0.0028393409512664,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_realized_vol_5m",
+        "variant": "market_futures_primary_timing",
+        "test_mae_improvement": -0.0010071362628519,
+        "test_spearman_increment": -0.0037618032418101,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_abs_abnormal_return_1h",
+        "variant": "market_futures",
+        "test_mae_improvement": -0.0004443195935696,
+        "test_spearman_increment": -0.002432154528247,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_abs_abnormal_return_1h",
+        "variant": "market_futures_primary_timing",
+        "test_mae_improvement": -0.001177675433819,
+        "test_spearman_increment": -0.0068524921984757,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_realized_vol_1h",
+        "variant": "market_futures",
+        "test_mae_improvement": -0.0064834568320767,
+        "test_spearman_increment": -0.0001453959490996,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      },
+      {
+        "target": "target_realized_vol_1h",
+        "variant": "market_futures_primary_timing",
+        "test_mae_improvement": -0.0065235381540637,
+        "test_spearman_increment": -0.0033839884442955,
+        "walkforward_folds_mae_better": 1,
+        "incremental_value_supported": false
+      }
+    ],
+    "supported_comparisons": 0
+  },
+  "quality": {
+    "cutoff_violations": 0,
+    "leakage_violations": 0,
+    "duplicates": {
+      "early_reactions": 0,
+      "primary_url": 0,
+      "primary_content_hash": 0,
+      "funding": 0,
+      "open_interest": 0,
+      "long_short": 0,
+      "taker": 0
+    },
+    "pytest": {
+      "passed": 116,
+      "failed": 0,
+      "warnings": 6
+    },
+    "alembic_head": "0006_complete_stage135_metrics",
+    "alembic_check": "PASS",
+    "stage8_13_integrity": {
+      "status": "PASS",
+      "changed_hashes": [],
+      "missing_files": [],
+      "source_table_count_changes": {}
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "source": "donald_trump",
+  "start": "2020-01-01",
+  "end": "2026-07-01",
+  "resume": true,
+  "dry_run": true,
+  "fetched": 0,
+  "accepted": 0,
+  "rejected": 0,
+  "rejection_reasons": {},
+  "in_batch_duplicates": 0,
+  "inserted": 0,
+  "duplicates": 0,
+  "assets_inserted": 0,
+  "asset_counts": {},
+  "earliest": null,
+  "latest": null
+}

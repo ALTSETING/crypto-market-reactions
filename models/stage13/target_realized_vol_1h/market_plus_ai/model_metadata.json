@@ -1,0 +1,20 @@
+{
+  "artifact_type": "baseline_research_not_production",
+  "created_at": "2026-07-18T21:06:57.721601+00:00",
+  "target": "target_realized_vol_1h",
+  "dataset_variant": "market_plus_ai",
+  "model_family": "hist_gradient_boosting",
+  "configuration": "hist_gradient_boosting__l2_regularization-0_learning_rate-0.05_max_iter-150_max_leaf_nodes-15_min_samples_leaf-20",
+  "parameters": {
+    "learning_rate": 0.05,
+    "max_iter": 150,
+    "max_leaf_nodes": 15,
+    "min_samples_leaf": 20,
+    "l2_regularization": 0
+  },
+  "target_transform": "log1p",
+  "fit_rows": 5480,
+  "test_rows": 1371,
+  "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc",
+  "test_used_for_selection": false
+}

@@ -1,0 +1,43 @@
+{
+  "stage": 13,
+  "status": "PASS",
+  "artifact_type": "baseline_research_not_production",
+  "created_at": "2026-07-18T21:08:47.940388+00:00",
+  "stage12_dataset_version": "stage12_eth_v1",
+  "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc",
+  "stage12_hashes_verified": true,
+  "stage12_unchanged": true,
+  "targets": [
+    "target_abs_abnormal_return_1h",
+    "target_realized_vol_1h"
+  ],
+  "target_transforms": {
+    "target_abs_abnormal_return_1h": "log1p",
+    "target_realized_vol_1h": "log1p"
+  },
+  "dataset_variants": [
+    "market_only",
+    "ai_only",
+    "market_plus_ai"
+  ],
+  "validation_configurations": 102,
+  "test_evaluations": 46,
+  "walkforward_folds": 3,
+  "walkforward_rows": 18,
+  "leakage_violations": 0,
+  "test_used_for_selection": false,
+  "predictive_hypothesis": {
+    "target_abs_abnormal_return_1h": "SUPPORTED",
+    "target_realized_vol_1h": "SUPPORTED"
+  },
+  "ai_incremental_value": {
+    "target_abs_abnormal_return_1h": "NOT_SUPPORTED",
+    "target_realized_vol_1h": "NOT_SUPPORTED"
+  },
+  "paper_trading_run": false,
+  "real_trading_run": false,
+  "openai_api_requests": 0,
+  "production_model_created": false,
+  "pytest": "PASS",
+  "pytest_output": "........................................................................ [ 76%]\n......................                                                   [100%]\n============================== warnings summary ===============================\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\n  C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\joblib\\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\n  As an alternative, you can create a new view using np.reshape (with copy=False if needed).\n    array.shape = self.shape\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n94 passed, 6 warnings in 7.26s"
+}

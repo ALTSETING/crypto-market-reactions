@@ -1,0 +1,56 @@
+{
+  "A": {
+    "estimator": "LogisticRegression",
+    "class_weight": "balanced",
+    "sample_weight_used": false,
+    "resampling": false,
+    "oversampling": false,
+    "undersampling": false,
+    "per_source_weights": false,
+    "effective_weights": {
+      "DOWN": {
+        "rows": 1060,
+        "per_row_weight": 0.6817610062893081,
+        "effective_total_weight": 722.6666666666666
+      },
+      "NEUTRAL": {
+        "rows": 100,
+        "per_row_weight": 7.226666666666667,
+        "effective_total_weight": 722.6666666666666
+      },
+      "UP": {
+        "rows": 1008,
+        "per_row_weight": 0.716931216931217,
+        "effective_total_weight": 722.6666666666667
+      }
+    },
+    "source_code_fit_signature": "model.fit(train[columns], train.actual_direction); no sample_weight argument"
+  },
+  "B": {
+    "estimator": "GradientBoostingClassifier",
+    "class_weight": null,
+    "sample_weight_used": false,
+    "resampling": false,
+    "oversampling": false,
+    "undersampling": false,
+    "per_source_weights": false,
+    "effective_weights": {
+      "DOWN": {
+        "rows": 2409,
+        "per_row_weight": 1.0,
+        "effective_total_weight": 2409.0
+      },
+      "NEUTRAL": {
+        "rows": 210,
+        "per_row_weight": 1.0,
+        "effective_total_weight": 210.0
+      },
+      "UP": {
+        "rows": 2395,
+        "per_row_weight": 1.0,
+        "effective_total_weight": 2395.0
+      }
+    },
+    "source_code_fit_signature": "model.fit(train[columns], train.actual_direction); no sample_weight argument"
+  }
+}

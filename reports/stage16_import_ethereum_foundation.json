@@ -1,0 +1,20 @@
+{
+  "source": "ethereum_foundation",
+  "start": "2020-01-01",
+  "end": "2026-07-01",
+  "resume": true,
+  "dry_run": false,
+  "fetched": 7,
+  "accepted": 7,
+  "rejected": 0,
+  "rejection_reasons": {},
+  "in_batch_duplicates": 0,
+  "inserted": 0,
+  "duplicates": 7,
+  "assets_inserted": 0,
+  "asset_counts": {
+    "ETH": 7
+  },
+  "earliest": "2026-04-29T00:00:00+00:00",
+  "latest": "2026-07-01T00:00:00+00:00"
+}

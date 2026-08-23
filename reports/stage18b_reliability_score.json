@@ -1,0 +1,96 @@
+{
+  "A": {
+    "pattern": "A",
+    "score": 35.98025757575758,
+    "interpretation": "unreliable",
+    "components": {
+      "profitable_walkforward_folds": {
+        "max": 20,
+        "value": 8.0
+      },
+      "folds_above_baseline": {
+        "max": 15,
+        "value": 3.0
+      },
+      "positive_bootstrap_probability": {
+        "max": 15,
+        "value": 9.9045
+      },
+      "stability_across_years": {
+        "max": 10,
+        "value": 0
+      },
+      "stability_across_regimes": {
+        "max": 10,
+        "value": 6.666666666666666
+      },
+      "balanced_LONG_SHORT": {
+        "max": 10,
+        "value": 3.4090909090909083
+      },
+      "robustness_to_costs": {
+        "max": 10,
+        "value": 0
+      },
+      "source_diversification": {
+        "max": 5,
+        "value": 5.0
+      },
+      "not_dependent_on_two_trades": {
+        "max": 5,
+        "value": 0
+      }
+    },
+    "profitable_folds": 2,
+    "folds_above_baseline": 1,
+    "top_two_profit_share": 1.1859183506862616,
+    "strongest_baseline_net_expectancy": 0.2893343248562362
+  },
+  "B": {
+    "pattern": "B",
+    "score": 58.286833333333334,
+    "interpretation": "weak",
+    "components": {
+      "profitable_walkforward_folds": {
+        "max": 20,
+        "value": 4.0
+      },
+      "folds_above_baseline": {
+        "max": 15,
+        "value": 6.0
+      },
+      "positive_bootstrap_probability": {
+        "max": 15,
+        "value": 14.9535
+      },
+      "stability_across_years": {
+        "max": 10,
+        "value": 0
+      },
+      "stability_across_regimes": {
+        "max": 10,
+        "value": 10.0
+      },
+      "balanced_LONG_SHORT": {
+        "max": 10,
+        "value": 3.3333333333333326
+      },
+      "robustness_to_costs": {
+        "max": 10,
+        "value": 10
+      },
+      "source_diversification": {
+        "max": 5,
+        "value": 5
+      },
+      "not_dependent_on_two_trades": {
+        "max": 5,
+        "value": 5
+      }
+    },
+    "profitable_folds": 1,
+    "folds_above_baseline": 2,
+    "top_two_profit_share": 0.0767420900723205,
+    "strongest_baseline_net_expectancy": 0.21733451970968654
+  }
+}

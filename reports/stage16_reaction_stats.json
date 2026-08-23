@@ -1,0 +1,1001 @@
+{
+  "event_assets": 862,
+  "reaction_rows": 3340,
+  "by_symbol": {
+    "ETHUSDT": 1415,
+    "BTCUSDT": 1630,
+    "SOLUSDT": 295
+  },
+  "missing_windows": [
+    {
+      "event_id": 252,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 251,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 250,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 249,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 248,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 247,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 246,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 245,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 244,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 243,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 242,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 241,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 240,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 239,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 238,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 237,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 236,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 235,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 234,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 233,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 232,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 231,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 230,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 229,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 228,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 227,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 226,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 225,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 224,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 223,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 222,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 221,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 220,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 219,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 218,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 217,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 216,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 782,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 215,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 781,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 214,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 213,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 780,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 779,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 778,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 212,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 777,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 211,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 210,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 776,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 209,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 208,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 207,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 206,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 775,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 773,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 774,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 205,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 772,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 204,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 203,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 202,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 771,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 201,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 200,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 199,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 198,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 197,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 196,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 195,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 770,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 194,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 769,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 768,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 193,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 767,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 765,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 766,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 192,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 191,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 190,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 189,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 764,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 763,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 188,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 187,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 186,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 762,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 185,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 760,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 761,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 184,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 758,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 759,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 757,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 757,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 757,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 755,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 756,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 754,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 183,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 753,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 753,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 753,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 750,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 750,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 750,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 751,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 752,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 182,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 748,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 749,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 747,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 181,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 746,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 745,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 743,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 743,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 743,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 744,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 744,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 744,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 742,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 740,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 741,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 738,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 738,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 738,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 739,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 739,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 739,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 737,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 737,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 737,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 180,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 179,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 736,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 735,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 735,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 735,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 734,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 734,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 734,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 178,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 733,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 177,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 732,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 176,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 731,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 730,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 728,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 729,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 726,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 726,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 726,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 727,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 727,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 727,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 175,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 174,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 173,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 172,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 725,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 724,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 171,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 170,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 723,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 722,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 169,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 721,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 719,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 720,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 717,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 718,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 168,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 716,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 715,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 715,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 715,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 712,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 712,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 712,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 713,
+      "asset": "SOL",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 713,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 713,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 714,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 167,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 710,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 711,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 709,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 166,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 165,
+      "asset": "ETH",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 708,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    },
+    {
+      "event_id": 707,
+      "asset": "BTC",
+      "reason": "missing_pre_context"
+    }
+  ],
+  "missing_count": 194,
+  "horizons": [
+    1,
+    5,
+    10,
+    20,
+    40,
+    60,
+    180,
+    300,
+    480,
+    720
+  ],
+  "latencies": [
+    0,
+    1,
+    2,
+    3,
+    5
+  ]
+}

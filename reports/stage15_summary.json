@@ -1,0 +1,171 @@
+{
+  "stage": 15,
+  "technical_status": "PASS",
+  "conditional_edge": "NOT_SUPPORTED",
+  "input_events": 6851,
+  "hashes_verified": true,
+  "splits": {
+    "train": 4110,
+    "test": 1371,
+    "validation": 1370
+  },
+  "rule_generation": {
+    "manual_rules": 20,
+    "generated_rules": 257,
+    "evaluated": 277,
+    "train_pass": 259,
+    "validation_pass": 22,
+    "survived_bh": 5,
+    "shortlisted_for_locked_test": 22,
+    "test_shadow_candidates": 0
+  },
+  "best_test_rule": {
+    "rule_id": "beam_1h_bullish_0187_v1",
+    "version": "1",
+    "split": "test",
+    "direction": "bullish",
+    "horizon": "1h",
+    "complexity": 2,
+    "n": 84,
+    "wins": 52,
+    "losses": 32,
+    "win_rate": 0.6190476190476191,
+    "wilson_low": 0.5121544142609232,
+    "wilson_high": 0.7155285075451102,
+    "balanced_accuracy": 0.5148115359733052,
+    "precision": 0.6190476190476191,
+    "recall": 0.07613469985358712,
+    "mcc": 0.06175978107244317,
+    "bootstrap_win_rate_low": 0.5119047619047619,
+    "bootstrap_win_rate_high": 0.7261904761904762,
+    "p_vs_50": 0.018764766817206575,
+    "mean_return": 0.024654410151698992,
+    "median_return": 0.09618290068394986,
+    "mean_net_return": -0.175345589848301,
+    "net_win_rate": 0.35714285714285715,
+    "profit_factor": 0.41829762428705974,
+    "max_drawdown": -15.538430713888932,
+    "source_count": 3,
+    "month_count": 3,
+    "holding_minutes": 60
+  },
+  "shadow_candidates": 0,
+  "paper_trading_evidence_sufficient": false,
+  "paper_trading_run": false,
+  "real_trading_run": false,
+  "openai_requests": 0,
+  "test_used_once": true,
+  "test_used_for_tuning": false,
+  "leakage_violations": 0,
+  "stage8_13_5_hashes_unchanged": true,
+  "baseline_comparison": [
+    {
+      "comparison": "random_50_50",
+      "n": 1371,
+      "win_rate": 0.4908825674690007,
+      "balanced_accuracy": 0.4908811161428717,
+      "precision": 0.48905109489051096,
+      "recall": 0.4904831625183016,
+      "mcc": -0.018237651280305786,
+      "mean_net_return": -0.19795472773121545,
+      "profit_factor": 0.3759100729466435
+    },
+    {
+      "comparison": "always_bullish",
+      "n": 1371,
+      "win_rate": 0.49817651349380015,
+      "balanced_accuracy": 0.5,
+      "precision": 0.49817651349380015,
+      "recall": 1.0,
+      "mcc": 0.0,
+      "mean_net_return": -0.2183100863485589,
+      "profit_factor": 0.3346518414275309
+    },
+    {
+      "comparison": "always_bearish",
+      "n": 1371,
+      "win_rate": 0.5018234865061999,
+      "balanced_accuracy": 0.5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "mcc": 0.0,
+      "mean_net_return": -0.18168991365144113,
+      "profit_factor": 0.4159070285864359
+    },
+    {
+      "comparison": "market_momentum_only",
+      "n": 1371,
+      "win_rate": 0.5207877461706784,
+      "balanced_accuracy": 0.520831914603834,
+      "precision": 0.5185185185185185,
+      "recall": 0.5329428989751098,
+      "mcc": 0.04167562660240374,
+      "mean_net_return": -0.1997400170755793,
+      "profit_factor": 0.379634455574262
+    },
+    {
+      "comparison": "stage9_ai_direction",
+      "n": 544,
+      "win_rate": 0.5036764705882353,
+      "balanced_accuracy": 0.5118800461361015,
+      "precision": 0.478134110787172,
+      "recall": 0.6431372549019608,
+      "mcc": 0.024565298500940847,
+      "mean_net_return": -0.2540841743401878,
+      "profit_factor": 0.3022145438504317
+    },
+    {
+      "comparison": "shallow_tree_market_only",
+      "n": 1371,
+      "win_rate": 0.5178701677607586,
+      "balanced_accuracy": 0.5192709574721646,
+      "precision": 0.509075907590759,
+      "recall": 0.9033674963396779,
+      "mcc": 0.06018496156816806,
+      "mean_net_return": -0.1771648028757742,
+      "profit_factor": 0.4110341800109159
+    },
+    {
+      "comparison": "shallow_tree_ai_market",
+      "n": 1371,
+      "win_rate": 0.5178701677607586,
+      "balanced_accuracy": 0.5192709574721646,
+      "precision": 0.509075907590759,
+      "recall": 0.9033674963396779,
+      "mcc": 0.06018496156816806,
+      "mean_net_return": -0.1771648028757742,
+      "profit_factor": 0.4110341800109159
+    },
+    {
+      "comparison": "stage13_market_model_plus_momentum",
+      "n": 110,
+      "win_rate": 0.509090909090909,
+      "balanced_accuracy": 0.5112077617932419,
+      "precision": 0.45614035087719296,
+      "recall": 0.5306122448979592,
+      "mcc": 0.022296489098405838,
+      "mean_net_return": -0.10317010314103556,
+      "profit_factor": 0.7412825511084058
+    }
+  ],
+  "discovery_methods": {
+    "beam_search_train": 235,
+    "association_rule_train": 5,
+    "decision_tree_train": 17
+  },
+  "permutation_tests_completed": 259,
+  "permutation_bh_survivors_validation": 7,
+  "approved_rules_file_semantics": "final shadow-gate approvals only",
+  "shortlist_file": "patterns/shortlisted_rules.yaml",
+  "ai_filter": {
+    "asset_focus": "ETH",
+    "model_name": "gpt-5-mini-2025-08-07",
+    "prompt_version": "eth_label_v1",
+    "status": "success"
+  },
+  "integrity": {
+    "stage8_13_preflight_hashes": true,
+    "stage13_5_dataset_hashes": true,
+    "source_table_counts": true
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "candles": [
+    {
+      "symbol": "BTCUSDT",
+      "rows": 1840240,
+      "earliest": "2023-01-01T00:00:00+00:00",
+      "latest": "2026-07-01T23:59:00+00:00",
+      "id_sum": 1715558344120,
+      "open_sum": 122705884786.08,
+      "close_sum": 122705926905.72,
+      "pre_2023_rows": 0
+    },
+    {
+      "symbol": "ETHUSDT",
+      "rows": 1840240,
+      "earliest": "2023-01-01T00:00:00+00:00",
+      "latest": "2026-07-01T23:59:00+00:00",
+      "id_sum": 5094860955320,
+      "open_sum": 4741783325.95,
+      "close_sum": 4741783680.79,
+      "pre_2023_rows": 0
+    },
+    {
+      "symbol": "SOLUSDT",
+      "rows": 1840240,
+      "earliest": "2023-01-01T00:00:00+00:00",
+      "latest": "2026-07-01T23:59:00+00:00",
+      "id_sum": 8473402670520,
+      "open_sum": 210598318.66,
+      "close_sum": 210598383.33,
+      "pre_2023_rows": 0
+    }
+  ],
+  "protected_table_counts": {
+    "news_articles": 11030,
+    "news_assets": 22138,
+    "news_market_reactions": 22109,
+    "news_analysis": 7115,
+    "high_impact_events": 752,
+    "high_impact_event_assets": 862,
+    "high_impact_market_reactions": 3340,
+    "high_impact_event_analysis": 714
+  },
+  "snapshot_sha256": "771e70652cbbabd907c161c77bf08e0196f345b791d7d757a018602875cc844b"
+}

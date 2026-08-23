@@ -1,0 +1,29 @@
+.env
+.env.*
+!.env.example
+!**/.env.example
+.venv/
+.tools/
+.scrapy/
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+frontend/coverage/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+*.tsbuildinfo
+dist/
+build/
+*.egg-info/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+# Historical datasets are part of the product foundation and must not be
+# silently excluded from future preservation/versioning decisions.

@@ -1,0 +1,202 @@
+{
+  "earliest_event_timestamp": "2020-01-11T00:48:29+00:00",
+  "latest_event_timestamp": "2026-07-01T00:00:00+00:00",
+  "unique_events": 714,
+  "event_asset_rows": 862,
+  "asset_earliest": {
+    "BTC": "2021-05-13T00:00:00+00:00",
+    "ETH": "2020-01-11T00:48:29+00:00",
+    "SOL": "2022-02-03T00:00:00+00:00"
+  },
+  "unique_events_by_year": {
+    "2020": 29,
+    "2021": 59,
+    "2022": 76,
+    "2023": 99,
+    "2024": 139,
+    "2025": 208,
+    "2026": 104
+  },
+  "event_asset_rows_by_year": {
+    "2020": 29,
+    "2021": 59,
+    "2022": 106,
+    "2023": 133,
+    "2024": 171,
+    "2025": 244,
+    "2026": 120
+  },
+  "fully_covered_rows_by_year": {
+    "2020": 0,
+    "2021": 0,
+    "2022": 0,
+    "2023": 133,
+    "2024": 171,
+    "2025": 244,
+    "2026": 120
+  },
+  "source_by_year": [
+    {
+      "source": "ethereum_foundation",
+      "year": 2026,
+      "rows": 7
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2020,
+      "rows": 29
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2021,
+      "rows": 38
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2022,
+      "rows": 21
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2023,
+      "rows": 36
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2024,
+      "rows": 33
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2025,
+      "rows": 52
+    },
+    {
+      "source": "ethereum_github",
+      "year": 2026,
+      "rows": 36
+    },
+    {
+      "source": "sec",
+      "year": 2021,
+      "rows": 21
+    },
+    {
+      "source": "sec",
+      "year": 2022,
+      "rows": 85
+    },
+    {
+      "source": "sec",
+      "year": 2023,
+      "rows": 97
+    },
+    {
+      "source": "sec",
+      "year": 2024,
+      "rows": 138
+    },
+    {
+      "source": "sec",
+      "year": 2025,
+      "rows": 192
+    },
+    {
+      "source": "sec",
+      "year": 2026,
+      "rows": 77
+    }
+  ],
+  "asset_by_year": [
+    {
+      "asset": "BTC",
+      "year": 2021,
+      "rows": 19
+    },
+    {
+      "asset": "BTC",
+      "year": 2022,
+      "rows": 42
+    },
+    {
+      "asset": "BTC",
+      "year": 2023,
+      "rows": 51
+    },
+    {
+      "asset": "BTC",
+      "year": 2024,
+      "rows": 83
+    },
+    {
+      "asset": "BTC",
+      "year": 2025,
+      "rows": 136
+    },
+    {
+      "asset": "BTC",
+      "year": 2026,
+      "rows": 56
+    },
+    {
+      "asset": "ETH",
+      "year": 2020,
+      "rows": 29
+    },
+    {
+      "asset": "ETH",
+      "year": 2021,
+      "rows": 40
+    },
+    {
+      "asset": "ETH",
+      "year": 2022,
+      "rows": 49
+    },
+    {
+      "asset": "ETH",
+      "year": 2023,
+      "rows": 65
+    },
+    {
+      "asset": "ETH",
+      "year": 2024,
+      "rows": 72
+    },
+    {
+      "asset": "ETH",
+      "year": 2025,
+      "rows": 90
+    },
+    {
+      "asset": "ETH",
+      "year": 2026,
+      "rows": 56
+    },
+    {
+      "asset": "SOL",
+      "year": 2022,
+      "rows": 15
+    },
+    {
+      "asset": "SOL",
+      "year": 2023,
+      "rows": 17
+    },
+    {
+      "asset": "SOL",
+      "year": 2024,
+      "rows": 16
+    },
+    {
+      "asset": "SOL",
+      "year": 2025,
+      "rows": 18
+    },
+    {
+      "asset": "SOL",
+      "year": 2026,
+      "rows": 8
+    }
+  ]
+}

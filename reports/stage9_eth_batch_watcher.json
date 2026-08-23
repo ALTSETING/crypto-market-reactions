@@ -1,0 +1,14 @@
+{
+  "watcher_pid": 2412,
+  "started_at": "2026-07-18T01:24:31.078650+00:00",
+  "checked_at": "2026-07-18T01:49:35.195926+00:00",
+  "batch_id": "batch_6a5ad4ec47448190a54a30466a5c5553",
+  "status": "completed",
+  "request_counts": {
+    "completed": 7015,
+    "failed": 0,
+    "total": 7015
+  },
+  "creates_batches": false,
+  "automatic_retries": false
+}

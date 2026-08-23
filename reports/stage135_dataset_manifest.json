@@ -1,0 +1,46 @@
+{
+  "dataset_version": "stage135_eth_v1",
+  "row_count": 6851,
+  "variants": {
+    "market_core": {
+      "rows": 6851,
+      "features": 101
+    },
+    "market_futures": {
+      "rows": 6851,
+      "features": 130
+    },
+    "market_futures_primary_timing": {
+      "rows": 6851,
+      "features": 139
+    }
+  },
+  "targets": [
+    "target_abs_abnormal_return_1h",
+    "target_realized_vol_15m",
+    "target_realized_vol_1h",
+    "target_realized_vol_5m",
+    "target_abs_abnormal_return_1m",
+    "target_abs_abnormal_return_3m",
+    "target_abs_abnormal_return_5m",
+    "target_abs_abnormal_return_15m",
+    "target_post_news_move_stronger_than_pre_move",
+    "target_new_information_reaction",
+    "target_late_article"
+  ],
+  "split_counts": {
+    "train": 4110,
+    "test": 1371,
+    "validation": 1370
+  },
+  "event_split_overlap": 0,
+  "post_news_features_in_predictors": 0,
+  "cutoff_violations": 0,
+  "file_hashes_sha256": {
+    "data/stage135/market_core.parquet": "c1dde5918861766ab8f68294a936ceb06a997bf427f803e4355d6da5db2452c3",
+    "data/stage135/market_futures.parquet": "5695d06b0295f811a49d3f2b10404c59968e864693a3e16a6dc03a920a32c3df",
+    "data/stage135/market_futures_primary_timing.parquet": "5db453b7b297e26a6ff177bbf325ff8a788e7d1d36910af4a5b6c4854fe780f3",
+    "data/stage135/targets.parquet": "56005d9e5d5d77ca2feaeceae8ff0268a521df45bc251ec14532f95033a7d277"
+  },
+  "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc"
+}

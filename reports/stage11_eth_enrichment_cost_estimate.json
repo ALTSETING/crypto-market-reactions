@@ -1,0 +1,90 @@
+{
+  "status": "DRY_RUN_PASS",
+  "api_requests_made": 0,
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_market_context_v1",
+  "event_count": 6858,
+  "estimated_input_tokens": 5302852,
+  "estimated_output_tokens_upper_bound": 1234440,
+  "standard_cost_usd_upper_bound": 3.794593,
+  "batch_cost_usd_upper_bound": 1.8972965,
+  "ab_test_30_standard_cost_usd_upper_bound": 0.01551225,
+  "pricing_standard_per_million": {
+    "input": 0.25,
+    "output": 2.0
+  },
+  "pricing_batch_per_million": {
+    "input": 0.125,
+    "output": 1.0
+  },
+  "max_article_tokens": 900,
+  "max_output_tokens": 180,
+  "json_schema": {
+    "type": "object",
+    "properties": {
+      "surprise_direction": {
+        "type": "string",
+        "enum": [
+          "positive",
+          "negative",
+          "neutral",
+          "mixed"
+        ]
+      },
+      "surprise_magnitude": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "expected_by_market": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "already_priced_in": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "information_freshness": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "primary_source_probability": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "actionable_novelty": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "event_specificity": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "confidence": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      }
+    },
+    "required": [
+      "surprise_direction",
+      "surprise_magnitude",
+      "expected_by_market",
+      "already_priced_in",
+      "information_freshness",
+      "primary_source_probability",
+      "actionable_novelty",
+      "event_specificity",
+      "confidence"
+    ],
+    "additionalProperties": false
+  },
+  "system_prompt": "Assess only how surprising and newly actionable this event was for ETH at publication time, using article facts only. Do not infer from later markets or events. Return strict JSON only. Scores are 0-100: surprise_magnitude deviation from typical expectations; expected_by_market prior broad anticipation; already_priced_in likely prior price incorporation; information_freshness new versus repeated information; primary_source_probability proximity to an original report; actionable_novelty likelihood of changing a trader's position; event_specificity concrete event versus commentary; confidence label certainty. No explanation or summary.",
+  "leakage_count": 0
+}

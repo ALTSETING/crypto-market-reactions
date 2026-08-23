@@ -1,0 +1,18 @@
+{
+  "target_name": "target_abs_abnormal_return_1h",
+  "dataset_variant": "market_plus_ai",
+  "model_family": "ridge",
+  "configuration": "ridge__alpha-0.1",
+  "parameters": "{\"alpha\": 0.1}",
+  "target_transform": "log1p",
+  "split": "validation",
+  "mae": 0.165043087236725,
+  "rmse": 0.24039243641354943,
+  "r2": 0.1335356431933432,
+  "spearman": 0.33775098781550267,
+  "pearson": 0.39927575044260155,
+  "median_absolute_error": 0.12182745615665233,
+  "rank_consistency": 0.6144443668925018,
+  "top_decile_lift": 1.941772517722104,
+  "top_quartile_detection": 0.43440233236151604
+}

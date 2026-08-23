@@ -1,0 +1,18 @@
+{
+  "target_name": "target_abs_abnormal_return_1h",
+  "dataset_variant": "ai_only",
+  "model_family": "ridge",
+  "configuration": "ridge__alpha-1.0",
+  "parameters": "{\"alpha\": 1.0}",
+  "target_transform": "log1p",
+  "split": "validation",
+  "mae": 0.18004856281248738,
+  "rmse": 0.26012768881068415,
+  "r2": -0.014570588923124017,
+  "spearman": 0.2084528516190027,
+  "pearson": 0.16128375868078157,
+  "median_absolute_error": 0.1391580929019776,
+  "rank_consistency": 0.5695708555878951,
+  "top_decile_lift": 1.0451380886639459,
+  "top_quartile_detection": 0.33819241982507287
+}

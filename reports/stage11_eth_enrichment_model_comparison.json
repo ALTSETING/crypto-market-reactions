@@ -1,0 +1,569 @@
+{
+  "status": "A_B_COMPLETE",
+  "models": {
+    "gpt-5-mini-2025-08-07": {
+      "success": 30,
+      "failed": 0,
+      "schema_success_rate": 1.0,
+      "actual_cost_usd": 0.0109515,
+      "input_tokens": 24366,
+      "output_tokens": 2430,
+      "retries": 0,
+      "direction_distribution": {
+        "negative": 7,
+        "positive": 3,
+        "neutral": 20
+      },
+      "score_statistics": {
+        "surprise_magnitude": {
+          "count": 30,
+          "mean": 30.5,
+          "median": 30.0,
+          "std": 19.337,
+          "min": 0,
+          "max": 70,
+          "unique_values": 8,
+          "distribution": {
+            "0": 1,
+            "10": 7,
+            "20": 4,
+            "25": 1,
+            "30": 7,
+            "40": 5,
+            "60": 2,
+            "70": 3
+          }
+        },
+        "expected_by_market": {
+          "count": 30,
+          "mean": 19.167,
+          "median": 20.0,
+          "std": 9.754,
+          "min": 5,
+          "max": 40,
+          "unique_values": 5,
+          "distribution": {
+            "5": 3,
+            "10": 8,
+            "20": 11,
+            "30": 6,
+            "40": 2
+          }
+        },
+        "already_priced_in": {
+          "count": 30,
+          "mean": 21.833,
+          "median": 20.0,
+          "std": 15.356,
+          "min": 5,
+          "max": 70,
+          "unique_values": 9,
+          "distribution": {
+            "5": 4,
+            "10": 7,
+            "15": 2,
+            "20": 6,
+            "25": 1,
+            "30": 6,
+            "40": 2,
+            "60": 1,
+            "70": 1
+          }
+        },
+        "information_freshness": {
+          "count": 30,
+          "mean": 68.667,
+          "median": 80.0,
+          "std": 26.8,
+          "min": 10,
+          "max": 90,
+          "unique_values": 7,
+          "distribution": {
+            "10": 2,
+            "20": 3,
+            "40": 2,
+            "60": 1,
+            "70": 2,
+            "80": 10,
+            "90": 10
+          }
+        },
+        "primary_source_probability": {
+          "count": 30,
+          "mean": 60.667,
+          "median": 70.0,
+          "std": 23.935,
+          "min": 10,
+          "max": 90,
+          "unique_values": 8,
+          "distribution": {
+            "10": 3,
+            "20": 1,
+            "30": 2,
+            "40": 1,
+            "60": 6,
+            "70": 8,
+            "80": 6,
+            "90": 3
+          }
+        },
+        "actionable_novelty": {
+          "count": 30,
+          "mean": 32.333,
+          "median": 37.5,
+          "std": 19.18,
+          "min": 5,
+          "max": 65,
+          "unique_values": 10,
+          "distribution": {
+            "5": 6,
+            "15": 3,
+            "20": 2,
+            "25": 1,
+            "30": 2,
+            "35": 1,
+            "40": 6,
+            "50": 5,
+            "60": 3,
+            "65": 1
+          }
+        },
+        "event_specificity": {
+          "count": 30,
+          "mean": 58.333,
+          "median": 70.0,
+          "std": 27.669,
+          "min": 0,
+          "max": 90,
+          "unique_values": 10,
+          "distribution": {
+            "0": 1,
+            "5": 2,
+            "10": 2,
+            "20": 1,
+            "30": 1,
+            "50": 1,
+            "60": 5,
+            "70": 5,
+            "80": 11,
+            "90": 1
+          }
+        },
+        "confidence": {
+          "count": 30,
+          "mean": 50.667,
+          "median": 55.0,
+          "std": 15.744,
+          "min": 20,
+          "max": 70,
+          "unique_values": 7,
+          "distribution": {
+            "20": 4,
+            "35": 1,
+            "40": 5,
+            "50": 5,
+            "60": 9,
+            "65": 1,
+            "70": 5
+          }
+        }
+      },
+      "pairwise_correlations": {
+        "surprise_magnitude": {
+          "surprise_magnitude": 1.0,
+          "expected_by_market": 0.7268,
+          "already_priced_in": 0.4796,
+          "information_freshness": 0.5738,
+          "primary_source_probability": 0.5322,
+          "actionable_novelty": 0.7698,
+          "event_specificity": 0.6246,
+          "confidence": 0.5244
+        },
+        "expected_by_market": {
+          "surprise_magnitude": 0.7268,
+          "expected_by_market": 1.0,
+          "already_priced_in": 0.5054,
+          "information_freshness": 0.5441,
+          "primary_source_probability": 0.5092,
+          "actionable_novelty": 0.7409,
+          "event_specificity": 0.6032,
+          "confidence": 0.454
+        },
+        "already_priced_in": {
+          "surprise_magnitude": 0.4796,
+          "expected_by_market": 0.5054,
+          "already_priced_in": 1.0,
+          "information_freshness": 0.4028,
+          "primary_source_probability": 0.4048,
+          "actionable_novelty": 0.458,
+          "event_specificity": 0.4681,
+          "confidence": 0.3637
+        },
+        "information_freshness": {
+          "surprise_magnitude": 0.5738,
+          "expected_by_market": 0.5441,
+          "already_priced_in": 0.4028,
+          "information_freshness": 1.0,
+          "primary_source_probability": 0.7965,
+          "actionable_novelty": 0.7194,
+          "event_specificity": 0.7702,
+          "confidence": 0.8039
+        },
+        "primary_source_probability": {
+          "surprise_magnitude": 0.5322,
+          "expected_by_market": 0.5092,
+          "already_priced_in": 0.4048,
+          "information_freshness": 0.7965,
+          "primary_source_probability": 1.0,
+          "actionable_novelty": 0.7191,
+          "event_specificity": 0.7869,
+          "confidence": 0.7374
+        },
+        "actionable_novelty": {
+          "surprise_magnitude": 0.7698,
+          "expected_by_market": 0.7409,
+          "already_priced_in": 0.458,
+          "information_freshness": 0.7194,
+          "primary_source_probability": 0.7191,
+          "actionable_novelty": 1.0,
+          "event_specificity": 0.7454,
+          "confidence": 0.6654
+        },
+        "event_specificity": {
+          "surprise_magnitude": 0.6246,
+          "expected_by_market": 0.6032,
+          "already_priced_in": 0.4681,
+          "information_freshness": 0.7702,
+          "primary_source_probability": 0.7869,
+          "actionable_novelty": 0.7454,
+          "event_specificity": 1.0,
+          "confidence": 0.6912
+        },
+        "confidence": {
+          "surprise_magnitude": 0.5244,
+          "expected_by_market": 0.454,
+          "already_priced_in": 0.3637,
+          "information_freshness": 0.8039,
+          "primary_source_probability": 0.7374,
+          "actionable_novelty": 0.6654,
+          "event_specificity": 0.6912,
+          "confidence": 1.0
+        }
+      },
+      "contradictions": {
+        "high_priced_in_and_high_freshness": 0,
+        "low_confidence_but_extreme_surprise": 0,
+        "generic_but_highly_actionable": 0
+      }
+    },
+    "gpt-5-nano-2025-08-07": {
+      "success": 30,
+      "failed": 0,
+      "schema_success_rate": 1.0,
+      "actual_cost_usd": 0.0022015,
+      "input_tokens": 24366,
+      "output_tokens": 2458,
+      "retries": 0,
+      "direction_distribution": {
+        "neutral": 29,
+        "positive": 1
+      },
+      "score_statistics": {
+        "surprise_magnitude": {
+          "count": 30,
+          "mean": 7.333,
+          "median": 0.0,
+          "std": 11.743,
+          "min": 0,
+          "max": 55,
+          "unique_values": 5,
+          "distribution": {
+            "0": 18,
+            "10": 5,
+            "15": 1,
+            "20": 5,
+            "55": 1
+          }
+        },
+        "expected_by_market": {
+          "count": 30,
+          "mean": 15,
+          "median": 0.0,
+          "std": 22.286,
+          "min": 0,
+          "max": 65,
+          "unique_values": 5,
+          "distribution": {
+            "0": 20,
+            "25": 1,
+            "40": 6,
+            "60": 2,
+            "65": 1
+          }
+        },
+        "already_priced_in": {
+          "count": 30,
+          "mean": 8.167,
+          "median": 0.0,
+          "std": 13.196,
+          "min": 0,
+          "max": 40,
+          "unique_values": 5,
+          "distribution": {
+            "0": 20,
+            "10": 2,
+            "20": 4,
+            "25": 1,
+            "40": 3
+          }
+        },
+        "information_freshness": {
+          "count": 30,
+          "mean": 60.333,
+          "median": 60.0,
+          "std": 17.221,
+          "min": 0,
+          "max": 80,
+          "unique_values": 4,
+          "distribution": {
+            "0": 2,
+            "60": 17,
+            "70": 9,
+            "80": 2
+          }
+        },
+        "primary_source_probability": {
+          "count": 30,
+          "mean": 62.5,
+          "median": 62.5,
+          "std": 12.829,
+          "min": 0,
+          "max": 70,
+          "unique_values": 5,
+          "distribution": {
+            "0": 1,
+            "50": 1,
+            "60": 13,
+            "65": 1,
+            "70": 14
+          }
+        },
+        "actionable_novelty": {
+          "count": 30,
+          "mean": 33.333,
+          "median": 35.0,
+          "std": 18.273,
+          "min": 0,
+          "max": 65,
+          "unique_values": 8,
+          "distribution": {
+            "0": 3,
+            "20": 9,
+            "25": 1,
+            "30": 2,
+            "40": 7,
+            "50": 3,
+            "60": 4,
+            "65": 1
+          }
+        },
+        "event_specificity": {
+          "count": 30,
+          "mean": 55.333,
+          "median": 60.0,
+          "std": 19.146,
+          "min": 0,
+          "max": 85,
+          "unique_values": 9,
+          "distribution": {
+            "0": 1,
+            "10": 1,
+            "20": 1,
+            "40": 5,
+            "50": 2,
+            "60": 9,
+            "70": 9,
+            "75": 1,
+            "85": 1
+          }
+        },
+        "confidence": {
+          "count": 30,
+          "mean": 55.5,
+          "median": 60.0,
+          "std": 11.927,
+          "min": 0,
+          "max": 70,
+          "unique_values": 6,
+          "distribution": {
+            "0": 1,
+            "40": 2,
+            "50": 3,
+            "55": 3,
+            "60": 20,
+            "70": 1
+          }
+        }
+      },
+      "pairwise_correlations": {
+        "surprise_magnitude": {
+          "surprise_magnitude": 1.0,
+          "expected_by_market": 0.8311,
+          "already_priced_in": 0.6461,
+          "information_freshness": 0.2517,
+          "primary_source_probability": 0.1217,
+          "actionable_novelty": 0.3094,
+          "event_specificity": 0.2412,
+          "confidence": 0.1583
+        },
+        "expected_by_market": {
+          "surprise_magnitude": 0.8311,
+          "expected_by_market": 1.0,
+          "already_priced_in": 0.9153,
+          "information_freshness": 0.291,
+          "primary_source_probability": 0.1603,
+          "actionable_novelty": 0.4338,
+          "event_specificity": 0.3945,
+          "confidence": 0.2383
+        },
+        "already_priced_in": {
+          "surprise_magnitude": 0.6461,
+          "expected_by_market": 0.9153,
+          "already_priced_in": 1.0,
+          "information_freshness": 0.2961,
+          "primary_source_probability": 0.1452,
+          "actionable_novelty": 0.3709,
+          "event_specificity": 0.4015,
+          "confidence": 0.2017
+        },
+        "information_freshness": {
+          "surprise_magnitude": 0.2517,
+          "expected_by_market": 0.291,
+          "already_priced_in": 0.2961,
+          "information_freshness": 1.0,
+          "primary_source_probability": 0.728,
+          "actionable_novelty": 0.6162,
+          "event_specificity": 0.7377,
+          "confidence": 0.551
+        },
+        "primary_source_probability": {
+          "surprise_magnitude": 0.1217,
+          "expected_by_market": 0.1603,
+          "already_priced_in": 0.1452,
+          "information_freshness": 0.728,
+          "primary_source_probability": 1.0,
+          "actionable_novelty": 0.5261,
+          "event_specificity": 0.6616,
+          "confidence": 0.8578
+        },
+        "actionable_novelty": {
+          "surprise_magnitude": 0.3094,
+          "expected_by_market": 0.4338,
+          "already_priced_in": 0.3709,
+          "information_freshness": 0.6162,
+          "primary_source_probability": 0.5261,
+          "actionable_novelty": 1.0,
+          "event_specificity": 0.7662,
+          "confidence": 0.4168
+        },
+        "event_specificity": {
+          "surprise_magnitude": 0.2412,
+          "expected_by_market": 0.3945,
+          "already_priced_in": 0.4015,
+          "information_freshness": 0.7377,
+          "primary_source_probability": 0.6616,
+          "actionable_novelty": 0.7662,
+          "event_specificity": 1.0,
+          "confidence": 0.5284
+        },
+        "confidence": {
+          "surprise_magnitude": 0.1583,
+          "expected_by_market": 0.2383,
+          "already_priced_in": 0.2017,
+          "information_freshness": 0.551,
+          "primary_source_probability": 0.8578,
+          "actionable_novelty": 0.4168,
+          "event_specificity": 0.5284,
+          "confidence": 1.0
+        }
+      },
+      "contradictions": {
+        "high_priced_in_and_high_freshness": 0,
+        "low_confidence_but_extreme_surprise": 0,
+        "generic_but_highly_actionable": 0
+      }
+    }
+  },
+  "paired_successes": 30,
+  "mean_absolute_score_differences": {
+    "surprise_magnitude": 23.833,
+    "expected_by_market": 17.5,
+    "already_priced_in": 16.667,
+    "information_freshness": 20.333,
+    "primary_source_probability": 14.833,
+    "actionable_novelty": 13.333,
+    "event_specificity": 16,
+    "confidence": 12.167
+  },
+  "significant_divergence_definition": "direction mismatch or any numeric score difference >=25",
+  "significant_divergences": 28,
+  "significant_divergence_news_ids": [
+    45,
+    715,
+    1019,
+    1144,
+    1894,
+    1947,
+    2081,
+    2189,
+    2467,
+    2573,
+    2616,
+    2767,
+    3153,
+    3167,
+    4240,
+    4294,
+    4298,
+    4326,
+    5174,
+    6673,
+    6832,
+    7891,
+    8131,
+    8293,
+    8833,
+    9836,
+    10420,
+    10806
+  ],
+  "systematic_errors": [
+    {
+      "model": "gpt-5-nano-2025-08-07",
+      "issue": "strong_neutral_default_bias",
+      "neutral_count": 29,
+      "sample_size": 30
+    },
+    {
+      "models": [
+        "gpt-5-mini-2025-08-07",
+        "gpt-5-nano-2025-08-07"
+      ],
+      "issue": "low_cross_model_stability",
+      "significant_divergences": 28,
+      "paired": 30
+    }
+  ],
+  "technical_winner": "gpt-5-mini-2025-08-07",
+  "actual_total_cost_usd": 0.013153,
+  "decision_gate": "NO-GO_PENDING_COMPLETED_HUMAN_REVIEW",
+  "predictive_claim": "NOT_EVALUATED_ON_N30",
+  "prompt_version": "eth_market_context_v1",
+  "sample_seed": 20260718,
+  "api_requests_made_this_run": 0,
+  "leakage_count": 0,
+  "duplicate_api_requests": 0,
+  "raw_response_persisted": true,
+  "mapping_errors": 0,
+  "resume_verified": true
+}

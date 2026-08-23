@@ -1,0 +1,16 @@
+{
+  "version": "stage16b_historical_backfill_v1",
+  "created_at": "2026-07-19T13:06:32.254419+00:00",
+  "source_records": 2909,
+  "canonical_events": 326,
+  "event_asset_rows": 326,
+  "files": {
+    "data\\stage16b\\canonical_events.parquet": "443b5919c38c3b607f0f6c6d31796585b495caf10b175726bed3d181e43b6653",
+    "data\\stage16b\\event_asset_coverage.parquet": "d11466c7d9ba093fa5ffae50d9ca5ec8b008069faeee855ec15f5200d668f60b",
+    "data\\stage16b\\event_source_records.parquet": "8a8850875ec24f6da548f4ecb9ae5b22deb7bcad4d994007bc284ae72464f78e",
+    "data\\stage16b\\source_records.parquet": "17a28239bf14a4052b603e8a2bbc5f826185cfff9dab87c007ecdcc4b856c9d2"
+  },
+  "openai_api_requests": 0,
+  "database_mutations": 0,
+  "protected_stage8_17_unchanged": true
+}

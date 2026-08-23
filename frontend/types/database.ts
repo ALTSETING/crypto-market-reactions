@@ -1,0 +1,54 @@
+import type { Asset } from "@/types/events";
+
+/** Exact live public.events row shape from migration 001 (49 columns). */
+export interface EventDatabaseRow {
+  event_id: string;
+  slug: string;
+  title: string;
+  published_at: string;
+  source: string;
+  source_url: string;
+  primary_asset: Asset | null;
+  related_assets: Asset[];
+  category: string;
+  sentiment: string | null;
+  sentiment_score: number | null;
+  importance: number | null;
+  ai_schema_version: string;
+  ai_prompt_version: string | null;
+  ai_original_scale: string;
+  archive_dataset_source: "A" | "B" | "C";
+  archive_member_id: string;
+  reaction_methodology: string;
+  reaction_value_unit: "percent";
+  btc_1m: number | null;
+  btc_5m: number | null;
+  btc_15m: number | null;
+  btc_1h: number | null;
+  btc_4h: number | null;
+  btc_24h: number | null;
+  btc_reaction_source: string | null;
+  btc_reference_time: string | null;
+  btc_reference_latency_minutes: number | null;
+  eth_1m: number | null;
+  eth_5m: number | null;
+  eth_15m: number | null;
+  eth_1h: number | null;
+  eth_4h: number | null;
+  eth_24h: number | null;
+  eth_reaction_source: string | null;
+  eth_reference_time: string | null;
+  eth_reference_latency_minutes: number | null;
+  sol_1m: number | null;
+  sol_5m: number | null;
+  sol_15m: number | null;
+  sol_1h: number | null;
+  sol_4h: number | null;
+  sol_24h: number | null;
+  sol_reaction_source: string | null;
+  sol_reference_time: string | null;
+  sol_reference_latency_minutes: number | null;
+  search_vector: unknown;
+  created_at: string;
+  updated_at: string;
+}

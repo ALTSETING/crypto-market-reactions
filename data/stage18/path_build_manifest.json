@@ -1,0 +1,9 @@
+{
+  "signature": "909540935ecd09c16829ab0f4a49dd87754de913b896d05bb1678d86ddc15723",
+  "inventory_hash": "4a78d76ad1ddbe2450c79f3db7a658d4418d463ffa2eb6ca0f5ec6b86e3f381f",
+  "rows": 8039,
+  "fully_covered": 7947,
+  "path_rows": 11451627,
+  "partitioning": "asset/event-year/event-month",
+  "no_synthetic_candles": true
+}

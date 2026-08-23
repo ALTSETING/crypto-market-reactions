@@ -1,0 +1,115 @@
+{
+  "sources": [
+    {
+      "source": "donald_trump",
+      "start": "2020-01-01",
+      "end": "2026-07-01",
+      "resume": true,
+      "dry_run": true,
+      "fetched": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "rejection_reasons": {},
+      "in_batch_duplicates": 0,
+      "inserted": 0,
+      "duplicates": 0,
+      "assets_inserted": 0,
+      "asset_counts": {},
+      "earliest": null,
+      "latest": null
+    },
+    {
+      "source": "elon_musk",
+      "start": "2020-01-01",
+      "end": "2026-07-01",
+      "resume": true,
+      "dry_run": true,
+      "fetched": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "rejection_reasons": {},
+      "in_batch_duplicates": 0,
+      "inserted": 0,
+      "duplicates": 0,
+      "assets_inserted": 0,
+      "asset_counts": {},
+      "earliest": null,
+      "latest": null
+    },
+    {
+      "source": "ethereum_foundation",
+      "start": "2020-01-01",
+      "end": "2026-07-01",
+      "resume": true,
+      "dry_run": false,
+      "fetched": 7,
+      "accepted": 7,
+      "rejected": 0,
+      "rejection_reasons": {},
+      "in_batch_duplicates": 0,
+      "inserted": 0,
+      "duplicates": 7,
+      "assets_inserted": 0,
+      "asset_counts": {
+        "ETH": 7
+      },
+      "earliest": "2026-04-29T00:00:00+00:00",
+      "latest": "2026-07-01T00:00:00+00:00"
+    },
+    {
+      "source": "ethereum_github",
+      "start": "2020-01-01",
+      "end": "2026-07-01",
+      "resume": true,
+      "dry_run": false,
+      "fetched": 245,
+      "accepted": 245,
+      "rejected": 0,
+      "rejection_reasons": {},
+      "in_batch_duplicates": 0,
+      "inserted": 0,
+      "duplicates": 245,
+      "assets_inserted": 0,
+      "asset_counts": {
+        "ETH": 245
+      },
+      "earliest": "2020-01-11T00:48:29+00:00",
+      "latest": "2026-06-30T17:17:27+00:00"
+    },
+    {
+      "source": "sec",
+      "start": "2020-01-01",
+      "end": "2026-07-01",
+      "resume": true,
+      "dry_run": false,
+      "fetched": 500,
+      "accepted": 462,
+      "rejected": 38,
+      "rejection_reasons": {
+        "below_crypto_relevance_threshold": 38
+      },
+      "in_batch_duplicates": 0,
+      "inserted": 0,
+      "updated": 0,
+      "duplicates": 500,
+      "assets_inserted": 0,
+      "asset_counts": {
+        "BTC": 387,
+        "ETH": 149,
+        "SOL": 74
+      },
+      "earliest": "2021-05-13T00:00:00+00:00",
+      "latest": "2026-07-01T12:47:58+00:00"
+    }
+  ],
+  "database_events_by_source": {
+    "sec": 500,
+    "ethereum_github": 245,
+    "ethereum_foundation": 7
+  },
+  "database_status": {
+    "accepted": 714,
+    "rejected": 38
+  },
+  "resume_semantics": "unique URL/canonical/content/platform+external constraints and bulk ON CONFLICT"
+}

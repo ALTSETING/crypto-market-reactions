@@ -1,0 +1,20 @@
+{
+  "source": "ethereum_github",
+  "start": "2020-01-01",
+  "end": "2026-07-01",
+  "resume": true,
+  "dry_run": false,
+  "fetched": 245,
+  "accepted": 245,
+  "rejected": 0,
+  "rejection_reasons": {},
+  "in_batch_duplicates": 0,
+  "inserted": 0,
+  "duplicates": 245,
+  "assets_inserted": 0,
+  "asset_counts": {
+    "ETH": 245
+  },
+  "earliest": "2020-01-11T00:48:29+00:00",
+  "latest": "2026-06-30T17:17:27+00:00"
+}

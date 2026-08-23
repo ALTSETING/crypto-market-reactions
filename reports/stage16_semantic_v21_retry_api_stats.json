@@ -1,0 +1,16 @@
+{
+  "selected": 28,
+  "success": 28,
+  "failed": 0,
+  "invalid_schema": 0,
+  "refused": 0,
+  "missing": 0,
+  "input_tokens": 18043,
+  "output_tokens": 9135,
+  "actual_cost_usd": 0.02278075,
+  "max_output_tokens": 400,
+  "automatic_third_batch": false,
+  "event_custom_id_mapping_valid": true,
+  "batch_id": "batch_6a5c435daa7c819091514c4915d3a009",
+  "cumulative_actual_cost_usd": 0.529171
+}

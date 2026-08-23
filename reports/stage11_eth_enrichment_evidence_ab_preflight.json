@@ -1,0 +1,245 @@
+{
+  "status": "PREFLIGHT_PASS",
+  "api_requests_made": 0,
+  "sample_size": 30,
+  "news_ids": [
+    4728,
+    6832,
+    4298,
+    4326,
+    9836,
+    5174,
+    8131,
+    8833,
+    10420,
+    10806,
+    1144,
+    1947,
+    2616,
+    4240,
+    4294,
+    7891,
+    8293,
+    6673,
+    45,
+    715,
+    1019,
+    1894,
+    2081,
+    2189,
+    2467,
+    2573,
+    2767,
+    3153,
+    3167,
+    3438
+  ],
+  "event_keys": [
+    "7e87edbabff54cf89b5ce6f5d4c6eb0d",
+    "992bbf6c64c94b16888f768c48834f2f",
+    "4c53b94469914202bcabc4e9e78b9e0d",
+    "e3bf64f65c60416cbf2a09e65b9a5865",
+    "f29d938503614d379ea51c36b3cd5446",
+    "a06825a410ef45858c2c42ececc3c56b",
+    "2b5a27f7b1644e0ebf65b060c0bb0bc2",
+    "5cdb1fb9c21449e9bd142c3814f6f39c",
+    "2365cfc0361b4fe496c1d6cf370f0552",
+    "86413f332b994e77aa3de3d520dd78d7",
+    "3eef38f805e743c395917a1aa0c1d56d",
+    "2e7d7742813c46eaacf139eeab550ba2",
+    "267c45becca747c6b0f4b481f170c937",
+    "4496687cb6e94cebb891765edd311d7f",
+    "d58d2c794ecb471f864ba801b9de7cb3",
+    "145620d34cf24c588b9a373cdf8477e4",
+    "3c9fa012137b4d2397160e6947754c12",
+    "7b1d44127899467eb781ec75bf60e98a",
+    "fc506d0594d043c8950d4350c8f6a32e",
+    "cbd071535361443680fa88444a2182b2",
+    "89fd5a8cb8ad4263a3a5d6bc01a136f5",
+    "91f9a51f82d646d2a49eb3132c07c4d5",
+    "7b44393b4562423583b09199037169ff",
+    "756141f0cb9c48958e0f58d0c1b2ee04",
+    "b3fe49b2d0554b6ab7990ba348ba4f03",
+    "c5bb3b3e297e497c88c18684555429ad",
+    "f6dfac9a3a774182a6ee0fea3d315385",
+    "ac7057f5fe8f40889aa56233204ceee3",
+    "439b21c928644c81b3b3fa191eb46c11",
+    "4aa835df89284000b2175460996db471"
+  ],
+  "input_hashes": {
+    "4728": "884386b35ba4f159d556d6af87bed600378ec57c100266b5e350b26307d91e27",
+    "6832": "3792204602debc6f782f036a5b163a84fe7ffbe3c6a8d695962a52aa56d78ebb",
+    "4298": "0ccef4558eeaca330016771fb180698ff8dd01fba9ec3af597146b8c7337df72",
+    "4326": "87288e0a4cfe6f50c0079a68c5d6c74d473371c847a970db3f8ab5e5d76fb3b5",
+    "9836": "1aee8bd51e032a6af21e9ead2a34c6323c24afa2bcd9923ba698c2d9a60af4a2",
+    "5174": "4a70c0cbb0a84958ae4d03b6a77c12c4b27b3c266ede28b209288882860cd790",
+    "8131": "da4e02950cf079702354ae4fde2cbd8ae8a9be655a0d436b77d29772a6be8c02",
+    "8833": "0f33d08b298f890cb1d8505b1c07672052cbd34e9e1053ca9fe690558c8b147e",
+    "10420": "f1fe3391a9984fa7086d627fd37aca92a336abe3c344f5bcf3b20006cfdae79b",
+    "10806": "de781a78109e8d0f7d9f38e26680bcc57521178412a9fc9cd2c31fe68762478d",
+    "1144": "fb3a7feaaaf50c209bcc8e612f522ac7c406f8747fca9e44edb14acbd377fe00",
+    "1947": "825a0f30b165000f62e19ccf3a5b518d39094753f7fba981ac3d6f34365e70c0",
+    "2616": "06f83eda48cb1609fe6a092bc8c5aab7cc6b67a7d3a7e42d5e37c26e4d323157",
+    "4240": "5e2ecd9123150fd26208e329a4aa499b230f3cba9f171da626761148c7760c41",
+    "4294": "b7807a11d3edc840e517f2af492e913f248511e4f96440ac357a0a1756a3ff0e",
+    "7891": "29ae1cd196fe0b1bb1f033c72e43153411a7a2e893ecea76f1fc62260225c218",
+    "8293": "53465e57707d45eb362cfaefe666b36d7af19caefad04435f4ba186b6f35aa5c",
+    "6673": "e21f6743b6bec6c7517e9ec3f09ef7f3d99fd48acf353d5b702798e80c2cf600",
+    "45": "a87ae5d3797411cd2bd2cdebbef22ffb55858dc455a99f383a036e1ee7b9a1af",
+    "715": "3bebe867dc08d2882952caee435611c7f124cbcb8f2c6e92b5f36a77c69fa150",
+    "1019": "9b84f24beeafbd44a1109137442feb01986caf800afd96c9331e430ae125a4f2",
+    "1894": "6dcb99f150e2ddad5d725300d9feec0ce4e14bcdd2d5fc679dba2051dc3dd1f3",
+    "2081": "800ddfed1741f91de38096ad38f5054e3cea98fb8997a8b2e3383fc46475a1da",
+    "2189": "0fac83aacdb621c36798b90f3a4e9b388dbf522d82af1a894630a3bed4873881",
+    "2467": "66439460157e426f5017ef954a8d14658d8377776592acbc200b239e6472a0d2",
+    "2573": "67891e7b8c945f71922c186391ca045efdaa5d2068b7cd128c8068e1a839b325",
+    "2767": "a2747e75ad323ddd9b696588995c3e02cb435127b88ca831602afc24fbfb6cf9",
+    "3153": "9330e4c495478954f01ae15bb2c7375303d38626dab9ba969e078a68fae78fee",
+    "3167": "67f093e636a742cec15e314029efae91c4823a90b4faee8782838fd70f5936ca",
+    "3438": "bd2799e845ff3474003de629d31d467e8141d0bac5f3e9703cfb043b0cf0df72"
+  },
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_market_context_v2",
+  "system_prompt": "Label only article evidence about ETH at publication time; never use later events or market data. Distinguish a concrete original event from repetition or commentary. Do not infer market expectations without textual evidence. Do not infer priced-in status from later price movement. Do not assume the publisher is the primary source. For expected_by_market, already_priced_in, and primary_source_probability, set evidence to sufficient only when the article directly supports the score; otherwise set evidence to insufficient and the score to null. Use integer scores 0-100 elsewhere. Return only strict JSON; no explanation.",
+  "json_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "surprise_direction": {
+        "enum": [
+          "positive",
+          "negative",
+          "neutral",
+          "mixed"
+        ],
+        "title": "Surprise Direction",
+        "type": "string"
+      },
+      "surprise_magnitude": {
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Surprise Magnitude",
+        "type": "integer"
+      },
+      "expected_by_market": {
+        "anyOf": [
+          {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Expected By Market"
+      },
+      "expected_by_market_evidence": {
+        "enum": [
+          "sufficient",
+          "insufficient"
+        ],
+        "title": "Expected By Market Evidence",
+        "type": "string"
+      },
+      "already_priced_in": {
+        "anyOf": [
+          {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Already Priced In"
+      },
+      "already_priced_in_evidence": {
+        "enum": [
+          "sufficient",
+          "insufficient"
+        ],
+        "title": "Already Priced In Evidence",
+        "type": "string"
+      },
+      "information_freshness": {
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Information Freshness",
+        "type": "integer"
+      },
+      "primary_source_probability": {
+        "anyOf": [
+          {
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Primary Source Probability"
+      },
+      "primary_source_evidence": {
+        "enum": [
+          "sufficient",
+          "insufficient"
+        ],
+        "title": "Primary Source Evidence",
+        "type": "string"
+      },
+      "actionable_novelty": {
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Actionable Novelty",
+        "type": "integer"
+      },
+      "event_specificity": {
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Event Specificity",
+        "type": "integer"
+      },
+      "confidence": {
+        "maximum": 100,
+        "minimum": 0,
+        "title": "Confidence",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "surprise_direction",
+      "surprise_magnitude",
+      "expected_by_market",
+      "expected_by_market_evidence",
+      "already_priced_in",
+      "already_priced_in_evidence",
+      "information_freshness",
+      "primary_source_probability",
+      "primary_source_evidence",
+      "actionable_novelty",
+      "event_specificity",
+      "confidence"
+    ],
+    "title": "EvidenceEnrichmentPayload",
+    "type": "object"
+  },
+  "estimated_input_tokens": 32136,
+  "estimated_output_tokens_upper_bound": 5400,
+  "estimated_cost_usd_upper_bound": 0.018834,
+  "max_cost_usd": 0.02,
+  "leakage_count": 0,
+  "unique_request_identity_count": 30,
+  "nullable_score_fields": [
+    "expected_by_market",
+    "already_priced_in",
+    "primary_source_probability"
+  ],
+  "evidence_fields": [
+    "expected_by_market_evidence",
+    "already_priced_in_evidence",
+    "primary_source_evidence"
+  ],
+  "same_sample_as_v1": true
+}

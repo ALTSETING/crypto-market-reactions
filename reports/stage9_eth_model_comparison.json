@@ -1,0 +1,149 @@
+{
+  "prompt_version": "eth_label_v1",
+  "model_ids": [
+    "gpt-5-nano-2025-08-07",
+    "gpt-5-mini-2025-08-07"
+  ],
+  "paired_successes": 50,
+  "models": {
+    "gpt-5-nano-2025-08-07": {
+      "success": 50,
+      "failed": 0,
+      "schema_success_rate": 1.0,
+      "actual_cost_usd": 0.0033984,
+      "average_cost_per_article_usd": 6.797e-05,
+      "input_tokens": 38528,
+      "output_tokens": 3680,
+      "total_tokens": 42208,
+      "average_latency_seconds": 1.5779,
+      "retries": 0,
+      "direction_distribution": {
+        "neutral": 46,
+        "mixed": 1,
+        "bullish": 3
+      },
+      "category_distribution": {
+        "tokenomics": 5,
+        "stablecoins": 4,
+        "institutional_adoption": 8,
+        "regulation": 7,
+        "macro": 1,
+        "nft": 1,
+        "market_commentary": 12,
+        "defi": 5,
+        "security": 2,
+        "protocol_upgrade": 1,
+        "fees": 1,
+        "layer2": 2,
+        "etf": 1
+      },
+      "horizon_distribution": {
+        "days": 26,
+        "weeks": 7,
+        "months": 2,
+        "hours": 5,
+        "minutes": 9,
+        "unclear": 1
+      }
+    },
+    "gpt-5-mini-2025-08-07": {
+      "success": 50,
+      "failed": 0,
+      "schema_success_rate": 1.0,
+      "actual_cost_usd": 0.016544,
+      "average_cost_per_article_usd": 0.00033088,
+      "input_tokens": 38528,
+      "output_tokens": 3456,
+      "total_tokens": 41984,
+      "average_latency_seconds": 1.5126,
+      "retries": 0,
+      "direction_distribution": {
+        "neutral": 25,
+        "bullish": 14,
+        "mixed": 7,
+        "bearish": 4
+      },
+      "category_distribution": {
+        "other": 3,
+        "institutional_adoption": 13,
+        "regulation": 2,
+        "stablecoins": 4,
+        "macro": 2,
+        "nft": 3,
+        "market_commentary": 8,
+        "legal": 1,
+        "etf": 3,
+        "security": 2,
+        "exchange": 4,
+        "protocol_upgrade": 2,
+        "network_activity": 2,
+        "layer2": 1
+      },
+      "horizon_distribution": {
+        "weeks": 18,
+        "months": 11,
+        "days": 8,
+        "hours": 7,
+        "unclear": 4,
+        "minutes": 2
+      }
+    }
+  },
+  "mean_absolute_score_differences": {
+    "sentiment": 10.5,
+    "importance": 22.52,
+    "novelty": 22.88,
+    "credibility": 50.78,
+    "confidence": 9.56,
+    "eth_relevance": 21.7
+  },
+  "overall_mean_absolute_score_difference": 22.99,
+  "categorical_agreement_rates": {
+    "direction": 0.54,
+    "category": 0.54,
+    "horizon": 0.3
+  },
+  "significant_divergence_definition": "sentiment>=30, importance/confidence/eth_relevance>=25, or bearish-vs-bullish",
+  "significant_divergences": 36,
+  "significant_divergence_news_ids": [
+    603,
+    739,
+    782,
+    955,
+    2058,
+    2082,
+    2517,
+    2778,
+    3703,
+    3737,
+    3836,
+    3999,
+    4167,
+    5128,
+    5354,
+    5442,
+    5723,
+    5752,
+    5761,
+    6050,
+    6480,
+    6616,
+    6715,
+    7633,
+    7895,
+    8064,
+    8285,
+    8717,
+    8986,
+    9624,
+    9738,
+    10233,
+    10263,
+    10342,
+    10553,
+    10973
+  ],
+  "total_actual_cost_usd": 0.0199424,
+  "recommendation": "gpt-5-mini-2025-08-07",
+  "recommendation_basis": "mini preferred because nano did not meet schema/stability thresholds"
+}

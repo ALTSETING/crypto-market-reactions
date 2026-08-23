@@ -1,0 +1,70 @@
+{
+  "audit_status": "PARTIAL_DIAGNOSTIC",
+  "retrospective_only": true,
+  "pattern_a": {
+    "pattern_id": "stage17_directional_lock_v1:5e81bf106834c3a8edf640cad718e2c113106059460198ffc34aa6dfa60831f9",
+    "entry_rule": "argmax UP/DOWN probability; NO_SIGNAL below confidence threshold or outside subgroup",
+    "signal_direction": "LONG_OR_SHORT",
+    "fixed_exit_horizon": "12h",
+    "neutral_threshold": 0.1,
+    "cost_model": {
+      "base_round_trip_percent": 0.2
+    },
+    "frozen_feature_list": [
+      "ai_source_reliability",
+      "ai_novelty",
+      "ai_importance",
+      "ai_specificity",
+      "ai_confidence",
+      "ai_actionability",
+      "ai_institutional_relevance",
+      "ai_retail_relevance",
+      "ai_economic_significance",
+      "ai_technical_significance",
+      "ai_security_significance",
+      "ai_adoption_significance",
+      "ai_execution_certainty",
+      "ai_urgency",
+      "ai_fundamental_relevance",
+      "ai_asset_relevance",
+      "ai_content_valence_score",
+      "metadata_asset",
+      "metadata_source",
+      "metadata_source_type",
+      "metadata_platform",
+      "source_event_type",
+      "source_information_status",
+      "ai_surprise_evidence",
+      "ai_first_disclosure",
+      "ai_market_scope",
+      "ai_temporary_vs_structural",
+      "ai_evidence_quality",
+      "ai_content_valence",
+      "ai_directness"
+    ],
+    "frozen_model_hash": "cdaa5784f48709640594b926b4fa7932777596a44dd5fd80e76800c5ba917bf0",
+    "config_hash": "5e81bf106834c3a8edf640cad718e2c113106059460198ffc34aa6dfa60831f9",
+    "selection_origin": "RETROSPECTIVE_EXPLORATORY",
+    "candidate_rule_sha256": "743808baf640223e19f0be18f50f79c08ab26d630bc9d503cf4add5c59de2f0f"
+  },
+  "pattern_b": {
+    "pattern_id": "model:semantic_plus_market:gradient_boosting:12h:0.1:0.4:ETH",
+    "config_hash": "509a91b2d6fda0991eba012cf273ad54ef9b2f711a49a6891a7ba0a7277f900e",
+    "status": "CANNOT_RECONSTRUCT_WITHOUT_REFIT",
+    "available_signals": 0,
+    "missing_walkforward_signals": 111,
+    "missing_validation_signals": 46,
+    "coverage_percent": 0.0,
+    "frozen_model_hash": null
+  },
+  "selection_summary": {
+    "best_accuracy_horizons": [
+      "8h",
+      "12h"
+    ],
+    "best_gross_horizon": "12h",
+    "best_net_horizon": "12h",
+    "pattern_a_current_horizon_folds_beating_baseline": 0,
+    "pattern_b_current_horizon_folds_beating_baseline": 1
+  }
+}

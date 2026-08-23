@@ -1,0 +1,24 @@
+{
+  "version": "stage17_manual_hypotheses_v2",
+  "created_before_locked_test": true,
+  "primary_latency_minutes": 1,
+  "primary_horizons": [
+    "1h",
+    "3h",
+    "12h"
+  ],
+  "hypotheses": {
+    "H1": "verified primary + confirmed + relevance>=60 + direct + BTC stable",
+    "H2": "ETH positive + relevance>=70 + direct + importance>=50 + not already rising",
+    "H3": "negative regulatory/legal/policy + relevance>=60 + BTC not strongly rising",
+    "H4": "ETH protocol update + technical>=50 + relevance>=60 + low/medium pre-volatility",
+    "H5": "institutional>=60 + execution>=70 + relevance>=60 + BTC stable/rising",
+    "H6": "novelty>=50 + specificity>=60 + relevance>=70 + direct",
+    "H7": "verified primary + confirmed + structural + fundamental>=60",
+    "H8": "security event/significance>=60 + relevance>=60 + direct",
+    "H9": "public figure; only if observed, otherwise INSUFFICIENT_DATA",
+    "H10": "relevance>=70 + importance<30 control",
+    "H11": "verified primary + novelty<20 + relevance>=40 control",
+    "H12": "direct vs indirect vs market_wide comparison"
+  }
+}

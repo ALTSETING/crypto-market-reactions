@@ -1,0 +1,768 @@
+{
+  "status": "PASS",
+  "completed_at": "2026-07-19T03:29:52.259420+00:00",
+  "batch_id": "batch_6a5c435daa7c819091514c4915d3a009",
+  "batch_status": "completed",
+  "selected": 714,
+  "submitted": 714,
+  "success": 714,
+  "failed": 0,
+  "invalid_schema": 0,
+  "refused": 0,
+  "missing": 0,
+  "documented_non_success": 0,
+  "schema_success_rate": 1.0,
+  "input_tokens": 608916,
+  "output_tokens": 188471,
+  "actual_cost_usd": 0.529171,
+  "average_cost_per_event": 0.00074114,
+  "max_cost_usd": 0.7,
+  "model": "gpt-5-mini",
+  "prompt_version": "high_impact_semantic_v2_1",
+  "duplicates": 0,
+  "leakage": 0,
+  "predictive_fields": [],
+  "event_type_distribution": {
+    "policy_statement": 1,
+    "protocol_update": 189,
+    "product_launch": 57,
+    "security_event": 5,
+    "official_decision": 460,
+    "legal_action": 2
+  },
+  "information_status_distribution": {
+    "official_plan": 172,
+    "confirmed_action": 542
+  },
+  "evidence_quality_distribution": {
+    "primary_source": 520,
+    "official_statement": 8,
+    "official_document": 186
+  },
+  "first_disclosure_distribution": {
+    "no": 634,
+    "yes": 52,
+    "unclear": 28
+  },
+  "surprise_null_rate": 1.0,
+  "asset_counts": {
+    "ETH": 401,
+    "BTC": 387,
+    "SOL": 74
+  },
+  "content_valence_distribution": {
+    "ETH:positive": 104,
+    "ETH:neutral": 295,
+    "ETH:negative": 1,
+    "ETH:mixed": 1,
+    "BTC:positive": 50,
+    "BTC:neutral": 337,
+    "SOL:neutral": 74
+  },
+  "average_asset_relevance": 24.848027842227378,
+  "average_importance": 30.698879551820728,
+  "average_novelty": 16.098039215686274,
+  "average_specificity": 27.07282913165266,
+  "average_source_reliability": 37.593837535014,
+  "resume_no_new_batch": true,
+  "automatic_retry_batch": false,
+  "pytest": {
+    "returncode": 0,
+    "passed": 213,
+    "failed": 0,
+    "stdout_tail": "........................................................................ [ 33%]\r\n........................................................................ [ 67%]\r\n.....................................................................    [100%]\r\n============================== warnings summary ===============================\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\r\n  C:\\Users\\Denis\\Desktop\\����� ������\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\joblib\\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\r\n  As an alternative, you can create a new view using np.reshape (with copy=False if needed).\r\n    array.shape = self.shape\r\n\r\n.venv\\Lib\\site-packages\\_pytest\\cacheprovider.py:469\r\n  C:\\Users\\Denis\\Desktop\\����� ������\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\_pytest\\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\\Users\\Denis\\Desktop\\����� ������\\eth_news_trading_bot\\.pytest_cache\\v\\cache\\nodeids: [WinError 183] Cannot create a file when that file already exists: 'C:\\\\Users\\\\Denis\\\\Desktop\\\\����� ������\\\\eth_news_trading_bot\\\\.pytest_cache\\\\v\\\\cache'\r\n    config.cache.set(\"cache/nodeids\", sorted(self.cached_nodeids))\r\n\r\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\r\n213 passed, 7 warnings in 7.30s\r\n",
+    "stderr_tail": ""
+  },
+  "stage8_15_unchanged": {
+    "unchanged": true,
+    "changed_files": [],
+    "changed_counts": {}
+  },
+  "semantic_v1_v2_artifacts": {
+    "unchanged": true,
+    "changed": [],
+    "expected": {
+      "stage16_semantic_v1_vs_v2.json": "B060BF7536806512C46B54E61A9E4758E52D9E68FD01DCC24A142A475AE1646A",
+      "stage16_semantic_v2_preflight.json": "0BF9C936B28BD13B5F0621273BED1EBBD53C34B8640A3D456C0D17362282A3D3",
+      "stage16_ai_semantic_v2_results.csv": "C1C5BB88FCFA6C23094122C7791DF36BEDA46B10AD0AC2917925B0AF6D7C94F1",
+      "stage16_ai_semantic_v1_dryrun_comparator.csv": "5B4BEA15807DC6599E32DA97B302AFB2612ABA2F1E4D45710AE1A2D05B39D795",
+      "stage16_high_impact_semantic_v2_preflight.jsonl": "FF5E52F42D53A1B35FC5F76568D59E6DF87541A807ECA32628CE33F40CA46CCF"
+    },
+    "actual": {
+      "stage16_semantic_v1_vs_v2.json": "B060BF7536806512C46B54E61A9E4758E52D9E68FD01DCC24A142A475AE1646A",
+      "stage16_semantic_v2_preflight.json": "0BF9C936B28BD13B5F0621273BED1EBBD53C34B8640A3D456C0D17362282A3D3",
+      "stage16_ai_semantic_v2_results.csv": "C1C5BB88FCFA6C23094122C7791DF36BEDA46B10AD0AC2917925B0AF6D7C94F1",
+      "stage16_ai_semantic_v1_dryrun_comparator.csv": "5B4BEA15807DC6599E32DA97B302AFB2612ABA2F1E4D45710AE1A2D05B39D795",
+      "stage16_high_impact_semantic_v2_preflight.jsonl": "FF5E52F42D53A1B35FC5F76568D59E6DF87541A807ECA32628CE33F40CA46CCF"
+    }
+  },
+  "dataset_manifest": {
+    "dataset_version": "stage16_high_impact_semantic_v21",
+    "rows": 668,
+    "target_rows": 668,
+    "variants": {
+      "a_source_only": [
+        "metadata_event_id",
+        "metadata_published_at",
+        "metadata_asset",
+        "metadata_symbol",
+        "metadata_source",
+        "metadata_source_type",
+        "metadata_platform",
+        "metadata_author_name",
+        "metadata_author_handle",
+        "metadata_event_group_id",
+        "metadata_split",
+        "source_time_confidence",
+        "source_authenticity",
+        "source_crypto_relevance",
+        "source_asset_relevance",
+        "source_event_type",
+        "source_information_status",
+        "ai_source_reliability",
+        "ai_novelty",
+        "ai_importance",
+        "ai_specificity",
+        "ai_confidence",
+        "ai_surprise_level",
+        "ai_surprise_evidence",
+        "ai_first_disclosure",
+        "ai_actionability",
+        "ai_institutional_relevance",
+        "ai_retail_relevance",
+        "ai_market_scope",
+        "ai_regulatory_strength",
+        "ai_economic_significance",
+        "ai_technical_significance",
+        "ai_security_significance",
+        "ai_adoption_significance",
+        "ai_execution_certainty",
+        "ai_urgency",
+        "ai_fundamental_relevance",
+        "ai_temporary_vs_structural",
+        "ai_evidence_quality",
+        "ai_asset_relevance",
+        "ai_content_valence",
+        "ai_content_valence_score",
+        "ai_directness"
+      ],
+      "b_market_only": [
+        "metadata_event_id",
+        "metadata_published_at",
+        "metadata_asset",
+        "metadata_symbol",
+        "metadata_split",
+        "pre_return_1m",
+        "pre_return_5m",
+        "pre_return_10m",
+        "pre_return_20m",
+        "pre_return_40m",
+        "pre_return_60m",
+        "pre_return_180m",
+        "pre_return_300m",
+        "pre_return_480m",
+        "pre_return_720m",
+        "pre_realized_vol_5m",
+        "pre_realized_vol_20m",
+        "pre_realized_vol_60m",
+        "pre_realized_vol_180m",
+        "pre_realized_vol_720m",
+        "pre_volume_z60",
+        "pre_volume_vs_avg60",
+        "pre_distance_sma20",
+        "pre_distance_ema20",
+        "pre_distance_sma50",
+        "pre_distance_ema50",
+        "pre_distance_sma200",
+        "pre_distance_ema200",
+        "pre_sma20_slope",
+        "pre_trend_regime",
+        "pre_rolling_beta_btc",
+        "pre_rolling_corr_btc",
+        "pre_relative_strength_1h"
+      ],
+      "c_source_market": [
+        "metadata_event_id",
+        "metadata_published_at",
+        "metadata_asset",
+        "metadata_symbol",
+        "metadata_source",
+        "metadata_source_type",
+        "metadata_platform",
+        "metadata_author_name",
+        "metadata_author_handle",
+        "metadata_event_group_id",
+        "metadata_split",
+        "source_time_confidence",
+        "source_authenticity",
+        "source_crypto_relevance",
+        "source_asset_relevance",
+        "source_event_type",
+        "source_information_status",
+        "ai_source_reliability",
+        "ai_novelty",
+        "ai_importance",
+        "ai_specificity",
+        "ai_confidence",
+        "ai_surprise_level",
+        "ai_surprise_evidence",
+        "ai_first_disclosure",
+        "ai_actionability",
+        "ai_institutional_relevance",
+        "ai_retail_relevance",
+        "ai_market_scope",
+        "ai_regulatory_strength",
+        "ai_economic_significance",
+        "ai_technical_significance",
+        "ai_security_significance",
+        "ai_adoption_significance",
+        "ai_execution_certainty",
+        "ai_urgency",
+        "ai_fundamental_relevance",
+        "ai_temporary_vs_structural",
+        "ai_evidence_quality",
+        "ai_asset_relevance",
+        "ai_content_valence",
+        "ai_content_valence_score",
+        "ai_directness",
+        "pre_return_1m",
+        "pre_return_5m",
+        "pre_return_10m",
+        "pre_return_20m",
+        "pre_return_40m",
+        "pre_return_60m",
+        "pre_return_180m",
+        "pre_return_300m",
+        "pre_return_480m",
+        "pre_return_720m",
+        "pre_realized_vol_5m",
+        "pre_realized_vol_20m",
+        "pre_realized_vol_60m",
+        "pre_realized_vol_180m",
+        "pre_realized_vol_720m",
+        "pre_volume_z60",
+        "pre_volume_vs_avg60",
+        "pre_distance_sma20",
+        "pre_distance_ema20",
+        "pre_distance_sma50",
+        "pre_distance_ema50",
+        "pre_distance_sma200",
+        "pre_distance_ema200",
+        "pre_sma20_slope",
+        "pre_trend_regime",
+        "pre_rolling_beta_btc",
+        "pre_rolling_corr_btc",
+        "pre_relative_strength_1h"
+      ],
+      "d_source_market_timing": [
+        "metadata_event_id",
+        "metadata_published_at",
+        "metadata_asset",
+        "metadata_symbol",
+        "metadata_source",
+        "metadata_source_type",
+        "metadata_platform",
+        "metadata_author_name",
+        "metadata_author_handle",
+        "metadata_event_group_id",
+        "metadata_split",
+        "source_time_confidence",
+        "source_authenticity",
+        "source_crypto_relevance",
+        "source_asset_relevance",
+        "source_event_type",
+        "source_information_status",
+        "ai_source_reliability",
+        "ai_novelty",
+        "ai_importance",
+        "ai_specificity",
+        "ai_confidence",
+        "ai_surprise_level",
+        "ai_surprise_evidence",
+        "ai_first_disclosure",
+        "ai_actionability",
+        "ai_institutional_relevance",
+        "ai_retail_relevance",
+        "ai_market_scope",
+        "ai_regulatory_strength",
+        "ai_economic_significance",
+        "ai_technical_significance",
+        "ai_security_significance",
+        "ai_adoption_significance",
+        "ai_execution_certainty",
+        "ai_urgency",
+        "ai_fundamental_relevance",
+        "ai_temporary_vs_structural",
+        "ai_evidence_quality",
+        "ai_asset_relevance",
+        "ai_content_valence",
+        "ai_content_valence_score",
+        "ai_directness",
+        "pre_return_1m",
+        "pre_return_5m",
+        "pre_return_10m",
+        "pre_return_20m",
+        "pre_return_40m",
+        "pre_return_60m",
+        "pre_return_180m",
+        "pre_return_300m",
+        "pre_return_480m",
+        "pre_return_720m",
+        "pre_realized_vol_5m",
+        "pre_realized_vol_20m",
+        "pre_realized_vol_60m",
+        "pre_realized_vol_180m",
+        "pre_realized_vol_720m",
+        "pre_volume_z60",
+        "pre_volume_vs_avg60",
+        "pre_distance_sma20",
+        "pre_distance_ema20",
+        "pre_distance_sma50",
+        "pre_distance_ema50",
+        "pre_distance_sma200",
+        "pre_distance_ema200",
+        "pre_sma20_slope",
+        "pre_trend_regime",
+        "pre_rolling_beta_btc",
+        "pre_rolling_corr_btc",
+        "pre_relative_strength_1h",
+        "timing_ingestion_delay_seconds",
+        "timing_event_group_source_count"
+      ]
+    },
+    "targets": [
+      "metadata_event_id",
+      "metadata_asset",
+      "metadata_published_at",
+      "target_return_1m",
+      "target_direction_1m",
+      "target_abs_return_1m",
+      "target_abnormal_return_1m",
+      "target_abs_abnormal_return_1m",
+      "target_strong_1m_0_25",
+      "target_strong_1m_0_5",
+      "target_strong_1m_1",
+      "target_strong_1m_2",
+      "target_strong_1m_3",
+      "target_exceeds_low_cost_1m",
+      "target_exceeds_base_cost_1m",
+      "target_exceeds_stress_cost_1m",
+      "target_return_5m",
+      "target_direction_5m",
+      "target_abs_return_5m",
+      "target_abnormal_return_5m",
+      "target_abs_abnormal_return_5m",
+      "target_strong_5m_0_25",
+      "target_strong_5m_0_5",
+      "target_strong_5m_1",
+      "target_strong_5m_2",
+      "target_strong_5m_3",
+      "target_exceeds_low_cost_5m",
+      "target_exceeds_base_cost_5m",
+      "target_exceeds_stress_cost_5m",
+      "target_return_10m",
+      "target_direction_10m",
+      "target_abs_return_10m",
+      "target_abnormal_return_10m",
+      "target_abs_abnormal_return_10m",
+      "target_strong_10m_0_25",
+      "target_strong_10m_0_5",
+      "target_strong_10m_1",
+      "target_strong_10m_2",
+      "target_strong_10m_3",
+      "target_exceeds_low_cost_10m",
+      "target_exceeds_base_cost_10m",
+      "target_exceeds_stress_cost_10m",
+      "target_return_20m",
+      "target_direction_20m",
+      "target_abs_return_20m",
+      "target_abnormal_return_20m",
+      "target_abs_abnormal_return_20m",
+      "target_strong_20m_0_25",
+      "target_strong_20m_0_5",
+      "target_strong_20m_1",
+      "target_strong_20m_2",
+      "target_strong_20m_3",
+      "target_exceeds_low_cost_20m",
+      "target_exceeds_base_cost_20m",
+      "target_exceeds_stress_cost_20m",
+      "target_return_40m",
+      "target_direction_40m",
+      "target_abs_return_40m",
+      "target_abnormal_return_40m",
+      "target_abs_abnormal_return_40m",
+      "target_strong_40m_0_25",
+      "target_strong_40m_0_5",
+      "target_strong_40m_1",
+      "target_strong_40m_2",
+      "target_strong_40m_3",
+      "target_exceeds_low_cost_40m",
+      "target_exceeds_base_cost_40m",
+      "target_exceeds_stress_cost_40m",
+      "target_return_1h",
+      "target_direction_1h",
+      "target_abs_return_1h",
+      "target_abnormal_return_1h",
+      "target_abs_abnormal_return_1h",
+      "target_strong_1h_0_25",
+      "target_strong_1h_0_5",
+      "target_strong_1h_1",
+      "target_strong_1h_2",
+      "target_strong_1h_3",
+      "target_exceeds_low_cost_1h",
+      "target_exceeds_base_cost_1h",
+      "target_exceeds_stress_cost_1h",
+      "target_return_3h",
+      "target_direction_3h",
+      "target_abs_return_3h",
+      "target_abnormal_return_3h",
+      "target_abs_abnormal_return_3h",
+      "target_strong_3h_0_25",
+      "target_strong_3h_0_5",
+      "target_strong_3h_1",
+      "target_strong_3h_2",
+      "target_strong_3h_3",
+      "target_exceeds_low_cost_3h",
+      "target_exceeds_base_cost_3h",
+      "target_exceeds_stress_cost_3h",
+      "target_return_5h",
+      "target_direction_5h",
+      "target_abs_return_5h",
+      "target_abnormal_return_5h",
+      "target_abs_abnormal_return_5h",
+      "target_strong_5h_0_25",
+      "target_strong_5h_0_5",
+      "target_strong_5h_1",
+      "target_strong_5h_2",
+      "target_strong_5h_3",
+      "target_exceeds_low_cost_5h",
+      "target_exceeds_base_cost_5h",
+      "target_exceeds_stress_cost_5h",
+      "target_return_8h",
+      "target_direction_8h",
+      "target_abs_return_8h",
+      "target_abnormal_return_8h",
+      "target_abs_abnormal_return_8h",
+      "target_strong_8h_0_25",
+      "target_strong_8h_0_5",
+      "target_strong_8h_1",
+      "target_strong_8h_2",
+      "target_strong_8h_3",
+      "target_exceeds_low_cost_8h",
+      "target_exceeds_base_cost_8h",
+      "target_exceeds_stress_cost_8h",
+      "target_return_12h",
+      "target_direction_12h",
+      "target_abs_return_12h",
+      "target_abnormal_return_12h",
+      "target_abs_abnormal_return_12h",
+      "target_strong_12h_0_25",
+      "target_strong_12h_0_5",
+      "target_strong_12h_1",
+      "target_strong_12h_2",
+      "target_strong_12h_3",
+      "target_exceeds_low_cost_12h",
+      "target_exceeds_base_cost_12h",
+      "target_exceeds_stress_cost_12h",
+      "target_max_favorable_1h",
+      "target_max_adverse_1h",
+      "target_max_absolute_1h",
+      "target_max_favorable_12h",
+      "target_max_adverse_12h",
+      "target_max_absolute_12h",
+      "target_realized_vol_1h",
+      "target_realized_vol_12h"
+    ],
+    "leakage_violations": 0,
+    "files": {
+      "C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\datasets\\stage16_high_impact_semantic_v21\\a_source_only.parquet": "1c12eb90512ffbc2d0a65370f7d2fd95278180b27467953b309237b635651192",
+      "C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\datasets\\stage16_high_impact_semantic_v21\\b_market_only.parquet": "440c5881cbfe03d929031340d77beeb52b42a4eb2b80d0d5cb69cd73a242bf6c",
+      "C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\datasets\\stage16_high_impact_semantic_v21\\c_source_market.parquet": "580c40678f1dddc35d91db455e059a003129504d7f65758c4925eb9d21d79189",
+      "C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\datasets\\stage16_high_impact_semantic_v21\\d_source_market_timing.parquet": "4462361c0dd0feeeeaeeb9a6eb3e3e4ec8dacfdef9c066eefd94f1c1f124d9b8",
+      "C:\\Users\\Denis\\Desktop\\архів крипти\\eth_news_trading_bot\\datasets\\stage16_high_impact_semantic_v21\\targets.parquet": "2b99715d314445f1cd007ad8d56db756bf130faee3116bcb976120d4ee9549a9"
+    },
+    "split_counts": {
+      "train": 400,
+      "validation": 134,
+      "test": 134
+    }
+  },
+  "descriptive_audit": {
+    "mode": "descriptive_only",
+    "pattern_discovery": false,
+    "ml_tuning": false,
+    "trading": false,
+    "source_x_event_type_groups": 8,
+    "source_x_asset_groups": 5,
+    "semantic_vs_absolute_move": {
+      "importance": {
+        "1m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.03235127573013127
+        },
+        "5m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.055558859789188446
+        },
+        "10m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.019840239955084743
+        },
+        "20m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.0725124581542719
+        },
+        "40m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.08725210412743693
+        },
+        "1h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.11867536623022051
+        },
+        "3h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.0615499751210939
+        },
+        "5h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.002443715321075608
+        },
+        "8h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.05192943352458859
+        },
+        "12h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.11779756951621753
+        }
+      },
+      "novelty": {
+        "1m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.045928699912639814
+        },
+        "5m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.03432194699089913
+        },
+        "10m": {
+          "n": 668,
+          "spearman_vs_abs_move": 0.013474573805737612
+        },
+        "20m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.05792624022569423
+        },
+        "40m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.0885128528446233
+        },
+        "1h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.13093811256659724
+        },
+        "3h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.03636101084564288
+        },
+        "5h": {
+          "n": 668,
+          "spearman_vs_abs_move": 0.005132272866156157
+        },
+        "8h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.04949245518356472
+        },
+        "12h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.11409354295761595
+        }
+      },
+      "specificity": {
+        "1m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.031183519915621245
+        },
+        "5m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.05666362664096955
+        },
+        "10m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.025466900593866453
+        },
+        "20m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.07118591289704308
+        },
+        "40m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.06711015423706844
+        },
+        "1h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.1349672633044891
+        },
+        "3h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.06610289958987889
+        },
+        "5h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.00897856596893776
+        },
+        "8h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.062105564004931196
+        },
+        "12h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.1202133747390124
+        }
+      },
+      "source_reliability": {
+        "1m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.022108634029436303
+        },
+        "5m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.02771137394163527
+        },
+        "10m": {
+          "n": 668,
+          "spearman_vs_abs_move": 0.021482213504826212
+        },
+        "20m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.06942187780599525
+        },
+        "40m": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.05098189342161244
+        },
+        "1h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.07714330159580733
+        },
+        "3h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.009988617928435459
+        },
+        "5h": {
+          "n": 668,
+          "spearman_vs_abs_move": 0.004417069746169161
+        },
+        "8h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.048697365771746125
+        },
+        "12h": {
+          "n": 668,
+          "spearman_vs_abs_move": -0.13668447454576307
+        }
+      }
+    },
+    "pre_event_vs_post_event": {
+      "1m": {
+        "n": 668,
+        "median_abs_pre": 0.0252238617732381,
+        "median_abs_post": 0.03782042
+      },
+      "5m": {
+        "n": 668,
+        "median_abs_pre": 0.06266463924669008,
+        "median_abs_post": 0.08956473
+      },
+      "10m": {
+        "n": 668,
+        "median_abs_pre": 0.0802113386844272,
+        "median_abs_post": 0.12493979
+      },
+      "20m": {
+        "n": 668,
+        "median_abs_pre": 0.14008970063095205,
+        "median_abs_post": 0.16692955
+      },
+      "40m": {
+        "n": 668,
+        "median_abs_pre": 0.21551364720774902,
+        "median_abs_post": 0.254484395
+      }
+    },
+    "horizon_coverage": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    },
+    "analysis_events": 714,
+    "reaction_rows": 668
+  },
+  "next_stage_started": false,
+  "paper_or_real_trading": false,
+  "original_batch_id": "batch_6a5c3f61149881909855d38bff25e326",
+  "retry_batch_id": "batch_6a5c435daa7c819091514c4915d3a009",
+  "retry": {
+    "selected": 28,
+    "success": 28,
+    "failed": 0,
+    "invalid_schema": 0,
+    "refused": 0,
+    "missing": 0,
+    "input_tokens": 18043,
+    "output_tokens": 9135,
+    "actual_cost_usd": 0.02278075,
+    "max_output_tokens": 400,
+    "automatic_third_batch": false,
+    "event_custom_id_mapping_valid": true
+  },
+  "resume_no_new_retry_batch": true
+}

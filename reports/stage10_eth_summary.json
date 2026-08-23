@@ -1,0 +1,298 @@
+{
+  "stage": "Stage 10 ETH AI label effectiveness",
+  "analysis_status": "ANALYSIS_COMPLETE",
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_label_v1",
+  "input_audit": {
+    "analysis_rows": 7065,
+    "unique_news_ids": 7065,
+    "duplicate_news_ids": 0,
+    "complete_reactions": 7058,
+    "missing_or_incomplete_reactions": 7,
+    "utc_published": true,
+    "utc_baseline": true,
+    "baseline_mismatches": 0,
+    "missing_reasons": [
+      {
+        "news_id": 17,
+        "source": "decrypt",
+        "published_at": "2018-09-13T18:33:53+00:00",
+        "reason": "published_before_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 20,
+        "source": "cointelegraph",
+        "published_at": "2026-07-10T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 22,
+        "source": "cointelegraph",
+        "published_at": "2026-07-10T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 2,
+        "source": "cointelegraph",
+        "published_at": "2026-07-11T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 5,
+        "source": "cointelegraph",
+        "published_at": "2026-07-12T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 6,
+        "source": "cointelegraph",
+        "published_at": "2026-07-12T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      },
+      {
+        "news_id": 9,
+        "source": "cointelegraph",
+        "published_at": "2026-07-13T00:00:00+00:00",
+        "reason": "published_after_available_ETHUSDT_candles"
+      }
+    ]
+  },
+  "evaluated_articles": 7058,
+  "event_level_count": 6851,
+  "neutral_bands_pct": [
+    0.1,
+    0.25,
+    0.5,
+    1.0
+  ],
+  "strong_move_thresholds_pct": {
+    "return_5m": 0.25,
+    "return_15m": 0.5,
+    "return_30m": 0.75,
+    "return_1h": 1.0,
+    "return_4h": 2.0,
+    "return_24h": 3.0
+  },
+  "mixed_policy": "mapped to neutral for 3-class metrics; separately described in direction_details",
+  "time_split": {
+    "method": "chronological",
+    "train": 3529,
+    "validation": 1764,
+    "test": 1765
+  },
+  "selected_thresholds_without_test_leakage": [
+    {
+      "horizon": "return_24h",
+      "confidence_threshold": 50,
+      "importance_threshold": 40,
+      "abs_sentiment_threshold": 50,
+      "relevance_threshold": 90,
+      "train_n": 33,
+      "train_win_rate": 0.66666667,
+      "train_mean_return_signed": 2.30172924,
+      "train_median_return_signed": 1.867351,
+      "train_mean_absolute_move": 3.92071997,
+      "train_win_ci_low": 0.49607894,
+      "train_win_ci_high": 0.80249772,
+      "train_accuracy": 0.66666667,
+      "train_precision_macro": 0.55208333,
+      "train_recall_macro": 0.36363636,
+      "validation_n": 20,
+      "validation_win_rate": 0.45,
+      "validation_mean_return_signed": 0.1696296,
+      "validation_median_return_signed": -0.2228955,
+      "validation_mean_absolute_move": 2.6078644,
+      "validation_win_ci_low": 0.25819786,
+      "validation_win_ci_high": 0.65791466,
+      "validation_accuracy": 0.45,
+      "validation_precision_macro": 0.15789474,
+      "validation_recall_macro": 0.3,
+      "test_n": 10,
+      "test_win_rate": 0.5,
+      "test_mean_return_signed": -0.645027,
+      "test_median_return_signed": 0.293909,
+      "test_mean_absolute_move": 2.5244386,
+      "test_win_ci_low": 0.23659309,
+      "test_win_ci_high": 0.76340691,
+      "test_accuracy": 0.5,
+      "test_precision_macro": 0.33333333,
+      "test_recall_macro": 0.38888889,
+      "selected_without_test_leakage": true
+    }
+  ],
+  "test_baseline_comparison": [
+    {
+      "horizon": "return_5m",
+      "ai_balanced_accuracy": 0.31338532,
+      "best_baseline": 0.34435885,
+      "beats_best_baseline": false
+    },
+    {
+      "horizon": "return_15m",
+      "ai_balanced_accuracy": 0.33293307,
+      "best_baseline": 0.34325798,
+      "beats_best_baseline": false
+    },
+    {
+      "horizon": "return_30m",
+      "ai_balanced_accuracy": 0.33834488,
+      "best_baseline": 0.33333333,
+      "beats_best_baseline": true
+    },
+    {
+      "horizon": "return_1h",
+      "ai_balanced_accuracy": 0.34280131,
+      "best_baseline": 0.33333333,
+      "beats_best_baseline": true
+    },
+    {
+      "horizon": "return_4h",
+      "ai_balanced_accuracy": 0.32769702,
+      "best_baseline": 0.33333333,
+      "beats_best_baseline": false
+    },
+    {
+      "horizon": "return_24h",
+      "ai_balanced_accuracy": 0.32748831,
+      "best_baseline": 0.33333333,
+      "beats_best_baseline": false
+    }
+  ],
+  "significant_tests_after_bh": 9,
+  "total_significance_tests": 36,
+  "limitations": [
+    "Seven analyses are outside available ETHUSDT candle coverage and are documented, not imputed.",
+    "Returns end at 24h, so AI weeks/months horizons are marked unverifiable rather than wrong.",
+    "Time-to-MFE/MAE is unavailable; only stored 1h extrema exist.",
+    "Observational correlations do not establish causality.",
+    "Threshold search uses train/validation/test chronology; test is not used for selection."
+  ],
+  "reports": [
+    "stage10_eth_baselines.csv",
+    "stage10_eth_category_metrics.csv",
+    "stage10_eth_confidence_bins.csv",
+    "stage10_eth_direction_metrics.csv",
+    "stage10_eth_event_level_metrics.csv",
+    "stage10_eth_feature_correlations.csv",
+    "stage10_eth_horizon_metrics.csv",
+    "stage10_eth_importance_bins.csv",
+    "stage10_eth_sentiment_bins.csv",
+    "stage10_eth_significance_tests.csv",
+    "stage10_eth_source_metrics.csv",
+    "stage10_eth_threshold_search.csv",
+    "stage10_eth_time_split_metrics.csv"
+  ],
+  "stage_status": "PASS",
+  "completed_at": "2026-07-18T02:11:38.265192+00:00",
+  "pytest": {
+    "status": "PASS",
+    "passed": 37,
+    "failed": 0,
+    "summary": "37 passed in 5.68s"
+  },
+  "report_audit": {
+    "stage10_eth_summary.json": {
+      "exists": true,
+      "nonempty": true,
+      "rows": null
+    },
+    "stage10_eth_direction_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 24
+    },
+    "stage10_eth_sentiment_bins.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 42
+    },
+    "stage10_eth_importance_bins.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 30
+    },
+    "stage10_eth_confidence_bins.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 60
+    },
+    "stage10_eth_category_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 120
+    },
+    "stage10_eth_horizon_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 6
+    },
+    "stage10_eth_feature_correlations.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 126
+    },
+    "stage10_eth_threshold_search.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 4500
+    },
+    "stage10_eth_event_level_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 12
+    },
+    "stage10_eth_source_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 18
+    },
+    "stage10_eth_time_split_metrics.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 42
+    },
+    "stage10_eth_significance_tests.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 36
+    },
+    "stage10_eth_baselines.csv": {
+      "exists": true,
+      "nonempty": true,
+      "rows": 126
+    },
+    "stage10_eth_final_assessment.md": {
+      "exists": true,
+      "nonempty": true,
+      "rows": null
+    }
+  },
+  "criteria": {
+    "all_7065_audited": true,
+    "complete_reactions": 7058,
+    "documented_missing_reactions": 7,
+    "unexplained_missing_reactions": 0,
+    "article_level_complete": true,
+    "event_level_complete": true,
+    "chronological_time_split_complete": true,
+    "baseline_comparison_complete": true,
+    "statistical_significance_complete": true,
+    "threshold_test_leakage": 0,
+    "all_reports_created": true
+  },
+  "final_conclusions": {
+    "direction_predictive_value": "not supported; near-chance and unstable",
+    "best_supported_horizon": "none; small test advantages at 30m and 1h are not stable",
+    "sentiment_effectiveness": "near-zero correlation at all horizons",
+    "importance_effectiveness": "not supported; two weak significant correlations are negative",
+    "confidence_filtering": "not supported consistently",
+    "category_usefulness": "none validated across balanced/time/source controls",
+    "selected_threshold": "24h confidence>=50 importance>=40 abs(sentiment)>=50 relevance>=90; test n=10, win rate=0.50, CI [0.237,0.763], inconclusive",
+    "source_time_stability": "no stable material edge",
+    "beats_baseline_on_test": "2 of 6 horizons, by small margins",
+    "enough_for_ml": "yes for controlled feature research, not for a final production model",
+    "enough_for_paper_trading": false,
+    "enough_for_real_trading": false,
+    "overall_predictive_hypothesis": "NOT_SUPPORTED"
+  }
+}

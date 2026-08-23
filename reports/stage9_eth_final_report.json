@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "batch_id": "batch_6a5ad4ec47448190a54a30466a5c5553",
+  "batch_status": "completed",
+  "total_unique_eth_news": 7065,
+  "already_analyzed_before_batch": 50,
+  "submitted": 7015,
+  "success": 7065,
+  "batch_success": 7015,
+  "failed": 0,
+  "invalid_schema": 0,
+  "refused": 0,
+  "retries": 0,
+  "missing_analyses": 0,
+  "schema_success_rate": 1.0,
+  "input_tokens": 4940881,
+  "output_tokens": 478676,
+  "actual_cost_usd": 1.09628613,
+  "average_cost_per_news_usd": 0.00015628,
+  "max_cost_usd": 2.0,
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_label_v1",
+  "leakage": 0,
+  "category_distribution": {
+    "institutional_adoption": 1680,
+    "other": 545,
+    "regulation": 615,
+    "etf": 323,
+    "stablecoins": 250,
+    "staking": 106,
+    "defi": 87,
+    "legal": 45,
+    "security": 449,
+    "layer2": 243,
+    "tokenomics": 66,
+    "market_commentary": 1297,
+    "macro": 534,
+    "network_activity": 292,
+    "partnership": 32,
+    "exchange": 207,
+    "nft": 181,
+    "protocol_upgrade": 109,
+    "fees": 3,
+    "hack": 1
+  },
+  "direction_distribution": {
+    "bullish": 1990,
+    "neutral": 3334,
+    "bearish": 791,
+    "mixed": 950
+  },
+  "horizon_distribution": {
+    "months": 1115,
+    "unclear": 215,
+    "weeks": 2674,
+    "days": 1696,
+    "hours": 1187,
+    "minutes": 178
+  },
+  "sentiment_statistics": {
+    "mean": 5.645,
+    "median": 0,
+    "min": -80,
+    "max": 80
+  },
+  "importance_statistics": {
+    "mean": 36.28,
+    "median": 35,
+    "min": 5,
+    "max": 90
+  },
+  "eth_relevance_statistics": {
+    "mean": 47.158,
+    "median": 50,
+    "min": 5,
+    "max": 95
+  },
+  "documented_failures": 0,
+  "pytest_exit_code": 0,
+  "pytest_summary": "33 passed in 6.03s",
+  "final_audit_at": "2026-07-18T01:55:06.148030+00:00",
+  "database_audit": {
+    "model_prompt_rows": 7065,
+    "success": 7065,
+    "batch_rows": 7015,
+    "missing_analyses": 0,
+    "null_success_payloads": 0,
+    "duplicate_news_identities": 0
+  },
+  "file_audit": {
+    "input_jsonl_lines": 7015,
+    "output_jsonl_lines": 7015,
+    "error_jsonl_lines": 0,
+    "results_csv_rows": 7065,
+    "failures_csv_rows": 0
+  },
+  "resume_duplicate_cost_check": "submission guard active; no second batch created"
+}

@@ -1,0 +1,22 @@
+{
+  "submitted_at": "2026-07-18T01:20:44+00:00",
+  "recovered_at": "2026-07-18T01:21:38.381036+00:00",
+  "recovered_after_client_timeout": true,
+  "batch_id": "batch_6a5ad4ec47448190a54a30466a5c5553",
+  "input_file_id": "file-FFhJEoUVPuj4zuHHi29URi",
+  "status": "completed",
+  "submitted": 7015,
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_label_v1",
+  "asset_focus": "ETH",
+  "max_cost_usd": 2.0,
+  "estimated_batch_cost_usd": 1.66547575,
+  "request_counts": {
+    "completed": 7015,
+    "failed": 0,
+    "total": 7015
+  },
+  "output_file_id": "file-RKDB5ugrQF5kDYpXkGY6k7",
+  "error_file_id": null,
+  "checked_at": "2026-07-18T01:49:35.433416+00:00"
+}

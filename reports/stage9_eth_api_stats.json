@@ -1,0 +1,15 @@
+{
+  "batch_id": "batch_6a5ad4ec47448190a54a30466a5c5553",
+  "model": "gpt-5-mini-2025-08-07",
+  "prompt_version": "eth_label_v1",
+  "submitted": 7015,
+  "batch_success": 7015,
+  "failed": 0,
+  "invalid_schema": 0,
+  "refused": 0,
+  "input_tokens": 4940881,
+  "output_tokens": 478676,
+  "actual_cost_usd": 1.09628613,
+  "average_cost_per_news_usd": 0.00015628,
+  "schema_success_rate": 1.0
+}

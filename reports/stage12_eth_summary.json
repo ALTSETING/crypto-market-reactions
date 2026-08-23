@@ -1,0 +1,31 @@
+{
+  "stage": 12,
+  "dataset_version": "stage12_eth_v1",
+  "status": "PASS",
+  "source_analyses": 7065,
+  "source_reactions": 22109,
+  "event_rows": 6851,
+  "exclusions": 7,
+  "features_before_audit": 125,
+  "features_approved": 110,
+  "features_removed": 15,
+  "target_count": 62,
+  "recommended_targets": [
+    "target_abs_abnormal_return_1h",
+    "target_realized_vol_1h"
+  ],
+  "split_counts": {
+    "train": 4110,
+    "test": 1371,
+    "validation": 1370
+  },
+  "missing_feature_cells": 0,
+  "feature_cutoff_violations": 0,
+  "leakage_violations": 0,
+  "duplicate_events": 0,
+  "infinite_values": 0,
+  "manifest_path": "data\\stage12\\manifest.json",
+  "pytest_result": "........................................................................ [ 92%]\n......                                                                   [100%]\n78 passed in 9.33s",
+  "stage8_11_counts_unchanged": true,
+  "pytest_exit_code": 0
+}

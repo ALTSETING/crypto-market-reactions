@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "manifest": "reports\\stage16_semantic_v21_dataset_manifest.json",
+  "manifest_sha256": "ece7d3cf79b187da0078f2e2aa3a74f5c28300a30a23c34db3362f5d3025b6e2",
+  "expected": {
+    "a_source_only.parquet": "1c12eb90512ffbc2d0a65370f7d2fd95278180b27467953b309237b635651192",
+    "b_market_only.parquet": "440c5881cbfe03d929031340d77beeb52b42a4eb2b80d0d5cb69cd73a242bf6c",
+    "c_source_market.parquet": "580c40678f1dddc35d91db455e059a003129504d7f65758c4925eb9d21d79189",
+    "d_source_market_timing.parquet": "4462361c0dd0feeeeaeeb9a6eb3e3e4ec8dacfdef9c066eefd94f1c1f124d9b8",
+    "targets.parquet": "2b99715d314445f1cd007ad8d56db756bf130faee3116bcb976120d4ee9549a9"
+  },
+  "actual": {
+    "a_source_only.parquet": "1c12eb90512ffbc2d0a65370f7d2fd95278180b27467953b309237b635651192",
+    "b_market_only.parquet": "440c5881cbfe03d929031340d77beeb52b42a4eb2b80d0d5cb69cd73a242bf6c",
+    "c_source_market.parquet": "580c40678f1dddc35d91db455e059a003129504d7f65758c4925eb9d21d79189",
+    "d_source_market_timing.parquet": "4462361c0dd0feeeeaeeb9a6eb3e3e4ec8dacfdef9c066eefd94f1c1f124d9b8",
+    "targets.parquet": "2b99715d314445f1cd007ad8d56db756bf130faee3116bcb976120d4ee9549a9"
+  },
+  "mismatched": [],
+  "protected_stage8_16_snapshot_files": 244,
+  "protected_stage8_16_unchanged": true,
+  "changed": [],
+  "disappeared": [],
+  "new": []
+}

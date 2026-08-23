@@ -1,0 +1,140 @@
+{
+  "dry_run": true,
+  "api_requests_made": 0,
+  "articles": 7065,
+  "batch_requests": 7065,
+  "input_token_stats": {
+    "average": 533.43,
+    "median": 378,
+    "p95": 928,
+    "max": 999
+  },
+  "estimated_total_input_tokens": 3768694,
+  "estimated_total_output_tokens": 989100,
+  "estimated_total_tokens": 4757794,
+  "truncated_articles": 976,
+  "prices_usd_per_1m_standard": {
+    "gpt-5-nano": {
+      "input": 0.05,
+      "output": 0.4
+    },
+    "gpt-5-mini": {
+      "input": 0.25,
+      "output": 2.0
+    }
+  },
+  "estimated_cost_usd": {
+    "gpt-5-nano": {
+      "standard": 0.584075,
+      "batch": 0.292037
+    },
+    "gpt-5-mini": {
+      "standard": 2.920374,
+      "batch": 1.460187
+    }
+  },
+  "longest_20_inputs": [
+    {
+      "news_id": 8155,
+      "title": "Morning Minute: Bitcoin Makes Smashing New ATH Over $125k",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 4700,
+      "title": "What is Ethereum (ETH)? A Beginner's Guide to the Smart Contract Blockchain",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 3021,
+      "title": "Ethereum Founder Vitalik Buterin Backs Convicted Dev, Calls Privacy 'Essential Protection'",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 88,
+      "title": "Ripio CEO Bets on Local Stablecoins in Latin America",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 9119,
+      "title": "New ‘Axie Infinity’ Ethereum Gaming Token Will Be Airdropped to AXS Stakers",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 9431,
+      "title": "Morning Minute: North Korea Hacks Drift for $285M",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 2544,
+      "title": "CZ Memoir Rekindles Feud with OKX Founder Star Xu",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 9365,
+      "title": "Meet the Anti-Trump Crypto Developer Running for Congress in Virginia",
+      "input_tokens": 999
+    },
+    {
+      "news_id": 4102,
+      "title": "Pudgy Penguins' PENGU Token Doubles in a Week Amid ETF Hype",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 8269,
+      "title": "Bullish Bets Lose $860M to Liquidations as ETH, BTC, XRP, DOGE Prices Drop 9%",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 7832,
+      "title": "R0AR Announces Node Sale: Democratizing Layer 2 Infrastructure While Rewarding Community Participation",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 4346,
+      "title": "Is AI the Future of Ethereum? The Network's Developers Are Banking on It",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 3188,
+      "title": "The Year in Ethereum 2025: Institutions Embrace ETH as the 'Ivory Tower' Crumbles",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 1420,
+      "title": "Australian Crypto Executives Signal Crypto Growth Despite Challenges",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 6910,
+      "title": "A $300 million borrowing spike on Aave signals liquidity crunch after KelpDAO exploit",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 1746,
+      "title": "BTC price news: Bitcoin under $60,000 on track for a rare back-to-back quarterly loss",
+      "input_tokens": 998
+    },
+    {
+      "news_id": 8001,
+      "title": "a16z, DeFi Education Fund Want SEC Safe Harbor for DEX, Crypto Wallet Devs",
+      "input_tokens": 997
+    },
+    {
+      "news_id": 2785,
+      "title": "Stream Finance Stablecoin Plunges 77% After Protocol's Fund Manager Loses $93 Million",
+      "input_tokens": 997
+    },
+    {
+      "news_id": 5293,
+      "title": "Senate Banking Panel Releases CLARITY Act Draft Ahead of Thursday Markup",
+      "input_tokens": 997
+    },
+    {
+      "news_id": 4256,
+      "title": "SharpLink Will Explore Staking Portion of $3.6 Billion Ethereum Treasury on Linea, CEO Says",
+      "input_tokens": 996
+    }
+  ],
+  "tokenizer": "tiktoken:o200k_base",
+  "output_estimate_basis": "configured maximum of 140 tokens per article"
+}

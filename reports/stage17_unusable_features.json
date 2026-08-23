@@ -1,0 +1,24 @@
+{
+  "excluded_fields": [
+    {
+      "field": "surprise_level",
+      "column": "ai_surprise_level",
+      "null_rate": 1.0,
+      "unusable_reason": "100% null; evidence-aware field excluded without imputation"
+    },
+    {
+      "field": "surprise_evidence",
+      "column": "ai_surprise_evidence",
+      "null_rate": 0.0,
+      "unusable_reason": "zero variance"
+    },
+    {
+      "field": "regulatory_strength",
+      "column": "ai_regulatory_strength",
+      "null_rate": 1.0,
+      "unusable_reason": "100% null"
+    }
+  ],
+  "surprise_level_policy": "exclude; do not zero-impute; do not recover without a new AI Batch",
+  "openai_api_requests": 0
+}

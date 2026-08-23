@@ -1,0 +1,16 @@
+{
+  "status": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+  "test_type": "directional_prediction",
+  "test_used": true,
+  "test_used_once": true,
+  "test_used_for_tuning": false,
+  "rules_changed_after_test": false,
+  "lock_sha256": "5e81bf106834c3a8edf640cad718e2c113106059460198ffc34aa6dfa60831f9",
+  "predictions": 66,
+  "coverage": 0.4925373134328358,
+  "accuracy": 0.4090909090909091,
+  "wilson_95_ci": [
+    0.2986741800934037,
+    0.5295081029999674
+  ]
+}

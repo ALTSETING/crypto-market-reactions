@@ -1,0 +1,556 @@
+[
+  {
+    "rule_id": "beam_30m_bullish_0053_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_importance": {
+        "lte": 20
+      },
+      "pre_eth_minus_btc_return_5m": {
+        "lte": -0.025
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.9998131360164542,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bullish_0101_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "lte": 30
+      },
+      "pre_eth_minus_btc_return_5m": {
+        "lte": -0.087
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.9723339599665495,
+    "selected_holding_minutes": 30,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bullish_0103_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "lte": 30
+      },
+      "pre_eth_realized_vol_1h": {
+        "gte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.9316129032258051,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bullish_0119_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_credibility": {
+        "gte": 80
+      },
+      "pre_regime_volatility": {
+        "eq": "high_volatility"
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.8886260917288517,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bullish_0161_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "lte": 35
+      },
+      "pre_eth_minus_btc_return_5m": {
+        "lte": -0.087
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.8814913017684526,
+    "selected_holding_minutes": 30,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bullish_0163_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "lte": 35
+      },
+      "pre_eth_realized_vol_1h": {
+        "gte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.8658795678282977,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0218_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_sentiment": {
+        "gte": -10
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.4715990496335556,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0020_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 30
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3936877905230418,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0198_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_importance": {
+        "gte": 20
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3572484719780975,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0040_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_importance": {
+        "gte": 30
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3251192491346362,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0238_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_novelty": {
+        "gte": 10
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3208476201364296,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0158_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 20
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3163062095621214,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0138_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_confidence": {
+        "gte": 50
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.1500196019494153,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_30m_bearish_0080_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 35
+      },
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.588
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.1241551070947111,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "tree_ai_market_30m_01_v1",
+    "description": "Simplified shallow decision-tree leaf",
+    "direction": "bearish",
+    "target_horizon": "30m",
+    "conditions": {
+      "pre_eth_realized_vol_1h": {
+        "lte": 0.604
+      },
+      "pre_btc_distance_sma50": {
+        "lte": -0.002
+      },
+      "pre_eth_distance_sma50": {
+        "gt": -0.049
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "decision_tree_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0171_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 80
+      },
+      "pre_eth_return_4h": {
+        "gte": 1.108
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.6512580435934665,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0059_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_importance": {
+        "gte": 50
+      },
+      "pre_eth_return_4h": {
+        "gte": 1.108
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.5514681654815508,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0039_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_importance": {
+        "gte": 60
+      },
+      "pre_eth_return_4h": {
+        "gte": 1.108
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.521103500742244,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0131_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 70
+      },
+      "pre_eth_return_4h": {
+        "gte": 1.108
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.3584048752090219,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0024_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_category": {
+        "eq": "security"
+      },
+      "pre_eth_distance_sma20": {
+        "gte": 0.047
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 1.0508993401928102,
+    "selected_holding_minutes": 240,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "beam_1h_bullish_0187_v1",
+    "description": "Controlled AI + market beam-search subgroup",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "ai_eth_relevance": {
+        "gte": 80
+      },
+      "pre_eth_return_1h": {
+        "gte": 0.147
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "beam_search_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "train_discovery_score": 0.9507253433941506,
+    "selected_holding_minutes": 60,
+    "selected_neutral_band": 0.1
+  },
+  {
+    "rule_id": "tree_ai_market_1h_03_v1",
+    "description": "Simplified shallow decision-tree leaf",
+    "direction": "bullish",
+    "target_horizon": "1h",
+    "conditions": {
+      "pre_eth_minus_btc_return_1h": {
+        "lte": -0.393
+      },
+      "pre_eth_realized_vol_1h": {
+        "gt": 1.148
+      },
+      "pre_eth_btc_rolling_beta": {
+        "gt": 1.239
+      }
+    },
+    "minimum_sample_size": 30,
+    "created_from": "decision_tree_train",
+    "allowed_splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "version": "1",
+    "selected_holding_minutes": 60,
+    "selected_neutral_band": 0.1
+  }
+]

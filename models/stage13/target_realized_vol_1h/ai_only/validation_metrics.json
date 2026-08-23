@@ -1,0 +1,18 @@
+{
+  "target_name": "target_realized_vol_1h",
+  "dataset_variant": "ai_only",
+  "model_family": "random_forest",
+  "configuration": "random_forest__max_depth-6_max_features-0.7_min_samples_leaf-2_n_estimators-100",
+  "parameters": "{\"max_depth\": 6, \"max_features\": 0.7, \"min_samples_leaf\": 2, \"n_estimators\": 100}",
+  "target_transform": "log1p",
+  "split": "validation",
+  "mae": 0.29440382238848956,
+  "rmse": 0.5087093600020128,
+  "r2": 0.11008930326968847,
+  "spearman": 0.5073298467119073,
+  "pearson": 0.34989762980031575,
+  "median_absolute_error": 0.1962776961035837,
+  "rank_consistency": 0.6780550725550155,
+  "top_decile_lift": 1.3860412609396917,
+  "top_quartile_detection": 0.4868804664723032
+}

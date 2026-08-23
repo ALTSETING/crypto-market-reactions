@@ -1,0 +1,81 @@
+{
+  "status": "PASS",
+  "prompt_version": "high_impact_semantic_v2_1",
+  "mode": "offline_dry_run",
+  "events_expected": 714,
+  "events_processed": 714,
+  "model_for_estimate": "gpt-5-mini",
+  "api_requests": 0,
+  "jsonl_created": false,
+  "jsonl_uploaded": false,
+  "batch_submitted": false,
+  "include_reason": false,
+  "system_prompt": "Classify only the message's semantic properties. Do not make market forecasts or trading recommendations. Use surprise_level=null and surprise_evidence=insufficient without direct textual evidence. Use regulatory_strength=null unless regulatory. Content valence is message meaning, not market direction. Return strict JSON.",
+  "system_prompt_tokens": 56,
+  "input_tokens": {
+    "total": 772647,
+    "average": 1082.138655462185,
+    "median": 897.0,
+    "p95": 1811.0,
+    "max": 1929
+  },
+  "body_truncation": {
+    "max_body_tokens": 900,
+    "events_truncated": 64,
+    "fraction": 0.0896358543417367
+  },
+  "estimated_output_tokens_per_event": 234,
+  "estimated_output_tokens_total": 167076,
+  "estimated_batch_cost_usd": {
+    "gpt-5-nano": 0.10546275,
+    "gpt-5-mini": 0.52731375
+  },
+  "schema_name": "high_impact_semantic_v2_1",
+  "schema_valid": true,
+  "strict_schema_issues": [],
+  "predictive_fields": [],
+  "leakage_violations": 0,
+  "resume_deterministic": true,
+  "duplicate_dry_run_requests": 0,
+  "targets": {
+    "average_input_tokens_lte_1200": true,
+    "p95_input_tokens_lte_2000": true,
+    "strict_schema_issues_zero": true,
+    "predictive_fields_zero": true,
+    "leakage_zero": true
+  },
+  "nullable_evidence_aware": {
+    "surprise_level": [
+      "integer",
+      "null"
+    ],
+    "surprise_evidence": [
+      "sufficient",
+      "insufficient"
+    ],
+    "consistency_validation": true
+  },
+  "reason_mode": "CLI --include-reason only; disabled for this mass-mode preflight",
+  "preserved_v1_v2_artifact_hashes": {
+    "stage16_semantic_v1_vs_v2.json": "b060bf7536806512c46b54e61a9e4758e52d9e68fd01dcc24a142a475ae1646a",
+    "stage16_semantic_v2_preflight.json": "0bf9c936b28bd13b5f0621273bed1ebbd53c34b8640a3d456c0d17362282a3d3",
+    "stage16_ai_semantic_v2_results.csv": "c1c5bb88fcfa6c23094122c7791df36beda46b10ad0ac2917925b0af6d7c94f1",
+    "stage16_ai_semantic_v1_dryrun_comparator.csv": "5b4bea15807dc6599e32da97b302afb2612aba2f1e4d45710ae1a2d05b39d795",
+    "stage16_high_impact_semantic_v2_preflight.jsonl": "ff5e52f42d53a1b35fc5f76568d59e6df87541a807eca32628ce33f40ca46ccf"
+  },
+  "redundancy_decisions": {
+    "new_information_ratio": {
+      "decision": "removed",
+      "reason": "Strong semantic overlap with novelty; a reliable ratio needs a comparison corpus, not one isolated message.",
+      "evidence_type": "schema_identifiability_review"
+    },
+    "ecosystem_impact": {
+      "decision": "removed",
+      "reason": "Overlaps importance plus economic, technical, adoption, and fundamental significance scores.",
+      "evidence_type": "schema_identifiability_review"
+    },
+    "empirical_correlation_available": false,
+    "note": "Stage 16 v2 has offline dry-run metadata only; no model outputs exist, so empirical score correlations were not fabricated."
+  },
+  "comparison_report": "stage16_semantic_v21_comparison.json"
+}

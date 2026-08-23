@@ -1,0 +1,18 @@
+{
+  "generated_rules": 100,
+  "rows": 516,
+  "maximum_rules": 500,
+  "maximum_conditions": 2,
+  "allowed_maximum_conditions": 4,
+  "minimum_train_support": 30,
+  "preferred_train_support": 50,
+  "threshold_source": "train_only",
+  "test_used": false,
+  "duplicate_equivalent_rules": 0,
+  "primary_latency_minutes": 1,
+  "primary_horizons": [
+    "1h",
+    "3h",
+    "12h"
+  ]
+}

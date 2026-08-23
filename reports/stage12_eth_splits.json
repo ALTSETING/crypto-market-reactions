@@ -1,0 +1,63 @@
+{
+  "dataset_version": "stage12_eth_v1",
+  "method": "chronological_60_20_20",
+  "train": {
+    "count": 4110,
+    "start": "2023-01-19T20:40:05+00:00",
+    "end": "2026-01-17T21:16:26.593000+00:00",
+    "first_event_key": "992bbf6c64c94b16888f768c48834f2f",
+    "last_event_key": "d11868f4f24043a19279d8687c1a64d3"
+  },
+  "validation": {
+    "count": 1370,
+    "start": "2026-01-18T15:00:00+00:00",
+    "end": "2026-03-31T13:01:04+00:00",
+    "first_event_key": "a3a27424e13741a9b2f134d8052795e6",
+    "last_event_key": "b7b53dc5a27341f08d6e956035c6805f"
+  },
+  "test": {
+    "count": 1371,
+    "start": "2026-03-31T13:10:22.166000+00:00",
+    "end": "2026-06-30T22:16:52+00:00",
+    "first_event_key": "e20c694ed990401f82352fbfd5996db8",
+    "last_event_key": "2b5c8ae53d164771a1b388e41ec92035"
+  },
+  "walk_forward_folds": [
+    {
+      "fold": 1,
+      "train_count": 2741,
+      "evaluation_count": 1370,
+      "train_end": "2025-09-26T12:41:49+00:00",
+      "evaluation_start": "2025-09-26T13:15:36.802000+00:00",
+      "evaluation_end": "2026-01-18T15:00:00+00:00",
+      "target_distribution": {
+        "target_abs_abnormal_return_1h": 0.29914187765414296,
+        "target_realized_vol_1h": 0.7748890610405869
+      }
+    },
+    {
+      "fold": 2,
+      "train_count": 4111,
+      "evaluation_count": 1370,
+      "train_end": "2026-01-18T15:00:00+00:00",
+      "evaluation_start": "2026-01-18T16:07:30.323000+00:00",
+      "evaluation_end": "2026-03-31T13:10:22.166000+00:00",
+      "target_distribution": {
+        "target_abs_abnormal_return_1h": 0.2596484138372676,
+        "target_realized_vol_1h": 0.81276599524681
+      }
+    },
+    {
+      "fold": 3,
+      "train_count": 5481,
+      "evaluation_count": 1370,
+      "train_end": "2026-03-31T13:10:22.166000+00:00",
+      "evaluation_start": "2026-03-31T15:30:00+00:00",
+      "evaluation_end": "2026-06-30T22:16:52+00:00",
+      "target_distribution": {
+        "target_abs_abnormal_return_1h": 0.17867792609571415,
+        "target_realized_vol_1h": 0.5568840704877376
+      }
+    }
+  ]
+}

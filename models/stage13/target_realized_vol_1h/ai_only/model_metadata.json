@@ -1,0 +1,19 @@
+{
+  "artifact_type": "baseline_research_not_production",
+  "created_at": "2026-07-18T21:06:48.332255+00:00",
+  "target": "target_realized_vol_1h",
+  "dataset_variant": "ai_only",
+  "model_family": "random_forest",
+  "configuration": "random_forest__max_depth-6_max_features-0.7_min_samples_leaf-2_n_estimators-100",
+  "parameters": {
+    "n_estimators": 100,
+    "max_depth": 6,
+    "min_samples_leaf": 2,
+    "max_features": 0.7
+  },
+  "target_transform": "log1p",
+  "fit_rows": 5480,
+  "test_rows": 1371,
+  "stage12_schema_hash": "ec3a671595c1e4dea854652c9734515003287f9acccf1cd48cc7144efbebe4cc",
+  "test_used_for_selection": false
+}

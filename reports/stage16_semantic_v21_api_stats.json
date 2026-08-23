@@ -1,0 +1,17 @@
+{
+  "batch_id": "batch_6a5c435daa7c819091514c4915d3a009",
+  "model": "gpt-5-mini",
+  "prompt_version": "high_impact_semantic_v2_1",
+  "selected": 714,
+  "submitted": 714,
+  "success": 714,
+  "failed": 0,
+  "invalid_schema": 0,
+  "refused": 0,
+  "missing": 0,
+  "schema_success_rate": 1.0,
+  "input_tokens": 608916,
+  "output_tokens": 188471,
+  "actual_cost_usd": 0.529171,
+  "average_cost_per_event": 0.00074114
+}

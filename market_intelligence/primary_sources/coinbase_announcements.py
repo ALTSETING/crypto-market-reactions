@@ -1,0 +1,1 @@
+"""Optional Coinbase adapter placeholder."""

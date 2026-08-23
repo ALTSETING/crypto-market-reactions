@@ -1,0 +1,23 @@
+{
+  "sampling_unit": "event_id",
+  "asset_rows_moved_together": true,
+  "search_pipeline_repeated": true,
+  "train_search_repeated": true,
+  "validation_selection_repeated": true,
+  "permutations": 500,
+  "candidate_rules": 105,
+  "max_conditions": 2,
+  "primary_horizons": [
+    "1h",
+    "3h",
+    "12h"
+  ],
+  "observed_best_validation_abs_lift": 0.44611230764682475,
+  "observed_rule": "confirmed__asset_not_rising",
+  "observed_horizon": "12h",
+  "search_adjusted_p": 0.21157684630738524,
+  "null_mean": 0.2856701595437731,
+  "null_p95": 0.630802549849588,
+  "null_max": 1.0014807477479857,
+  "status": "PASS"
+}

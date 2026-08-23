@@ -1,0 +1,500 @@
+[
+  {
+    "news_id": 603,
+    "title": "Crypto Dev's Platform Allows AI Agents To Hire Humans For Physical Tasks",
+    "model_name": "gpt-5-mini-2025-08-07",
+    "input_hash": "80b7181cad838e925c86c4a71fc7056ead1560b96b6a61bfc8163b31d2c76b1f",
+    "input_excerpt": "Asset focus: ETH\nTitle: Crypto Dev's Platform Allows AI Agents To Hire Humans For Physical Tasks\nText: Crypto dev launches website for agentic AI to ‘rent a human’ The site lets users set an hourly rate for tasks from errands to business meetings. It was built using AI agents in a \"Ralph loop,\" a form of vibe coding. In what some may see as a unique and slightly dystopian use of artificial intelligence, a crypto developer has launched a website that enables AI agents to rent humans to do tasks i",
+    "status": "success",
+    "schema_status": "valid",
+    "structured_response": {
+      "sentiment": 0,
+      "importance": 10,
+      "novelty": 35,
+      "credibility": 70,
+      "direction": "neutral",
+      "category": "other",
+      "horizon": "weeks",
+      "confidence": 50,
+      "eth_relevance": 15
+    },
+    "raw_response": {
+      "id": "resp_03d2146991e8812e016a5ad09908a8819eb563590001e7acd2",
+      "created_at": 1784336537.0,
+      "error": null,
+      "incomplete_details": null,
+      "instructions": null,
+      "metadata": {},
+      "model": "gpt-5-mini-2025-08-07",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_03d2146991e8812e016a5ad099d678819e8250b7374aacfeb9",
+          "summary": [],
+          "type": "reasoning",
+          "content": [],
+          "encrypted_content": "gAAAAABqWtCa7A1d42Ta6sYHoFv6HPJfGesK0bvA-Nu3R0lVOPQ2K8MNb6VljXPr-DY9ZEqKSzYIDrw2ltFNCXXag0ph4QxABzE0_Z1Q-NXIzgkO53igHsWQvIbhbOmnZbDTz3DjNcL1iMqsokdKugar6H4G6HuX0dAFH1G6hOQtDpkjIJnAwer6xBn92o3Tg6be96TqFVSidOqUQK4eulKq98W_PFG_XusZdlmOELXLLgrZWRAiNrvW1pUbLe8--kjEwc-HmRzdpbAS1XkMEe8TXj92ZxOkvT0IO2TPcCDlyzVEWlWBbvIIbhddBzP54sVaLo7V0TPt3Jwvm0QYOIzQOYTdwd78KW5atvZ3SuIZ0eODKeBRBrddq3_kB-FwPlLBi8ywLjvcn90wztJbuGLG5gmX-eOPsJktDXfuU_N-JqsHQE2nz6xRRPmnTenOeWhi-um0P7Ud_ATebNAimgy1jDqgpzVS30UPm-0bSpC89slrQqBQcjMvyJIIPmcS8gqZ2HcHk7221WUd9wX2sSFosviooM3EIsPmmPaEHHOFMlSeNa2w2zpdd5u2Ft58HH6pVxjzEcxq7WdYFXxxgJgG7vKRP_69WHi0iHZ9mClq873APcznWnnqisB-LbkTApdyGgPdEnzO1xBOrHti-QzpYcr-xKWIelvPn4pufbqHmaH9P1TA9S4CRAmVj-Fy5N_o0yxGAHO6XqkjSQboBa5RddHLeyfCv1w-RedvIPixK4VWiddWM_59SY_8LcD9s-Dnxu_hdwPzMtJDlapG4-ByRR2EXT5AkMB6mwTzn8myUZ7S0NsZImBCdbHSLSYRIhR5JJW1lV0uRD1eJdUK5u1tlCY-xY2pAl9PU9RsCahUEgdb9j6FuIJR5sABVgSO0Vf4paffYqm2ObGHyEM4RpM6zCpxFY_xO3chB7PcGgjaK2gtjbN61DIfD6O9pcsUQJxsH5lzqwDnZvQre_FD3afvVcGs_zGarX2XOJYiyFeU0qeodKkIdQc=",
+          "status": null
+        },
+        {
+          "id": "msg_03d2146991e8812e016a5ad09a0ce8819eb1aafb0214e5ff41",
+          "content": [
+            {
+              "annotations": [],
+              "text": "{\"sentiment\":0,\"importance\":10,\"novelty\":35,\"credibility\":70,\"direction\":\"neutral\",\"category\":\"other\",\"horizon\":\"weeks\",\"confidence\":50,\"eth_relevance\":15}",
+              "type": "output_text",
+              "logprobs": [],
+              "parsed": {
+                "sentiment": 0,
+                "importance": 10,
+                "novelty": 35,
+                "credibility": 70,
+                "direction": "neutral",
+                "category": "other",
+                "horizon": "weeks",
+                "confidence": 50,
+                "eth_relevance": 15
+              }
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": null
+        }
+      ],
+      "parallel_tool_calls": true,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_p": 1.0,
+      "background": false,
+      "completed_at": 1784336538.0,
+      "conversation": null,
+      "max_output_tokens": 140,
+      "max_tool_calls": null,
+      "moderation": null,
+      "previous_response_id": null,
+      "prompt": null,
+      "prompt_cache_key": null,
+      "prompt_cache_options": null,
+      "prompt_cache_retention": "in_memory",
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "minimal",
+        "generate_summary": null,
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "text": {
+        "format": {
+          "name": "EthAnalysisPayload",
+          "schema_": {
+            "additionalProperties": false,
+            "properties": {
+              "sentiment": {
+                "maximum": 100,
+                "minimum": -100,
+                "title": "Sentiment",
+                "type": "integer"
+              },
+              "importance": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Importance",
+                "type": "integer"
+              },
+              "novelty": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Novelty",
+                "type": "integer"
+              },
+              "credibility": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Credibility",
+                "type": "integer"
+              },
+              "direction": {
+                "enum": [
+                  "bearish",
+                  "neutral",
+                  "bullish",
+                  "mixed"
+                ],
+                "title": "Direction",
+                "type": "string"
+              },
+              "category": {
+                "enum": [
+                  "regulation",
+                  "etf",
+                  "staking",
+                  "protocol_upgrade",
+                  "layer2",
+                  "network_activity",
+                  "fees",
+                  "security",
+                  "hack",
+                  "exchange",
+                  "institutional_adoption",
+                  "partnership",
+                  "tokenomics",
+                  "legal",
+                  "macro",
+                  "market_commentary",
+                  "defi",
+                  "stablecoins",
+                  "nft",
+                  "other"
+                ],
+                "title": "Category",
+                "type": "string"
+              },
+              "horizon": {
+                "enum": [
+                  "minutes",
+                  "hours",
+                  "days",
+                  "weeks",
+                  "months",
+                  "unclear"
+                ],
+                "title": "Horizon",
+                "type": "string"
+              },
+              "confidence": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Confidence",
+                "type": "integer"
+              },
+              "eth_relevance": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Eth Relevance",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "sentiment",
+              "importance",
+              "novelty",
+              "credibility",
+              "direction",
+              "category",
+              "horizon",
+              "confidence",
+              "eth_relevance"
+            ],
+            "title": "EthAnalysisPayload",
+            "type": "object"
+          },
+          "type": "json_schema",
+          "description": null,
+          "strict": true
+        },
+        "verbosity": "medium"
+      },
+      "top_logprobs": 0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 1008,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 67,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1075
+      },
+      "user": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "frequency_penalty": 0.0,
+      "presence_penalty": 0.0,
+      "store": false,
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      }
+    },
+    "input_tokens": 1008,
+    "output_tokens": 67,
+    "total_tokens": 1075,
+    "actual_cost_usd": 0.000386,
+    "latency_seconds": 2.8296,
+    "retries": 0,
+    "error_message": null
+  },
+  {
+    "news_id": 603,
+    "title": "Crypto Dev's Platform Allows AI Agents To Hire Humans For Physical Tasks",
+    "model_name": "gpt-5-nano-2025-08-07",
+    "input_hash": "80b7181cad838e925c86c4a71fc7056ead1560b96b6a61bfc8163b31d2c76b1f",
+    "input_excerpt": "Asset focus: ETH\nTitle: Crypto Dev's Platform Allows AI Agents To Hire Humans For Physical Tasks\nText: Crypto dev launches website for agentic AI to ‘rent a human’ The site lets users set an hourly rate for tasks from errands to business meetings. It was built using AI agents in a \"Ralph loop,\" a form of vibe coding. In what some may see as a unique and slightly dystopian use of artificial intelligence, a crypto developer has launched a website that enables AI agents to rent humans to do tasks i",
+    "status": "success",
+    "schema_status": "valid",
+    "structured_response": {
+      "sentiment": 0,
+      "importance": 2,
+      "novelty": 3,
+      "credibility": 2,
+      "direction": "neutral",
+      "category": "tokenomics",
+      "horizon": "days",
+      "confidence": 40,
+      "eth_relevance": 60
+    },
+    "raw_response": {
+      "id": "resp_012b5e67dad028fd016a5ad09907bc81a1aa8deace51fc9e49",
+      "created_at": 1784336537.0,
+      "error": null,
+      "incomplete_details": null,
+      "instructions": null,
+      "metadata": {},
+      "model": "gpt-5-nano-2025-08-07",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_012b5e67dad028fd016a5ad099a79481a1bee03777397fd503",
+          "summary": [],
+          "type": "reasoning",
+          "content": [],
+          "encrypted_content": "gAAAAABqWtCalNQ2yulmuQknIVIaip5myFGm7Twxa56UM_wsdUvY6WBzCUtUYboc6h3NXH7H_ARUZ9pVi5vqA4qpB6Pw5PEaXiKPsIxGQKXdwjfcd7R3xDkrVZiehrdwZVbBW5YgQml7WwjKirDsWylASKiEpHD12JZVQfoLobrDDnVmXFbWRqpm8PHeM91rnwQhHwHv-HmwNW56qOAwPohoyQU0CCM4o9J5UvrbsvvPtvvjS3Nf32W_CHZCLgBfgJD98LXQ330OEXjV2175x4zezhImNp2RW2gtkyFeea4QJ6jTHNXkrpzFdILsAsftoz1D2XKHOiiVH1_3HeJUZ3U3Qo7K0dUZ43i59ReCTKQB1wai4DTxqnlmRemvbQLxEjcQndcPfdlc_yw6pZFgDTDak54Y3ohq20S0oKxFo9W-tCw0d63W--wptjlHSwxBIvBGEhSypThH0SFLbeNUazXRHfj4EXuR8M473zVmeFoQ5DT2aHLRzwOhBtKPwo0v72uHrnuHMC5gHwIhmHHDKZAaQFmqS3xLwuQRPj3E_hAiTKvty_g7yJVabgv8CXzeP5x6NYZPBRLpQ2dUNeU9S9B_RWmL4ekqinffNDSvophgsJ3U8tCCj0amz4h5VuTEgWXIOH6rAfo83AreKhOkp6__X_IeZ1Q0gdweqmmLM1mEORyLtKZa9UhLMf99Or7AJWWf-jW1g1VMdbwXLH0C-n4VvYmwZpe8z5CrYaDwIzeLVwMLuJ8bM9v1tHs0cHHL2kJZVOxJHaX9ManKMkd8ZMWQHLRhJ9iet0YhPiY-mBeI7IiEZKmsOw8_Whhpue7o7AoGyEy4z5y4GxbPErVWGEOs5JY0_QAucDtiP50CIaX9Qi5m6aoQsnsfH1ZZ2-yGfGeTLmn1snrvtWlyJfuREi_mCV3k0pYhmWbbuPeiPsPr_RL32dA-xwO8z69djfXuKtcVUfT5WX_tJAPBAr6OjC1HbEKdLJHsAEiGrxTuiBkGmigVan6tilI=",
+          "status": null
+        },
+        {
+          "id": "msg_012b5e67dad028fd016a5ad099cc8c81a1a8dd70eda169b1b1",
+          "content": [
+            {
+              "annotations": [],
+              "text": "{\"sentiment\":0,\"importance\":2,\"novelty\":3,\"credibility\":2,\"direction\":\"neutral\",\"category\":\"tokenomics\",\"horizon\":\"days\",\"confidence\":40,\"eth_relevance\":60}",
+              "type": "output_text",
+              "logprobs": [],
+              "parsed": {
+                "sentiment": 0,
+                "importance": 2,
+                "novelty": 3,
+                "credibility": 2,
+                "direction": "neutral",
+                "category": "tokenomics",
+                "horizon": "days",
+                "confidence": 40,
+                "eth_relevance": 60
+              }
+            }
+          ],
+          "role": "assistant",
+          "status": "completed",
+          "type": "message",
+          "phase": null
+        }
+      ],
+      "parallel_tool_calls": true,
+      "temperature": 1.0,
+      "tool_choice": "auto",
+      "tools": [],
+      "top_p": 1.0,
+      "background": false,
+      "completed_at": 1784336538.0,
+      "conversation": null,
+      "max_output_tokens": 140,
+      "max_tool_calls": null,
+      "moderation": null,
+      "previous_response_id": null,
+      "prompt": null,
+      "prompt_cache_key": null,
+      "prompt_cache_options": null,
+      "prompt_cache_retention": "in_memory",
+      "reasoning": {
+        "context": "current_turn",
+        "effort": "minimal",
+        "generate_summary": null,
+        "mode": "standard",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "text": {
+        "format": {
+          "name": "EthAnalysisPayload",
+          "schema_": {
+            "additionalProperties": false,
+            "properties": {
+              "sentiment": {
+                "maximum": 100,
+                "minimum": -100,
+                "title": "Sentiment",
+                "type": "integer"
+              },
+              "importance": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Importance",
+                "type": "integer"
+              },
+              "novelty": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Novelty",
+                "type": "integer"
+              },
+              "credibility": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Credibility",
+                "type": "integer"
+              },
+              "direction": {
+                "enum": [
+                  "bearish",
+                  "neutral",
+                  "bullish",
+                  "mixed"
+                ],
+                "title": "Direction",
+                "type": "string"
+              },
+              "category": {
+                "enum": [
+                  "regulation",
+                  "etf",
+                  "staking",
+                  "protocol_upgrade",
+                  "layer2",
+                  "network_activity",
+                  "fees",
+                  "security",
+                  "hack",
+                  "exchange",
+                  "institutional_adoption",
+                  "partnership",
+                  "tokenomics",
+                  "legal",
+                  "macro",
+                  "market_commentary",
+                  "defi",
+                  "stablecoins",
+                  "nft",
+                  "other"
+                ],
+                "title": "Category",
+                "type": "string"
+              },
+              "horizon": {
+                "enum": [
+                  "minutes",
+                  "hours",
+                  "days",
+                  "weeks",
+                  "months",
+                  "unclear"
+                ],
+                "title": "Horizon",
+                "type": "string"
+              },
+              "confidence": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Confidence",
+                "type": "integer"
+              },
+              "eth_relevance": {
+                "maximum": 100,
+                "minimum": 0,
+                "title": "Eth Relevance",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "sentiment",
+              "importance",
+              "novelty",
+              "credibility",
+              "direction",
+              "category",
+              "horizon",
+              "confidence",
+              "eth_relevance"
+            ],
+            "title": "EthAnalysisPayload",
+            "type": "object"
+          },
+          "type": "json_schema",
+          "description": null,
+          "strict": true
+        },
+        "verbosity": "medium"
+      },
+      "top_logprobs": 0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 1008,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 68,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1076
+      },
+      "user": null,
+      "billing": {
+        "payer": "developer"
+      },
+      "frequency_penalty": 0.0,
+      "presence_penalty": 0.0,
+      "store": false,
+      "tool_usage": {
+        "image_gen": {
+          "input_tokens": 0,
+          "input_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "output_tokens": 0,
+          "output_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 0
+          },
+          "total_tokens": 0
+        },
+        "web_search": {
+          "num_requests": 0
+        }
+      }
+    },
+    "input_tokens": 1008,
+    "output_tokens": 68,
+    "total_tokens": 1076,
+    "actual_cost_usd": 7.76e-05,
+    "latency_seconds": 2.8184,
+    "retries": 0,
+    "error_message": null
+  }
+]

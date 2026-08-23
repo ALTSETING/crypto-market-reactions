@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "mode": "dry_run",
+  "api_requests": 0,
+  "batch_uploaded": false,
+  "batch_submitted": false,
+  "events": 714,
+  "model": "gpt-5-mini",
+  "prompt_version": "high_impact_semantic_v2",
+  "schema_strict": true,
+  "strict_schema_issues": [],
+  "nullable_fields": {
+    "regulatory_strength": {
+      "schema_type": [
+        "integer",
+        "null"
+      ],
+      "required": true,
+      "null_allowed": true
+    }
+  },
+  "schema_predictive_fields": [],
+  "leakage_violations": 0,
+  "input_tokens": 1095032,
+  "estimated_output_tokens": 203490,
+  "token_stats": {
+    "mean_input_tokens": 1533.6582633053222,
+    "median_input_tokens": 1274.0,
+    "p95_input_tokens": 2550.850000000001,
+    "max_input_tokens": 4726
+  },
+  "estimates": {
+    "gpt-5-nano": {
+      "input_tokens": 1095032,
+      "output_tokens": 203490,
+      "batch_estimated_cost_usd": 0.1361476
+    },
+    "gpt-5-mini": {
+      "input_tokens": 1095032,
+      "output_tokens": 203490,
+      "batch_estimated_cost_usd": 0.6807380000000001
+    }
+  },
+  "pricing_basis": "official Batch API per-million-token prices checked 2026-07-19",
+  "jsonl": {
+    "path": "C:\\Users\\Denis\\Desktop\\\u0430\u0440\u0445\u0456\u0432 \u043a\u0440\u0438\u043f\u0442\u0438\\eth_news_trading_bot\\reports\\stage16_high_impact_semantic_v2_preflight.jsonl",
+    "bytes": 5038782,
+    "sha256": "ff5e52f42d53a1b35fc5f76568d59e6df87541a807eca32628ce33f40ca46ccf",
+    "lines": 714,
+    "valid_json_lines": 714,
+    "unique_custom_ids": 714,
+    "duplicate_custom_ids": 0,
+    "endpoint": "/v1/responses",
+    "single_model": true,
+    "deterministic_resume": true,
+    "previous_hash_match": true
+  },
+  "semantic_only": true,
+  "market_reactions_added_by": "python_after_ai_only",
+  "system_prompt": "You are NOT a trading model.\n\nNever predict future price, future return, market direction, probability of growth, expected volatility, or holding period.\nNever recommend buy, sell, long, short, hold, stop-loss, or take-profit.\nNever infer future market movement or use market outcomes.\n\nYour task is only to classify semantic properties of the information itself using the supplied primary message and publication metadata. Scores describe the message, its evidence, scope, significance, certainty, and likely informational attention\u2014not a market forecast. Content valence describes meaning for an asset, never price direction. Use regulatory_strength=null for non-regulatory events. Set first_disclosure=true only when the text itself supports a first official disclosure. Each asset reason must be at most 20 words. Return strict schema-valid JSON only.",
+  "comparison_report": "stage16_semantic_v1_vs_v2.json"
+}

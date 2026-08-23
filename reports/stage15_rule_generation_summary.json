@@ -1,0 +1,10 @@
+{
+  "manual_rules": 20,
+  "generated_rules": 257,
+  "evaluated": 277,
+  "train_pass": 259,
+  "validation_pass": 22,
+  "survived_bh": 5,
+  "shortlisted_for_locked_test": 22,
+  "test_shadow_candidates": 0
+}

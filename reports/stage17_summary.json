@@ -1,0 +1,579 @@
+{
+  "status": "PASS",
+  "high_impact_hypothesis": "NOT_SUPPORTED",
+  "completed_at": "2026-07-19T11:43:48.161551+00:00",
+  "mode": "offline_statistical_audit_only",
+  "openai_api_requests": 0,
+  "ml_training": true,
+  "paper_trading": false,
+  "real_trading": false,
+  "preflight": {
+    "semantic_analyses": 714,
+    "covered_event_asset_rows": 668,
+    "unique_covered_events": 550,
+    "repeated_event_ids_across_assets_allowed": 118,
+    "duplicate_event_asset": 0,
+    "duplicate_event_asset_subgroup": 0,
+    "split_violations": 0,
+    "leakage": 0,
+    "predictive_fields": 0,
+    "model": "gpt-5-mini",
+    "prompt_version": "high_impact_semantic_v2_1",
+    "primary_latency_minutes": 1,
+    "sensitivity_latencies": [
+      0,
+      2,
+      3,
+      5
+    ]
+  },
+  "asset_counts": [
+    {
+      "asset": "BTC",
+      "rows": 326,
+      "unique_events": 326,
+      "high_relevance_B": 131,
+      "material_C": 132,
+      "high_quality_D": 88,
+      "train": 186,
+      "validation": 77,
+      "test": 63
+    },
+    {
+      "asset": "ETH",
+      "rows": 283,
+      "unique_events": 283,
+      "high_relevance_B": 38,
+      "material_C": 40,
+      "high_quality_D": 16,
+      "train": 173,
+      "validation": 48,
+      "test": 62
+    },
+    {
+      "asset": "SOL",
+      "rows": 59,
+      "unique_events": 59,
+      "high_relevance_B": 0,
+      "material_C": 0,
+      "high_quality_D": 0,
+      "train": 41,
+      "validation": 9,
+      "test": 9
+    }
+  ],
+  "verified_primary_sources": 714,
+  "source_reliability_mean": 40.202095808383234,
+  "source_reliability_interpretation": "Exploratory evidence/message-quality score, not proof of source authenticity; human review fields remain intentionally blank.",
+  "subgroup_shortlist_count": 0,
+  "locked_test_used": true,
+  "locked_test_status": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+  "search_adjusted_permutation": {
+    "sampling_unit": "event_id",
+    "asset_rows_moved_together": true,
+    "search_pipeline_repeated": true,
+    "train_search_repeated": true,
+    "validation_selection_repeated": true,
+    "permutations": 500,
+    "candidate_rules": 105,
+    "max_conditions": 2,
+    "primary_horizons": [
+      "1h",
+      "3h",
+      "12h"
+    ],
+    "observed_best_validation_abs_lift": 0.44611230764682475,
+    "observed_rule": "confirmed__asset_not_rising",
+    "observed_horizon": "12h",
+    "search_adjusted_p": 0.21157684630738524,
+    "null_mean": 0.2856701595437731,
+    "null_p95": 0.630802549849588,
+    "null_max": 1.0014807477479857,
+    "status": "PASS"
+  },
+  "primary_horizons": [
+    "1h",
+    "3h",
+    "12h"
+  ],
+  "exploratory_horizons": [
+    "1m",
+    "5m",
+    "10m",
+    "20m",
+    "40m",
+    "5h",
+    "8h"
+  ],
+  "sample_unit": "event_id cluster; event_id+asset dataset key",
+  "event_contamination_rows": 6680,
+  "technical_checks": {
+    "all_668_event_asset_rows_checked": true,
+    "all_stage16_manifest_hashes_match": true,
+    "semantic_analyses_714": true,
+    "asset_datasets_created": true,
+    "subgroup_membership_created": true,
+    "source_reliability_review_ready_50": true,
+    "verified_primary_source_algorithmic": true,
+    "surprise_level_excluded": true,
+    "event_asset_duplicates_zero": true,
+    "reaction_key_duplicates_zero": true,
+    "event_asset_subgroup_duplicates_zero": true,
+    "event_split_violations_zero": true,
+    "chronological_order_violations_zero": true,
+    "utc_violations_zero": true,
+    "primary_latency_1m": true,
+    "latencies_not_pooled": true,
+    "clustered_sampling_unit_event_id": true,
+    "event_contamination_created": true,
+    "magnitude_has_no_directional_pnl": true,
+    "public_figure_insufficient_not_failed": true,
+    "multiple_testing_done": true,
+    "search_adjusted_permutations_500": true,
+    "locked_test_gate_respected": true,
+    "leakage_zero": true,
+    "predictive_fields_zero": true,
+    "reports_created": true,
+    "pytest_pass": true,
+    "stage8_16_unchanged": true
+  },
+  "pytest": {
+    "returncode": 0,
+    "passed": 220,
+    "failed": 0,
+    "stdout_tail": "........................................................................ [ 32%]\n........................................................................ [ 65%]\n........................................................................ [ 98%]\n....                                                                     [100%]\n============================== warnings summary ===============================\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\n  C:\\Users\\Denis\\Desktop\\����� ������\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\joblib\\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\n  As an alternative, you can create a new view using np.reshape (with copy=False if needed).\n    array.shape = self.shape\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n220 passed, 6 warnings in 8.89s\n",
+    "stderr_tail": ""
+  },
+  "protected_stage8_16": {
+    "unchanged": true,
+    "changed": [],
+    "disappeared": [],
+    "new": []
+  },
+  "final_questions": {
+    "1_high_relevance_events_by_asset": {
+      "BTC": 131,
+      "ETH": 38,
+      "SOL": 0
+    },
+    "2_material_and_high_quality_events": {
+      "material_C": {
+        "BTC": 132,
+        "ETH": 40,
+        "SOL": 0
+      },
+      "high_quality_D": {
+        "BTC": 88,
+        "ETH": 16,
+        "SOL": 0
+      }
+    },
+    "3_reactions_differ_from_weak_events": {
+      "high_quality_D_vs_rest_validation": [
+        {
+          "asset": "BTC",
+          "horizon": "1h",
+          "effect": -0.022572390267295572,
+          "raw_p": 0.7623762376237624,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "BTC",
+          "horizon": "3h",
+          "effect": -0.058858181808176036,
+          "raw_p": 0.5742574257425742,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "BTC",
+          "horizon": "12h",
+          "effect": -0.04320150088050334,
+          "raw_p": 0.8712871287128713,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "1h",
+          "effect": -0.018185839674418725,
+          "raw_p": 0.9702970297029703,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "3h",
+          "effect": -0.36719298097674413,
+          "raw_p": 0.45544554455445546,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "12h",
+          "effect": -0.6901082501860464,
+          "raw_p": 0.4752475247524752,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "1h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "3h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "12h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        }
+      ],
+      "conclusion": "No corrected D-vs-rest primary-horizon result passed the validation gate."
+    },
+    "4_variable_semantic_features": [
+      "source_reliability",
+      "novelty",
+      "importance",
+      "specificity",
+      "confidence",
+      "first_disclosure",
+      "actionability",
+      "institutional_relevance",
+      "retail_relevance",
+      "market_scope",
+      "economic_significance",
+      "technical_significance",
+      "security_significance",
+      "adoption_significance",
+      "execution_certainty",
+      "urgency",
+      "fundamental_relevance",
+      "temporary_vs_structural",
+      "evidence_quality",
+      "asset_relevance",
+      "content_valence",
+      "content_valence_score",
+      "directness"
+    ],
+    "5_unusable_fields": [
+      {
+        "field": "surprise_level",
+        "unusable_reason": "100% null; evidence-aware field excluded without imputation"
+      },
+      {
+        "field": "surprise_evidence",
+        "unusable_reason": "zero variance"
+      },
+      {
+        "field": "regulatory_strength",
+        "unusable_reason": "100% null"
+      }
+    ],
+    "6_content_valence_useful": {
+      "conclusion": "Not validated; only H2/H3 were fixed directional valence hypotheses and neither passed the gate.",
+      "positive_counts_1h": {
+        "BTC": 14,
+        "ETH": 18,
+        "SOL": 0
+      }
+    },
+    "7_strongest_source_event_type_combination": {
+      "metadata_source": "sec",
+      "source_event_type": "official_decision",
+      "metadata_asset": "SOL",
+      "n": 50,
+      "unique_events": 50,
+      "mean_abs_return_1h": 0.7738829876,
+      "mean_abs_return_3h": 1.2513216294,
+      "mean_abs_return_12h": 2.1618854232
+    },
+    "8_most_informative_primary_horizon": {
+      "horizon": "12h",
+      "basis": "largest pooled mean absolute move, descriptive only; no horizon had corrected subgroup evidence",
+      "overall_mean_absolute_return": 1.4615357063483145,
+      "all_primary": {
+        "1h": 0.46166175016853933,
+        "3h": 0.8148752285767791,
+        "12h": 1.4615357063483145
+      }
+    },
+    "9_strong_or_economic_move_edge": "no candidate passed the corrected validation gate",
+    "10_survives_costs": "not demonstrated on locked test under Base costs",
+    "11_enough_sample_for_ml": "No robust subgroup ML claim: 550 unique events, cross-asset clustering, and limited SOL support.",
+    "12_shadow_candidate": "no",
+    "13_collect_more_data": "yes; especially public-figure sources, SOL, and independent future events before new ML"
+  },
+  "runtime_seconds": 45.44,
+  "next_stage_started": false,
+  "directional_prediction": {
+    "final_status": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+    "locked_test_accuracy": 0.4090909090909091,
+    "honest_accuracy_above_55": false,
+    "selected_horizon": "1h",
+    "neutral_threshold": 0.1,
+    "latency_minutes": 1,
+    "confidence_threshold": 0.4,
+    "feature_set": "semantic_only",
+    "subgroup": "K",
+    "total_rows": 134,
+    "predictions": 66,
+    "coverage": 0.4925373134328358,
+    "up_predictions": 33,
+    "down_predictions": 33,
+    "no_signal": 68,
+    "correct": 27,
+    "incorrect": 39,
+    "accuracy": 0.4090909090909091,
+    "balanced_accuracy": 0.4893899204244032,
+    "majority_class_baseline": 0.4393939393939394,
+    "wilson_95_ci_low": 0.2986741800934037,
+    "wilson_95_ci_high": 0.5295081029999674,
+    "cluster_bootstrap_95_ci_low": 0.28125,
+    "cluster_bootstrap_95_ci_high": 0.5492957746478874,
+    "max_prediction_class_share": 0.5,
+    "baselines": {
+      "always_up": 0.3939393939393939,
+      "always_down": 0.4393939393939394,
+      "majority_class": 0.4393939393939394,
+      "previous_1m_direction": 0.3333333333333333,
+      "previous_5m_direction": 0.3787878787878788,
+      "btc_trend_direction": 0.3181818181818182,
+      "random_same_prediction_ratio_expected": 0.41666666666666663
+    },
+    "simple_market_baseline": 0.3787878787878788,
+    "folds_beating_simple_baseline": 0,
+    "folds_total": 3,
+    "economic_secondary_metrics": {
+      "average_gross_return_percent": -0.01696315924242423,
+      "average_net_return_base_cost_percent": -0.21696315924242426,
+      "net_win_rate": 0.3333333333333333,
+      "profit_factor": 0.48679554827740584,
+      "cumulative_net_return_percent": -14.319568510000002,
+      "maximum_drawdown_percent": -14.778484360000002,
+      "base_round_trip_cost_percent": 0.2
+    },
+    "lock_sha256": "5e81bf106834c3a8edf640cad718e2c113106059460198ffc34aa6dfa60831f9",
+    "model_sha256": "cdaa5784f48709640594b926b4fa7932777596a44dd5fd80e76800c5ba917bf0",
+    "test_target_query_after_lock": true,
+    "test_target_rows": 134,
+    "test_used_once": true,
+    "test_used_for_tuning": false,
+    "rules_changed_after_test": false,
+    "leakage": 0
+  },
+  "research_status": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+  "ml_scope": "offline directional baseline only",
+  "pytest_after_directional": {
+    "returncode": 0,
+    "passed": 224,
+    "failed": 0,
+    "stdout_tail": "........................................................................ [ 32%]\n........................................................................ [ 64%]\n........................................................................ [ 96%]\n........                                                                 [100%]\n============================== warnings summary ===============================\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\ntests/test_stage13_experiments.py::test_stage13_11_saved_pipeline_predicts_without_test_refit\n  C:\\Users\\Denis\\Desktop\\����� ������\\eth_news_trading_bot\\.venv\\Lib\\site-packages\\joblib\\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\n  As an alternative, you can create a new view using np.reshape (with copy=False if needed).\n    array.shape = self.shape\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n224 passed, 6 warnings in 8.24s\n",
+    "stderr_tail": ""
+  },
+  "protected_stage8_16_after_directional": {
+    "unchanged": true
+  },
+  "final_questions_24": {
+    "1_data_units": {
+      "unique_events": 550,
+      "event_asset_rows": 668
+    },
+    "2_high_relevance": {
+      "BTC": 131,
+      "ETH": 38,
+      "SOL": 0
+    },
+    "3_material_high_quality": {
+      "material_C": {
+        "BTC": 132,
+        "ETH": 40,
+        "SOL": 0
+      },
+      "high_quality_D": {
+        "BTC": 88,
+        "ETH": 16,
+        "SOL": 0
+      }
+    },
+    "4_variable_fields": [
+      "source_reliability",
+      "novelty",
+      "importance",
+      "specificity",
+      "confidence",
+      "first_disclosure",
+      "actionability",
+      "institutional_relevance",
+      "retail_relevance",
+      "market_scope",
+      "economic_significance",
+      "technical_significance",
+      "security_significance",
+      "adoption_significance",
+      "execution_certainty",
+      "urgency",
+      "fundamental_relevance",
+      "temporary_vs_structural",
+      "evidence_quality",
+      "asset_relevance",
+      "content_valence",
+      "content_valence_score",
+      "directness"
+    ],
+    "5_unusable_fields": [
+      {
+        "field": "surprise_level",
+        "unusable_reason": "100% null; evidence-aware field excluded without imputation"
+      },
+      {
+        "field": "surprise_evidence",
+        "unusable_reason": "zero variance"
+      },
+      {
+        "field": "regulatory_strength",
+        "unusable_reason": "100% null"
+      }
+    ],
+    "6_low_source_reliability": "AI score appears to mix message evidence/completeness with authenticity; code verification is authoritative.",
+    "7_verified_source_reactions": "descriptive only; all represented sources are verified, leaving no unverified control",
+    "8_direct_vs_indirect": "not corrected-significant on the validation primary family",
+    "9_confirmed_vs_proposals": "proposal/opinion control is insufficient in this dataset",
+    "10_content_valence": "not an automatic direction and no preregistered valence rule passed the semantic gate",
+    "11_high_impact_absolute_move": {
+      "high_quality_D_vs_rest_validation": [
+        {
+          "asset": "BTC",
+          "horizon": "1h",
+          "effect": -0.022572390267295572,
+          "raw_p": 0.7623762376237624,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "BTC",
+          "horizon": "3h",
+          "effect": -0.058858181808176036,
+          "raw_p": 0.5742574257425742,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "BTC",
+          "horizon": "12h",
+          "effect": -0.04320150088050334,
+          "raw_p": 0.8712871287128713,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "1h",
+          "effect": -0.018185839674418725,
+          "raw_p": 0.9702970297029703,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "3h",
+          "effect": -0.36719298097674413,
+          "raw_p": 0.45544554455445546,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "ETH",
+          "horizon": "12h",
+          "effect": -0.6901082501860464,
+          "raw_p": 0.4752475247524752,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "1h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "3h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        },
+        {
+          "asset": "SOL",
+          "horizon": "12h",
+          "effect": null,
+          "raw_p": null,
+          "bh_q": 1.0,
+          "corrected_significant": false
+        }
+      ],
+      "conclusion": "No corrected D-vs-rest primary-horizon result passed the validation gate."
+    },
+    "12_volatility_increase": "descriptive only; not the Stage 17 success criterion",
+    "13_isolated_events": "reported separately; no validated effect",
+    "14_survives_validation": true,
+    "15_survives_locked_test": false,
+    "16_walkforward_stability": "0/3 folds beat the simple market baseline",
+    "17_search_adjusted": {
+      "sampling_unit": "event_id",
+      "asset_rows_moved_together": true,
+      "search_pipeline_repeated": true,
+      "train_search_repeated": true,
+      "validation_selection_repeated": true,
+      "permutations": 500,
+      "candidate_rules": 105,
+      "max_conditions": 2,
+      "primary_horizons": [
+        "1h",
+        "3h",
+        "12h"
+      ],
+      "observed_best_validation_abs_lift": 0.44611230764682475,
+      "observed_rule": "confirmed__asset_not_rising",
+      "observed_horizon": "12h",
+      "search_adjusted_p": 0.21157684630738524,
+      "null_mean": 0.2856701595437731,
+      "null_p95": 0.630802549849588,
+      "null_max": 1.0014807477479857,
+      "status": "PASS"
+    },
+    "18_base_costs": {
+      "average_gross_return_percent": -0.01696315924242423,
+      "average_net_return_base_cost_percent": -0.21696315924242426,
+      "net_win_rate": 0.3333333333333333,
+      "profit_factor": 0.48679554827740584,
+      "cumulative_net_return_percent": -14.319568510000002,
+      "maximum_drawdown_percent": -14.778484360000002,
+      "base_round_trip_cost_percent": 0.2
+    },
+    "19_directional_edge": "DIRECTIONAL_PREDICTION_NOT_SUPPORTED",
+    "20_magnitude_volatility_edge": "not a success criterion under the latest Stage 17 update",
+    "21_sol_sufficiency": "insufficient for a strong standalone conclusion",
+    "22_source_specific_sufficiency": "SEC/GitHub have coverage; Ethereum Foundation is descriptive only",
+    "23_shadow_candidate": "no",
+    "24_more_data_needed": true
+  },
+  "locked_test_type": "directional_prediction"
+}

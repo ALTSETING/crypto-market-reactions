@@ -1,0 +1,401 @@
+{
+  "audit_type": "descriptive_existing_results_only",
+  "lock_sha256": "509a91b2d6fda0991eba012cf273ad54ef9b2f711a49a6891a7ba0a7277f900e",
+  "A_WALK_FORWARD_PERIOD_ANALYSIS": [
+    {
+      "dataset": "A_WALK_FORWARD",
+      "fold": 1,
+      "signals": 37,
+      "mean_signed_actual_eth_return_percent": -0.011557435675675774,
+      "median_signed_actual_eth_return_percent": null,
+      "mean_absolute_eth_return_percent": null,
+      "median_absolute_eth_return_percent": null,
+      "minimum_actual_return_percent": null,
+      "maximum_actual_return_percent": null,
+      "actual_return_standard_deviation_percent": null,
+      "when_eth_rose": {
+        "count": null,
+        "average_rise_percent": null,
+        "median_rise_percent": null,
+        "minimum_positive_return_percent": null,
+        "maximum_rise_percent": null
+      },
+      "when_eth_fell": {
+        "count": null,
+        "average_negative_return_percent": null,
+        "median_negative_return_percent": null,
+        "smallest_decline_percent": null,
+        "largest_decline_percent": null,
+        "average_decline_absolute_percent": null
+      },
+      "correct_predictions": {
+        "count": 19,
+        "average_favorable_move_percent": null,
+        "median_favorable_move_percent": null,
+        "average_gross_profit_percent": null,
+        "average_net_profit_base_percent": null
+      },
+      "incorrect_predictions": {
+        "count": 18,
+        "average_adverse_move_percent": null,
+        "median_adverse_move_percent": null,
+        "average_gross_loss_percent": null,
+        "average_net_loss_base_percent": null
+      },
+      "payoff": {
+        "gross_average_winner_percent": null,
+        "gross_average_loser_percent": null,
+        "gross_payoff_ratio": null,
+        "gross_profit_factor": 1.687162298413195,
+        "gross_expectancy_per_signal_percent": 0.3976237632432433,
+        "gross_break_even_accuracy": null,
+        "base_average_winner_percent": null,
+        "base_average_loser_percent": null,
+        "base_payoff_ratio": null,
+        "base_profit_factor": 1.293021470083211,
+        "base_expectancy_per_signal_percent": 0.1976237632432432,
+        "base_break_even_accuracy": null
+      },
+      "derivation": "Only aggregate-identifiable values are reported; no model refit. Correct/incorrect uses a ±0.10% neutral band, while profit factor uses the sign of trade return, so their payoff means cannot be cross-derived.",
+      "unavailable_prediction_level_fields": [
+        "medians",
+        "minimum",
+        "maximum",
+        "standard_deviation",
+        "absolute_move_bins",
+        "correct_LONG_average_rise",
+        "incorrect_LONG_average_fall",
+        "correct_SHORT_average_fall",
+        "incorrect_SHORT_average_rise",
+        "LONG_profit_factor",
+        "SHORT_profit_factor",
+        "average_winner",
+        "average_loser",
+        "payoff_ratio",
+        "break_even_accuracy"
+      ]
+    },
+    {
+      "dataset": "A_WALK_FORWARD",
+      "fold": 2,
+      "signals": 38,
+      "mean_signed_actual_eth_return_percent": 0.6658079476315789,
+      "median_signed_actual_eth_return_percent": null,
+      "mean_absolute_eth_return_percent": null,
+      "median_absolute_eth_return_percent": null,
+      "minimum_actual_return_percent": null,
+      "maximum_actual_return_percent": null,
+      "actual_return_standard_deviation_percent": null,
+      "when_eth_rose": {
+        "count": null,
+        "average_rise_percent": null,
+        "median_rise_percent": null,
+        "minimum_positive_return_percent": null,
+        "maximum_rise_percent": null
+      },
+      "when_eth_fell": {
+        "count": null,
+        "average_negative_return_percent": null,
+        "median_negative_return_percent": null,
+        "smallest_decline_percent": null,
+        "largest_decline_percent": null,
+        "average_decline_absolute_percent": null
+      },
+      "correct_predictions": {
+        "count": 15,
+        "average_favorable_move_percent": null,
+        "median_favorable_move_percent": null,
+        "average_gross_profit_percent": null,
+        "average_net_profit_base_percent": null
+      },
+      "incorrect_predictions": {
+        "count": 23,
+        "average_adverse_move_percent": null,
+        "median_adverse_move_percent": null,
+        "average_gross_loss_percent": null,
+        "average_net_loss_base_percent": null
+      },
+      "payoff": {
+        "gross_average_winner_percent": null,
+        "gross_average_loser_percent": null,
+        "gross_payoff_ratio": null,
+        "gross_profit_factor": 0.5345483405367942,
+        "gross_expectancy_per_signal_percent": -0.6677552981578946,
+        "gross_break_even_accuracy": null,
+        "base_average_winner_percent": null,
+        "base_average_loser_percent": null,
+        "base_payoff_ratio": null,
+        "base_profit_factor": 0.4405277866348626,
+        "base_expectancy_per_signal_percent": -0.8677552981578944,
+        "base_break_even_accuracy": null
+      },
+      "derivation": "Only aggregate-identifiable values are reported; no model refit. Correct/incorrect uses a ±0.10% neutral band, while profit factor uses the sign of trade return, so their payoff means cannot be cross-derived.",
+      "unavailable_prediction_level_fields": [
+        "medians",
+        "minimum",
+        "maximum",
+        "standard_deviation",
+        "absolute_move_bins",
+        "correct_LONG_average_rise",
+        "incorrect_LONG_average_fall",
+        "correct_SHORT_average_fall",
+        "incorrect_SHORT_average_rise",
+        "LONG_profit_factor",
+        "SHORT_profit_factor",
+        "average_winner",
+        "average_loser",
+        "payoff_ratio",
+        "break_even_accuracy"
+      ]
+    },
+    {
+      "dataset": "A_WALK_FORWARD",
+      "fold": 3,
+      "signals": 36,
+      "mean_signed_actual_eth_return_percent": -0.2774599469444444,
+      "median_signed_actual_eth_return_percent": null,
+      "mean_absolute_eth_return_percent": null,
+      "median_absolute_eth_return_percent": null,
+      "minimum_actual_return_percent": null,
+      "maximum_actual_return_percent": null,
+      "actual_return_standard_deviation_percent": null,
+      "when_eth_rose": {
+        "count": null,
+        "average_rise_percent": null,
+        "median_rise_percent": null,
+        "minimum_positive_return_percent": null,
+        "maximum_rise_percent": null
+      },
+      "when_eth_fell": {
+        "count": null,
+        "average_negative_return_percent": null,
+        "median_negative_return_percent": null,
+        "smallest_decline_percent": null,
+        "largest_decline_percent": null,
+        "average_decline_absolute_percent": null
+      },
+      "correct_predictions": {
+        "count": 21,
+        "average_favorable_move_percent": null,
+        "median_favorable_move_percent": null,
+        "average_gross_profit_percent": null,
+        "average_net_profit_base_percent": null
+      },
+      "incorrect_predictions": {
+        "count": 15,
+        "average_adverse_move_percent": null,
+        "median_adverse_move_percent": null,
+        "average_gross_loss_percent": null,
+        "average_net_loss_base_percent": null
+      },
+      "payoff": {
+        "gross_average_winner_percent": null,
+        "gross_average_loser_percent": null,
+        "gross_payoff_ratio": null,
+        "gross_profit_factor": 1.3064580179174037,
+        "gross_expectancy_per_signal_percent": 0.2045398386111111,
+        "gross_break_even_accuracy": null,
+        "base_average_winner_percent": null,
+        "base_average_loser_percent": null,
+        "base_payoff_ratio": null,
+        "base_profit_factor": 1.0060469488672656,
+        "base_expectancy_per_signal_percent": 0.0045398386111111,
+        "base_break_even_accuracy": null
+      },
+      "derivation": "Only aggregate-identifiable values are reported; no model refit. Correct/incorrect uses a ±0.10% neutral band, while profit factor uses the sign of trade return, so their payoff means cannot be cross-derived.",
+      "unavailable_prediction_level_fields": [
+        "medians",
+        "minimum",
+        "maximum",
+        "standard_deviation",
+        "absolute_move_bins",
+        "correct_LONG_average_rise",
+        "incorrect_LONG_average_fall",
+        "correct_SHORT_average_fall",
+        "incorrect_SHORT_average_rise",
+        "LONG_profit_factor",
+        "SHORT_profit_factor",
+        "average_winner",
+        "average_loser",
+        "payoff_ratio",
+        "break_even_accuracy"
+      ]
+    }
+  ],
+  "B_BEST_COMBINED_CANDIDATE_46_SIGNALS": {
+    "signals": 46,
+    "mean_signed_actual_eth_return_percent": -0.09212803000000004,
+    "median_signed_actual_eth_return_percent": null,
+    "mean_absolute_eth_return_percent": null,
+    "median_absolute_eth_return_percent": null,
+    "minimum_actual_return_percent": null,
+    "maximum_actual_return_percent": null,
+    "actual_return_standard_deviation_percent": null,
+    "when_eth_rose": {
+      "count": null,
+      "average_rise_percent": null,
+      "median_rise_percent": null,
+      "minimum_positive_return_percent": null,
+      "maximum_rise_percent": null
+    },
+    "when_eth_fell": {
+      "count": null,
+      "average_negative_return_percent": null,
+      "median_negative_return_percent": null,
+      "smallest_decline_percent": null,
+      "largest_decline_percent": null,
+      "average_decline_absolute_percent": null
+    },
+    "correct_predictions": {
+      "count": 27,
+      "average_favorable_move_percent": null,
+      "median_favorable_move_percent": null,
+      "average_gross_profit_percent": null,
+      "average_net_profit_base_percent": null
+    },
+    "incorrect_predictions": {
+      "count": 19,
+      "average_adverse_move_percent": null,
+      "median_adverse_move_percent": null,
+      "average_gross_loss_percent": null,
+      "average_net_loss_base_percent": null
+    },
+    "payoff": {
+      "gross_average_winner_percent": null,
+      "gross_average_loser_percent": null,
+      "gross_payoff_ratio": null,
+      "gross_profit_factor": 1.241283064238191,
+      "gross_expectancy_per_signal_percent": 0.1572844343478261,
+      "gross_break_even_accuracy": null,
+      "base_average_winner_percent": null,
+      "base_average_loser_percent": null,
+      "base_payoff_ratio": null,
+      "base_profit_factor": 0.9416785662811826,
+      "base_expectancy_per_signal_percent": -0.0427155656521739,
+      "base_break_even_accuracy": null
+    },
+    "derivation": "Only aggregate-identifiable values are reported; no model refit. Correct/incorrect uses a ±0.10% neutral band, while profit factor uses the sign of trade return, so their payoff means cannot be cross-derived.",
+    "unavailable_prediction_level_fields": [
+      "medians",
+      "minimum",
+      "maximum",
+      "standard_deviation",
+      "absolute_move_bins",
+      "correct_LONG_average_rise",
+      "incorrect_LONG_average_fall",
+      "correct_SHORT_average_fall",
+      "incorrect_SHORT_average_rise",
+      "LONG_profit_factor",
+      "SHORT_profit_factor",
+      "average_winner",
+      "average_loser",
+      "payoff_ratio",
+      "break_even_accuracy"
+    ]
+  },
+  "sets_are_disjoint_analytical_blocks": true,
+  "absolute_move_bins": {
+    "availability": "unavailable_without_prediction_rows",
+    "values": null
+  },
+  "arithmetic_checks": [
+    {
+      "fold": 1,
+      "check": "correct_plus_incorrect_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 1,
+      "check": "long_plus_short_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 1,
+      "check": "signals_plus_no_signal_equals_eth_evaluation_rows",
+      "passed": true
+    },
+    {
+      "fold": 1,
+      "check": "base_net_equals_gross_minus_0_20pct",
+      "passed": true
+    },
+    {
+      "fold": 2,
+      "check": "correct_plus_incorrect_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 2,
+      "check": "long_plus_short_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 2,
+      "check": "signals_plus_no_signal_equals_eth_evaluation_rows",
+      "passed": true
+    },
+    {
+      "fold": 2,
+      "check": "base_net_equals_gross_minus_0_20pct",
+      "passed": true
+    },
+    {
+      "fold": 3,
+      "check": "correct_plus_incorrect_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 3,
+      "check": "long_plus_short_equals_predictions",
+      "passed": true
+    },
+    {
+      "fold": 3,
+      "check": "signals_plus_no_signal_equals_eth_evaluation_rows",
+      "passed": true
+    },
+    {
+      "fold": 3,
+      "check": "base_net_equals_gross_minus_0_20pct",
+      "passed": true
+    },
+    {
+      "fold": "all",
+      "check": "walkforward_signal_sum_equals_111",
+      "passed": true
+    },
+    {
+      "fold": "all",
+      "check": "walkforward_eth_rows_equal_114",
+      "passed": true
+    },
+    {
+      "fold": "all",
+      "check": "walkforward_no_signal_sum_equals_3",
+      "passed": true
+    },
+    {
+      "fold": "validation_46",
+      "check": "validation_candidate_kept_separate",
+      "passed": true
+    },
+    {
+      "fold": "all",
+      "check": "duplicate_aggregate_fold_rows_zero",
+      "passed": true
+    },
+    {
+      "fold": "all",
+      "check": "individual_prediction_duplicates",
+      "passed": null,
+      "reason": "prediction-level rows were not persisted"
+    },
+    {
+      "fold": "all",
+      "check": "gross_expectancy_matches_individual_trade_returns",
+      "passed": null,
+      "reason": "prediction-level rows were not persisted; aggregate weighted identities were checked instead"
+    }
+  ],
+  "all_determinable_checks_passed": true
+}

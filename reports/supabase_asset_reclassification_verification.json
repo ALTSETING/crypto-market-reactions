@@ -1,0 +1,39 @@
+{
+  "checks": {
+    "total_is_7878": true,
+    "event_ids_unique": true,
+    "slugs_unique": true,
+    "local_classification_matches": true,
+    "generic_coinbase_absent_from_sol": true,
+    "rls_enabled": true,
+    "anon_select_only": true,
+    "readonly_policy_present": true,
+    "expected_indexes_present": true,
+    "fts_generated": true,
+    "fts_query_returns_rows": true
+  },
+  "total": 7878,
+  "unique_event_ids": 7878,
+  "unique_slugs": 7878,
+  "asset_counts": {
+    "BTC": 2593,
+    "ETH": 7374,
+    "SOL": 452
+  },
+  "empty_related_assets": 303,
+  "three_assets": 141,
+  "sol_sec": 8,
+  "sol_generic_coinbase": 0,
+  "classification_mismatches": 0,
+  "fts_matches_ethereum_etf": 107,
+  "indexes": [
+    "events_pkey",
+    "events_slug_key",
+    "ix_events_category",
+    "ix_events_primary_asset",
+    "ix_events_published_at",
+    "ix_events_related_assets_gin",
+    "ix_events_search_vector_gin",
+    "ix_events_source"
+  ]
+}

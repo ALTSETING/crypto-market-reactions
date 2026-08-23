@@ -1,0 +1,1 @@
+"""Optional Grayscale adapter placeholder."""

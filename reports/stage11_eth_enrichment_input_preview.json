@@ -1,0 +1,47 @@
+[
+  {
+    "event_key": "20ac46fad08b47dea568b944e4fff37e",
+    "news_id": 17,
+    "source": "decrypt",
+    "published_at": "2018-09-13T18:33:53+00:00",
+    "input": "Asset focus: ETH\nTitle: Ethereum mining is on the rocks\nText: Every gold rush starts with the little guy and ends in the hands of big corporations. The crypto mining rush started with CPU mining on laptops instead of gold pans, progressed to graphics cards rather than sluice-boxes and is now at the advanced techniques stage, with ASIC miners making the old technology obsolete. But the gold is running out. The value of Ethereum block rewards has dropped 86% to July 2017 levels but its four times more expensive to mine. The rewards are under threat too, a planned upgrade in October called Constantinople (EIP 1234) will shrink them by another 33% from three ETH to two ETH per block. This is likely to lead to even more centralized and large-scale mining rigs moving to areas where electricity is cheap. So Is the time of the little guy finally over? On the other hand, the decrease in supply of newly minted ETH per block might increase prices. This could go some way to alleviating the financial concerns of the miners. However, the co-founder and CTO of GPU computing firm Atlantic Crypto, which represents 0.2% of the Ethereum hashrate, Brian Venturo, is sceptical. He says the price gains won’t outweigh the block reward reduction and instead argues that other rewards should be targeted. If the difficulty of mining a coin falls, known as the hashrate, then the cost of mining becomes cheaper, and more profitable. Over the last month, it has gone down from 296,000 GH/s to 252,000 GH/s, a 15% drop. However, it's likely that the less profitable miners, such as individuals with high electricity costs, were the first to stop mining or move to other coins, so they won't reap the immediate benefits. Worse, the hashrate is likely to increase going forward, making it more expensive to mine. Bitcoin mining giant BTC.com recently announced a move into Ethereum mining with the goal of accounting for 12% of the hashrate within one year. Zhuang Zhong, director of BTC.com’s mining pool, told Decrypt he's not concerned about the price of Ethereum; the falling price will just require a change of strategy to shift between GPU mining and ASIC mining depending on which is more profitable at the time. BTC.com’s new mining pool also supports Bitmain’s ASIC Ethereum miner, which has circumvented Ethereum’s ASIC resistance. This could be the beginning of the kind of widespread ASIC mining that now dominates Bitcoin. Gold rushes were often followed by silver rushes, then metals like lead, copper and zinc. If Bitcoin is gold and Ethereum, silver, then maybe it’s time to look for some leaden alt-coins in them thar hills.",
+    "estimated_input_tokens": 894,
+    "estimated_output_tokens": 180
+  },
+  {
+    "event_key": "992bbf6c64c94b16888f768c48834f2f",
+    "news_id": 6832,
+    "source": "decrypt",
+    "published_at": "2023-01-19T20:40:05+00:00",
+    "input": "Asset focus: ETH\nTitle: ‘Creator Royalties Must Be Respected,’ Says Bored Ape Creator as Some Sewer Pass NFT Trades Blocked\nText: As marketplaces moved to stop (or potentially stop) enforcing creator royalties on NFT sales late last year, the creators of the Bored Ape Yacht Club made their position clear: they didn’t love it. With yesterday's Sewer Pass NFT launch, Yuga Labs has taken direct action and blocked secondary trading on certain marketplaces. The Sewer Pass rolled out on Wednesday for owners of Bored Ape or Mutant Ape Yacht Club NFTs, and serves as an access pass to the upcoming Dookey Dash web game. Only Ape NFT owners can mint a free pass, but the Ethereum NFT passes can then be freely resold through secondary marketplaces. Well, only certain marketplaces. As traders quickly discovered yesterday, the Sewer Pass can’t be traded on some platforms that don’t fully enforce creator-set royalties. A royalty is a fee—typically between 5% and 10%—taken from the sale price of the NFT and automatically paid to the project creator during each transaction. The NFTs start at 1.59 ETH (about $2,400) apiece, as of this writing, with “Tier 4” versions starting at nearly 4.9 ETH (about $7,550) each on OpenSea. X2Y2, a rival NFT marketplace that had previously made royalties optional for traders, then said that it would adopt the tool as well and require full royalty fees for traders of those projects. “OpenSea made its position clear that they intend to move with the rest of the herd and remove creator royalties for legacy collections from their platform, while keeping their trading fee the same across the board,” Yuga’s founders wrote, adding, “Not great.” Yuga Labs proposed an “allowlist” model that would let NFT project creators enable trading only on certain marketplaces that respect royalties, with list governance handled by a community-led DAO, or decentralized autonomous organization.",
+    "estimated_input_tokens": 740,
+    "estimated_output_tokens": 180
+  },
+  {
+    "event_key": "7e87edbabff54cf89b5ce6f5d4c6eb0d",
+    "news_id": 4728,
+    "source": "decrypt",
+    "published_at": "2023-06-02T14:30:27+00:00",
+    "input": "Asset focus: ETH\nTitle: What Is USDT? Tether's Record-Breaking Stablecoin\nText: In brief - Tether is a stablecoin, a type of cryptocurrency that is designed to be pegged to a given currency. - Its USDT cryptocurrency claims to be backed 1-to-1 by the U.S. dollar, though critics have questioned whether it is fully backed by cash reserves. In May 2023, Tether’s USDT stablecoin hit an all-time high in market capitalization, surpassing its previous peak level of $83.355 billion in May 2022, according to CoinGecko data. Tether is currently the third-largest cryptocurrency by market capitalization with a valuation of $83.6 billion, commanding 7.5% of the total cryptocurrency market capitalization. To critics of cryptocurrencies—like China’s major payment institutions—this price volatility makes them poorly suited to being actual currencies because their value can change quickly, making an agreed price hard to come by. Tether is a type of cryptocurrency known as a stablecoin. In a nutshell, Tether is meant to work as follows; whenever a user deposits a US dollar to Tether’s account, Tether Inc—the company behind Tether the stablecoin—mints one Tether in return. There are also Ethereum-based Tethers built using the ERC-20 standard.",
+    "estimated_input_tokens": 612,
+    "estimated_output_tokens": 180
+  },
+  {
+    "event_key": "a06825a410ef45858c2c42ececc3c56b",
+    "news_id": 5174,
+    "source": "decrypt",
+    "published_at": "2024-02-04T12:01:02+00:00",
+    "input": "Asset focus: ETH\nTitle: 5 Questions With SCENE: Gala Marija Vrbanic\nText: wish you had one?",
+    "estimated_input_tokens": 362,
+    "estimated_output_tokens": 180
+  },
+  {
+    "event_key": "f29d938503614d379ea51c36b3cd5446",
+    "news_id": 9836,
+    "source": "coindesk",
+    "published_at": "2024-10-03T00:00:00+00:00",
+    "input": "Asset focus: ETH\nTitle: X icon\nText: Search / News Video Prices Research Events Data & Indices Search / en Sign In Sign Up 404 Hmm, that's weird. Could've sworn the page was around here somewhere... Go To Homepage Crypto CD20 $1,720.75 CD20 down 0.91 percent 0.91% BTC $63,045.26 BTC down 1.37 percent 1.37% ETH $1,784.67 ETH down 0.91 percent 0.91% XRP $1.08 XRP down 1.54 percent 1.54% SOL $76.56 SOL down 0.18 percent 0.18%",
+    "estimated_input_tokens": 478,
+    "estimated_output_tokens": 180
+  }
+]

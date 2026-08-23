@@ -1,0 +1,15 @@
+{
+  "semantic_out_of_range_count": 0,
+  "invalid_numeric_count": 0,
+  "infinite_values_count": 0,
+  "unknown_schema_version_count": 0,
+  "semantic_scale_mismatch_count": 0,
+  "feature_order_mismatch_count": 0,
+  "duplicate_canonical_event_count": 0,
+  "target_mismatch_count": 0,
+  "return_mismatch_count": 0,
+  "leakage_count": 0,
+  "missing_values_preserved_not_zeroed": true,
+  "market_signature_matches_stage18a": true,
+  "pass": true
+}

@@ -1,0 +1,351 @@
+{
+  "status": "PASS",
+  "semantic_analyses": 714,
+  "successful_semantic_analyses": 714,
+  "ai_schema_success_rate": 1.0,
+  "unique_event_id": 550,
+  "unique_event_asset": 668,
+  "event_asset_rows": 668,
+  "asset_counts": {
+    "BTC": 326,
+    "ETH": 283,
+    "SOL": 59
+  },
+  "source_counts": {
+    "sec": 504,
+    "ethereum_github": 157,
+    "ethereum_foundation": 7
+  },
+  "event_type_counts": {
+    "official_decision": 502,
+    "protocol_update": 123,
+    "product_launch": 36,
+    "security_event": 4,
+    "legal_action": 2,
+    "policy_statement": 1
+  },
+  "split_row_counts": {
+    "train": 400,
+    "validation": 134,
+    "test": 134
+  },
+  "split_unique_event_counts": {
+    "train": 318,
+    "test": 116,
+    "validation": 116
+  },
+  "reaction_coverage": {
+    "0": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    },
+    "1": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    },
+    "2": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    },
+    "3": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    },
+    "5": {
+      "1m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "10m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "20m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "40m": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "1h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "3h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "5h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "8h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      },
+      "12h": {
+        "covered": 668,
+        "total": 668,
+        "rate": 1.0
+      }
+    }
+  },
+  "semantic_null_rates": {
+    "source_reliability": 0.0,
+    "novelty": 0.0,
+    "importance": 0.0,
+    "specificity": 0.0,
+    "confidence": 0.0,
+    "surprise_level": 1.0,
+    "surprise_evidence": 0.0,
+    "first_disclosure": 0.0,
+    "actionability": 0.0,
+    "institutional_relevance": 0.0,
+    "retail_relevance": 0.0,
+    "market_scope": 0.0,
+    "regulatory_strength": 1.0,
+    "economic_significance": 0.0,
+    "technical_significance": 0.0,
+    "security_significance": 0.0,
+    "adoption_significance": 0.0,
+    "execution_certainty": 0.0,
+    "urgency": 0.0,
+    "fundamental_relevance": 0.0,
+    "temporary_vs_structural": 0.0,
+    "evidence_quality": 0.0,
+    "asset_relevance": 0.0,
+    "content_valence": 0.0,
+    "content_valence_score": 0.0,
+    "directness": 0.0
+  },
+  "contamination_rates": {
+    "10m": 0.0014970059880239522,
+    "12h": 0.04640718562874251,
+    "1h": 0.0014970059880239522,
+    "1m": 0.0,
+    "20m": 0.0014970059880239522,
+    "3h": 0.0074850299401197605,
+    "40m": 0.0014970059880239522,
+    "5h": 0.017964071856287425,
+    "5m": 0.0,
+    "8h": 0.03293413173652695
+  },
+  "duplicate_event_asset": 0,
+  "duplicate_reaction_expanded_key": 0,
+  "split_contamination": 0,
+  "chronological_order_violations": 0,
+  "utc_violations": 0,
+  "timestamp_coverage": 1.0,
+  "leakage_violations": 0,
+  "predictive_fields": 0,
+  "primary_key": [
+    "event_id",
+    "asset"
+  ]
+}
