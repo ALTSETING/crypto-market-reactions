@@ -1,7 +1,9 @@
 import { SOURCE_TYPE_LABELS } from "@/types/events";
 import type { AnalyticsResult } from "@/types/ai-search";
 
-const number = (value: number | null): string => value === null ? "unavailable" : String(value);
+const number = (value: number | null): string => value === null
+  ? "unavailable"
+  : String(Math.round((value + Number.EPSILON) * 100) / 100);
 
 export function groundedAnswer(result: AnalyticsResult): { answer: string; calculation: string } {
   switch (result.kind) {
@@ -29,7 +31,7 @@ export function groundedAnswer(result: AnalyticsResult): { answer: string; calcu
       return {
         answer: result.items.length === 0
           ? "No non-null Reaction V2 observations matched."
-          : result.items.map((item) => `${item.title}: ${item.reaction}%`).join(" · "),
+          : `${result.items.length} ranked events are shown below.`,
         calculation: `Ranked ${result.sampleSize} non-null observations; returned ${result.items.length}.`,
       };
     case "comparison":

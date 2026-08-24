@@ -93,13 +93,33 @@ export function AiSearch() {
 
 function AiResult({ data }: { data: AiSearchSuccess }) {
   const chips = [data.intent.asset, data.intent.horizon, data.intent.sourceClass, data.intent.category].filter(Boolean);
+  const sampleSize = data.result.kind === "search"
+    ? data.result.matched
+    : data.result.kind === "comparison"
+      ? data.result.left.sampleSize + data.result.right.sampleSize
+      : data.result.sampleSize;
   return (
     <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => <span className="rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400" key={chip}>{chip}</span>)}
       </div>
       <p className="mt-3 text-base font-semibold leading-7 text-white">{data.answer}</p>
+      <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3">
+        <div><dt className="text-slate-500">Asset</dt><dd className="text-slate-200">{data.intent.asset ?? "All"}</dd></div>
+        <div><dt className="text-slate-500">Horizon</dt><dd className="text-slate-200">{data.intent.horizon ?? "Not applicable"}</dd></div>
+        <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
+      </dl>
       <p className="mt-2 text-sm leading-6 text-slate-400"><span className="font-semibold text-slate-300">Calculation:</span> {data.calculation}</p>
+      {data.result.kind === "ranking" && data.result.items.length > 0 && (
+        <ol className="mt-4 grid gap-2">
+          {data.result.items.map((item) => (
+            <li className="rounded-lg border border-white/10 px-3 py-2" key={item.eventId}>
+              <a className="text-sm text-sky-200 hover:text-white" href={item.href}>{item.title}</a>
+              <p className="mt-1 text-sm font-semibold text-white">{Math.round((item.reaction + Number.EPSILON) * 100) / 100}%</p>
+            </li>
+          ))}
+        </ol>
+      )}
       {data.citations.length > 0 ? (
         <ul className="mt-4 grid gap-2 sm:grid-cols-2">
           {data.citations.map((citation) => (
