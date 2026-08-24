@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SourceTypeBadge } from "@/components/source-type-badge";
 import { formatDate, formatReaction, reactionTone } from "@/lib/format";
 import {
   AVERAGE_REACTION_TOOLTIP,
@@ -27,6 +28,7 @@ export function EventCard({ event, selectedAsset, selectedHorizon }: EventCardPr
         <time dateTime={event.published_at}>{formatDate(event.published_at, true)} UTC</time>
         <span aria-hidden="true">•</span>
         <span className="uppercase tracking-[0.12em] text-slate-300">{event.source}</span>
+        <SourceTypeBadge sourceType={event.source_type} />
         <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-slate-300">
           {event.category.replaceAll("_", " ")}
         </span>

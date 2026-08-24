@@ -10,6 +10,9 @@ describe("parseEventsQuery", () => {
       sort: "newest",
       horizon: "1h",
       marketDataOnly: false,
+      sourceType: null,
+      category: null,
+      year: null,
       page: 1,
       pageSize: 25,
     });
@@ -24,9 +27,16 @@ describe("parseEventsQuery", () => {
   it("accepts combined filters", () => {
     expect(
       parseEventsQuery(
-        new URLSearchParams("q=ethereum+etf&asset=eth&from=2023-01-01&to=2025-12-31"),
+        new URLSearchParams("q=ethereum+etf&asset=eth&sourceType=primary_document&category=regulation&year=2024&from=2023-01-01&to=2025-12-31"),
       ),
-    ).toMatchObject({ asset: "ETH", from: "2023-01-01", to: "2025-12-31" });
+    ).toMatchObject({
+      asset: "ETH",
+      sourceType: "primary_document",
+      category: "regulation",
+      year: 2024,
+      from: "2023-01-01",
+      to: "2025-12-31",
+    });
   });
 
   it("rejects malformed and excessive values", () => {
@@ -37,6 +47,15 @@ describe("parseEventsQuery", () => {
     );
     expect(() => parseEventsQuery(new URLSearchParams("limit=-1"))).toThrow(QueryValidationError);
     expect(() => parseEventsQuery(new URLSearchParams("asset=XRP"))).toThrow(QueryValidationError);
+    expect(() => parseEventsQuery(new URLSearchParams("sourceType=publisher')) OR true--"))).toThrow(
+      QueryValidationError,
+    );
+    expect(() => parseEventsQuery(new URLSearchParams("category=drop_table"))).toThrow(
+      QueryValidationError,
+    );
+    expect(() => parseEventsQuery(new URLSearchParams("year=2027"))).toThrow(
+      QueryValidationError,
+    );
     expect(() => parseEventsQuery(new URLSearchParams("from=2025-02-30"))).toThrow(
       QueryValidationError,
     );

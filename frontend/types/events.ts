@@ -9,6 +9,34 @@ export type ReactionHorizon = (typeof REACTION_HORIZONS)[number];
 export const EVENT_SORTS = ["newest", "oldest", "growth", "decline"] as const;
 export type EventSort = (typeof EVENT_SORTS)[number];
 
+export const SOURCE_TYPES = [
+  "news_media",
+  "primary_document",
+  "official_announcement",
+  "unknown",
+] as const;
+export type SourceType = (typeof SOURCE_TYPES)[number];
+
+export const SOURCE_TYPE_LABELS: Record<SourceType, string> = {
+  news_media: "News media",
+  primary_document: "Primary document",
+  official_announcement: "Official announcement",
+  unknown: "Unknown source type",
+};
+
+export const EVENT_CATEGORIES = [
+  "defi", "etf", "exchange", "fees", "hack", "institutional",
+  "institutional_adoption", "layer2", "legal", "legal_action", "macro",
+  "market_commentary", "network_activity", "news", "nft", "official_decision",
+  "other", "partnership", "policy_statement", "product_launch", "protocol_update",
+  "protocol_upgrade", "regulation", "security", "security_event", "stablecoins",
+  "staking", "tokenomics",
+] as const;
+export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+
+export const EVENT_YEARS = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026] as const;
+export type EventYear = (typeof EVENT_YEARS)[number];
+
 export type ReactionValues = Record<Horizon, number | null>;
 
 export interface EventListItem {
@@ -17,6 +45,7 @@ export interface EventListItem {
   title: string;
   published_at: string;
   source: string;
+  source_type: SourceType;
   primary_asset: Asset | null;
   related_assets: Asset[];
   category: string;
@@ -65,6 +94,9 @@ export interface EventsQuery {
   query: string;
   asset: Asset | null;
   source: string;
+  sourceType: SourceType | null;
+  category: EventCategory | null;
+  year: EventYear | null;
   from: string | null;
   to: string | null;
   sort: EventSort;

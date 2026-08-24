@@ -10,6 +10,7 @@ function event(index: number): EventListItem {
     title: index === 0 ? '=HYPERLINK("unsafe")' : `Event ${index}`,
     published_at: "2026-01-01T00:00:00Z",
     source: "source",
+    source_type: "news_media",
     primary_asset: "BTC",
     related_assets: ["BTC", "ETH"],
     category: "market",
@@ -52,6 +53,7 @@ describe("current-page CSV", () => {
     const csv = serializeCurrentPageCsv([event(0)]);
     expect(csv).toContain(`"'=HYPERLINK(""unsafe"")"`);
     expect(csv).toContain('"BTC|ETH"');
+    expect(csv).toContain('"News media"');
     expect(csv).toContain('"1","2","3","4"');
   });
 });

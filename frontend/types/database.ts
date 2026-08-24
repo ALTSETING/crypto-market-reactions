@@ -1,4 +1,4 @@
-import type { Asset } from "@/types/events";
+import type { Asset, SourceType } from "@/types/events";
 
 /** Exact live public.events row shape from migration 001 (49 columns). */
 export interface EventDatabaseRow {
@@ -8,6 +8,11 @@ export interface EventDatabaseRow {
   published_at: string;
   source: string;
   source_url: string;
+  source_type: "primary" | "publisher" | "other" | null;
+  source_class_v2: SourceType;
+  document_class_v2: string;
+  source_class_confidence_v2: "high" | "medium" | "low";
+  source_classification_version: "dz13-source-class-v2";
   primary_asset: Asset | null;
   related_assets: Asset[];
   category: string;

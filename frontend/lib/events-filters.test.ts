@@ -34,7 +34,7 @@ describe("event filter URL state", () => {
 
   it("round-trips all supported URL parameters", () => {
     const params = new URLSearchParams(
-      "asset=BTC&sort=growth&horizon=1h&marketDataOnly=true&page=2&pageSize=50&q=bitcoin&source=SEC&from=2024-01-01&to=2025-01-01",
+      "asset=BTC&sort=growth&horizon=1h&marketDataOnly=true&page=2&pageSize=50&q=bitcoin&source=SEC&sourceType=primary_document&category=regulation&year=2024&from=2024-01-01&to=2025-01-01",
     );
     const parsed = parseEventsQuery(new URLSearchParams(params.toString()));
     expect(parsed).toMatchObject({
@@ -46,9 +46,22 @@ describe("event filter URL state", () => {
       pageSize: 50,
       query: "bitcoin",
       source: "SEC",
+      sourceType: "primary_document",
+      category: "regulation",
+      year: 2024,
       from: "2024-01-01",
       to: "2025-01-01",
     });
+  });
+
+  it("stores source type in the URL and resets pagination", () => {
+    const next = applyFilterUpdates(new URLSearchParams("q=etf&page=7"), {
+      sourceType: "official_announcement",
+      page: null,
+    });
+    expect(next.get("sourceType")).toBe("official_announcement");
+    expect(next.get("q")).toBe("etf");
+    expect(next.get("page")).toBeNull();
   });
 
   it("clears every filter and restores parser defaults", () => {
