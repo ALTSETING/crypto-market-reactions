@@ -6,6 +6,8 @@ import { EventsExplorer } from "@/components/events-explorer";
 import { getDatasetStats } from "@/lib/data/events";
 import { HOME_DESCRIPTION, HOME_TITLE, siteUrl } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+
 const getCachedDatasetStats = unstable_cache(getDatasetStats, ["public-dataset-stats-v9073"], {
   revalidate: 3_600,
   tags: ["public-events"],

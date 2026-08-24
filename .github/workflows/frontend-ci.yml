@@ -70,7 +70,7 @@ jobs:
       - name: Install release-test dependencies
         run: >-
           python -m pip install pytest pandas numpy pyarrow scikit-learn
-          psycopg2-binary python-dotenv
+          psycopg2-binary python-dotenv pydantic pydantic-settings
 
       - name: Run Python release and migration tests
         run: >-
