@@ -1,6 +1,6 @@
 import "server-only";
 
-import { applyExplicitQuestionDefaults } from "@/lib/ai-search/intent-defaults";
+import { applyExplicitQuestionDefaults, explicitQuestionClarification } from "@/lib/ai-search/intent-defaults";
 import { parseMockIntent } from "@/lib/ai-search/mock-provider";
 import { AI_RESOLUTION_JSON_SCHEMA, validateResolutionEnvelope } from "@/lib/ai-search/schema";
 import type { IntentResolution } from "@/types/ai-search";
@@ -56,6 +56,8 @@ export class OpenAiIntentProvider implements AiIntentProvider {
   }
 
   async resolve(question: string): Promise<IntentResolution> {
+    const clarification = explicitQuestionClarification(question);
+    if (clarification) return clarification;
     const estimatedInputCeiling = Math.ceil((question.length + PROVIDER_INSTRUCTIONS.length + JSON.stringify(AI_RESOLUTION_JSON_SCHEMA).length) / 2);
     const configuredMaxCost = this.options.maxCostUsd ?? 0.01;
     if (estimateGpt5MiniCost(estimatedInputCeiling, MAX_OUTPUT_TOKENS) > configuredMaxCost) {
