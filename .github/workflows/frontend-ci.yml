@@ -81,6 +81,8 @@ jobs:
           tests/test_data_quality_v2.py
           tests/test_website_asset_classification.py
           tests/test_asset_detector.py
+          tests/test_migration_009_static.py
+          tests/test_source_classification_v2_manifest.py
 
   migration-008-disposable:
     runs-on: ubuntu-latest

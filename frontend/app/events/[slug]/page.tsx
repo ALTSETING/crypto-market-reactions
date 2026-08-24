@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { ReactionTable } from "@/components/reaction-table";
+import { SourceTypeBadge } from "@/components/source-type-badge";
 import { getEventBySlug } from "@/lib/data/events";
 import { formatDate, formatImportance, safeExternalUrl } from "@/lib/format";
 import {
@@ -101,6 +102,7 @@ export default async function EventPage({ params }: EventPageProps) {
               <time dateTime={event.published_at}>{formatDate(event.published_at, true)} UTC</time>
               <span aria-hidden="true">•</span>
               <span className="uppercase tracking-[0.14em] text-slate-300">{event.source}</span>
+              <SourceTypeBadge sourceType={event.source_type} />
             </div>
             <h1 className="mt-5 break-words text-balance text-2xl font-semibold leading-tight tracking-[-0.03em] text-white min-[390px]:text-3xl sm:text-5xl">
               {event.title}
@@ -147,11 +149,21 @@ export default async function EventPage({ params }: EventPageProps) {
           <section className="mt-10" aria-labelledby="reactions-title">
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Historical market reactions</p>
-              <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl" id="reactions-title">
-                Price reactions
-              </h2>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <h2 className="text-2xl font-semibold text-white sm:text-3xl" id="reactions-title">
+                  Price reactions
+                </h2>
+                <span
+                  aria-label="Reaction V2: historical returns calculated with the current methodology from the recorded publication timestamp; this does not prove the event caused the price move."
+                  className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/25 bg-emerald-400/8 px-3 py-1 text-xs font-bold text-emerald-200"
+                  role="img"
+                  title="Calculated with the current methodology from the recorded publication timestamp. This is an observed association, not proof that the event caused the price move."
+                >
+                  Reaction V2 <span aria-hidden="true">?</span>
+                </span>
+              </div>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-                Percentage returns from the documented reference price around the publication timestamp. Missing values remain intentionally blank.
+                Historical percentage returns from the recorded publication timestamp. Missing values remain intentionally blank; these observations do not establish causality.
               </p>
             </div>
             <ReactionTable event={event} />
@@ -160,7 +172,9 @@ export default async function EventPage({ params }: EventPageProps) {
           <section className="mt-8 grid gap-4 rounded-2xl border border-white/10 bg-slate-900/45 p-5 text-sm sm:grid-cols-2 sm:p-6" aria-labelledby="method-title">
             <div>
               <h2 className="font-semibold text-white" id="method-title">Methodology</h2>
-              <p className="mt-2 break-words leading-6 text-slate-400">{event.reaction_methodology}</p>
+              <p className="mt-2 leading-6 text-slate-400">
+                Reaction V2 uses the current documented publication-time methodology. Alternative research alignments are not displayed as production data.
+              </p>
             </div>
             <dl className="grid content-start gap-3">
               {event.primary_asset && (
@@ -170,6 +184,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Sentiment score</dt><dd className="font-mono text-slate-200">{event.sentiment_score.toFixed(2)}</dd></div>
               )}
               <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Value unit</dt><dd className="text-slate-200">Percentage return</dd></div>
+              <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Reaction version</dt><dd className="text-slate-200">Reaction V2</dd></div>
               <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Publication date</dt><dd className="text-slate-200">{formatDate(event.published_at, true)} UTC</dd></div>
               <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Source</dt><dd className="text-slate-200">{event.source}</dd></div>
               <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Related assets</dt><dd className="text-slate-200">{event.related_assets.length ? event.related_assets.join(", ") : "None assigned"}</dd></div>

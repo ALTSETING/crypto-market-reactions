@@ -1,4 +1,4 @@
-import type { EventListItem } from "@/types/events";
+import { SOURCE_TYPE_LABELS, type EventListItem } from "@/types/events";
 
 export const CSV_MAX_ROWS = 50;
 
@@ -8,6 +8,7 @@ const CSV_COLUMNS = [
   "title",
   "published_at",
   "source",
+  "source_type",
   "primary_asset",
   "related_assets",
   "category",
@@ -25,6 +26,7 @@ type CsvColumn = (typeof CSV_COLUMNS)[number];
 
 function csvValue(event: EventListItem, column: CsvColumn): unknown {
   if (column === "related_assets") return event.related_assets.join("|");
+  if (column === "source_type") return SOURCE_TYPE_LABELS[event.source_type];
   return event[column];
 }
 

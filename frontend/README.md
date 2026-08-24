@@ -88,13 +88,18 @@ and post-deployment Google Search Console checklist.
 
 ## Query architecture
 
-- `/api/events` accepts `q`, `asset`, `sort`, `horizon`, `marketDataOnly`,
-  `source`, `from`, `to`, `page`, and `pageSize`. Legacy `limit` remains a
+- `/api/events` accepts `q`, `asset`, `sourceType`, `category`, `year`, `sort`,
+  `horizon`, `marketDataOnly`, `source`, `from`, `to`, `page`, and `pageSize`.
+  Source type, category, year, and asset use strict allowlists. Legacy `limit` remains a
   compatibility alias for `pageSize`.
 - Search uses Supabase `.textSearch()` against the generated PostgreSQL
   `search_vector`; it never downloads the full dataset for browser filtering.
 - Asset filtering uses `related_assets @>` through Supabase `.contains()`.
-- Date bounds use the indexed `published_at`; source uses the indexed `source`.
+- Date/year bounds use indexed `published_at`; publisher uses indexed `source`;
+  source type uses the migration-009
+  `(source_class_v2, published_at DESC)` index. The public query parameter and
+  response field remain `sourceType`/`source_type` for compatibility; the
+  server aliases them to the independent V2 database column.
 - Newest/oldest ordering uses `published_at` plus the unique `event_id`
   tie-breaker. Reaction ordering uses the allowlisted selected asset/horizon in
   Supabase before pagination, with `NULLS LAST`, then the same stable tie-breaker.
@@ -102,6 +107,8 @@ and post-deployment Google Search Console checklist.
   above 50 is capped at 50 by server-side validation.
 - Search runs only after the user presses Enter or selects Search. Filters,
   pagination, and page size also remain in the URL across reloads.
+- Changing the source-type filter resets pagination to page 1. Cards and event
+  pages render friendly labels rather than visible snake_case values.
 - Average reaction is a stored generated database value for one selected asset,
   ignores NULL horizons, counts zero, and requires at least three of six values.
 - `/events/[slug]` performs an indexed, single-row server lookup and returns the

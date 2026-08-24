@@ -10,6 +10,10 @@ This directory contains a standalone SQL migration for the future Crypto Market 
   after the Next.js server has a working secret/service-role credential.
 - `checks/verify_events.sql` — post-import counts, coverage checks and example queries.
 - `../scripts/database/import_events.py` — schema validation, slug preparation and idempotent COPY/upsert.
+- `migrations/009_source_classification_reaction_v2.sql` — additive DZ14 V2
+  source metadata in four independent columns. It never changes or classifies
+  from legacy `record_type`/`source_type`; the separate backfill validates the
+  exact 9,073-event mapping and rollback drops only the four V2 columns.
 
 ## Local validation without PostgreSQL
 
@@ -42,6 +46,11 @@ psql $env:DATABASE_URL -v ON_ERROR_STOP=1 -f database/checks/verify_events.sql
 The importer also accepts the legacy SQLAlchemy prefix `postgresql+psycopg2://` and normalizes it internally. `psql` itself normally expects `postgresql://`.
 
 The migration is intentionally not applied automatically by the importer. This keeps schema changes explicit and gives Supabase operators a chance to review SQL before execution.
+
+Migration 009 follows the same rule. Apply/reapply, backfill/reapply, protected
+reaction equality, index use, invalid-value rejection, and rollback/reapply are
+tested on an explicitly disposable PostgreSQL 16 database by
+`scripts/database/test_migration_009_disposable.py`.
 
 For a controlled reclassification of an existing 7,878-row table:
 

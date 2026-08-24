@@ -1,11 +1,17 @@
 import {
   ASSETS,
+  EVENT_CATEGORIES,
   EVENT_SORTS,
+  EVENT_YEARS,
   REACTION_HORIZONS,
+  SOURCE_TYPES,
   type Asset,
+  type EventCategory,
   type EventSort,
   type EventsQuery,
+  type EventYear,
   type ReactionHorizon,
+  type SourceType,
 } from "@/types/events";
 
 const MAX_QUERY_LENGTH = 120;
@@ -50,6 +56,9 @@ function parseDate(value: string | null, field: string): string | null {
 export function parseEventsQuery(params: URLSearchParams): EventsQuery {
   const query = (params.get("q") ?? "").trim();
   const source = (params.get("source") ?? "").trim();
+  const rawSourceType = params.get("sourceType")?.trim().toLowerCase() ?? "";
+  const rawCategory = params.get("category")?.trim().toLowerCase() ?? "";
+  const rawYear = params.get("year")?.trim() ?? "";
   if (query.length > MAX_QUERY_LENGTH || CONTROL_CHARACTERS.test(query)) {
     throw new QueryValidationError(`q must contain at most ${MAX_QUERY_LENGTH} safe characters.`);
   }
@@ -57,6 +66,21 @@ export function parseEventsQuery(params: URLSearchParams): EventsQuery {
     throw new QueryValidationError(
       `source must contain at most ${MAX_SOURCE_LENGTH} safe characters.`,
     );
+  }
+  if (rawSourceType && !SOURCE_TYPES.includes(rawSourceType as SourceType)) {
+    throw new QueryValidationError(
+      "sourceType must be news_media, primary_document, official_announcement, or unknown.",
+    );
+  }
+  if (rawCategory && !EVENT_CATEGORIES.includes(rawCategory as EventCategory)) {
+    throw new QueryValidationError("category is not in the supported category allowlist.");
+  }
+  const parsedYear = rawYear ? Number(rawYear) : null;
+  if (
+    rawYear
+    && (!/^\d{4}$/.test(rawYear) || !EVENT_YEARS.includes(parsedYear as EventYear))
+  ) {
+    throw new QueryValidationError("year must be between 2017 and 2026.");
   }
 
   const rawAsset = params.get("asset")?.trim().toUpperCase() ?? "";
@@ -106,6 +130,9 @@ export function parseEventsQuery(params: URLSearchParams): EventsQuery {
     query,
     asset: rawAsset ? (rawAsset as Asset) : null,
     source,
+    sourceType: rawSourceType ? (rawSourceType as SourceType) : null,
+    category: rawCategory ? (rawCategory as EventCategory) : null,
+    year: parsedYear as EventYear | null,
     from,
     to,
     sort,

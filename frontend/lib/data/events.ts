@@ -21,6 +21,7 @@ export const EVENT_LIST_SELECT = [
   "title",
   "published_at",
   "source",
+  "source_type:source_class_v2",
   "primary_asset",
   "related_assets",
   "category",
@@ -89,6 +90,13 @@ export async function getEvents(params: EventsQuery): Promise<EventsPage> {
   }
   if (params.asset) request = request.contains("related_assets", [params.asset]);
   if (params.source) request = request.eq("source", params.source);
+  if (params.sourceType) request = request.eq("source_class_v2", params.sourceType);
+  if (params.category) request = request.eq("category", params.category);
+  if (params.year) {
+    request = request
+      .gte("published_at", `${params.year}-01-01T00:00:00.000Z`)
+      .lt("published_at", `${params.year + 1}-01-01T00:00:00.000Z`);
+  }
   if (params.from) request = request.gte("published_at", `${params.from}T00:00:00.000Z`);
   if (params.to) request = request.lt("published_at", nextUtcDate(params.to));
   const selectedReactionColumn = params.asset

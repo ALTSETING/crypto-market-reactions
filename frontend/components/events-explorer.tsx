@@ -14,13 +14,18 @@ import {
 import { HORIZON_LABELS } from "@/lib/reactions";
 import {
   ASSETS,
+  EVENT_CATEGORIES,
   EVENT_SORTS,
+  EVENT_YEARS,
   REACTION_HORIZONS,
+  SOURCE_TYPES,
+  SOURCE_TYPE_LABELS,
   type ApiErrorBody,
   type Asset,
   type EventSort,
   type EventsPage,
   type ReactionHorizon,
+  type SourceType,
 } from "@/types/events";
 
 const assetOptions: Array<{ label: string; value: Asset | null }> = [
@@ -28,6 +33,14 @@ const assetOptions: Array<{ label: string; value: Asset | null }> = [
   { label: "BTC", value: "BTC" },
   { label: "ETH", value: "ETH" },
   { label: "SOL", value: "SOL" },
+];
+
+const sourceTypeOptions: Array<{ label: string; value: SourceType | null }> = [
+  { label: "All sources", value: null },
+  ...SOURCE_TYPES.filter((value) => value !== "unknown").map((value) => ({
+    label: SOURCE_TYPE_LABELS[value],
+    value,
+  })),
 ];
 
 const sortLabels: Record<EventSort, string> = {
@@ -57,6 +70,10 @@ export function EventsExplorer() {
   const currentQuery = searchParams.get("q") ?? "";
   const rawAsset = searchParams.get("asset")?.toUpperCase() ?? "";
   const currentAsset = ASSETS.includes(rawAsset as Asset) ? (rawAsset as Asset) : null;
+  const rawSourceType = searchParams.get("sourceType") ?? "";
+  const currentSourceType = SOURCE_TYPES.includes(rawSourceType as SourceType)
+    ? (rawSourceType as SourceType)
+    : null;
   const rawSort = searchParams.get("sort") ?? "newest";
   const currentSort = EVENT_SORTS.includes(rawSort as EventSort)
     ? (rawSort as EventSort)
@@ -122,6 +139,8 @@ export function EventsExplorer() {
     const form = new FormData(event.currentTarget);
     replaceParams({
       source: String(form.get("source") ?? "").trim() || null,
+      category: String(form.get("category") ?? "").trim() || null,
+      year: String(form.get("year") ?? "").trim() || null,
       from: String(form.get("from") ?? "") || null,
       to: String(form.get("to") ?? "") || null,
       page: null,
@@ -192,6 +211,26 @@ export function EventsExplorer() {
           </div>
         </fieldset>
 
+        <fieldset className="mt-5 border-t border-white/8 pt-5">
+          <legend className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Source type</legend>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {sourceTypeOptions.map((option) => {
+              const active = currentSourceType === option.value;
+              return (
+                <button
+                  aria-pressed={active}
+                  className={`rounded-xl border px-4 py-2 text-sm font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-emerald-300 ${active ? "border-emerald-400/50 bg-emerald-400/12 text-emerald-200" : "border-white/10 bg-white/[0.025] text-slate-400 hover:border-white/20 hover:text-white"}`}
+                  key={option.label}
+                  onClick={() => replaceParams({ sourceType: option.value, page: null })}
+                  type="button"
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
         <div className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2 lg:grid-cols-4">
           <label className="text-xs font-medium text-slate-400">
             Sort by
@@ -222,11 +261,13 @@ export function EventsExplorer() {
         </div>
         {!currentAsset && <p className="mt-2 text-xs text-slate-500" id="reaction-sort-hint">Select BTC, ETH, or SOL to sort by market reaction.</p>}
 
-        <form className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2 lg:grid-cols-[1fr_160px_160px_auto]" key={`${searchParams.get("source")}-${searchParams.get("from")}-${searchParams.get("to")}`} onSubmit={applyAdvancedFilters}>
-          <label className="text-xs font-medium text-slate-400">Source<select className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("source") ?? ""} name="source"><option value="">All sources</option>{sourceOptions.map(([label, value]) => <option key={value} value={value}>{label}</option>)}</select></label>
+        <form className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2 lg:grid-cols-3" key={`${searchParams.get("source")}-${searchParams.get("category")}-${searchParams.get("year")}-${searchParams.get("from")}-${searchParams.get("to")}`} onSubmit={applyAdvancedFilters}>
+          <label className="text-xs font-medium text-slate-400">Publisher<select className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("source") ?? ""} name="source"><option value="">All publishers</option>{sourceOptions.map(([label, value]) => <option key={value} value={value}>{label}</option>)}</select></label>
+          <label className="text-xs font-medium text-slate-400">Category<select className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm capitalize text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("category") ?? ""} name="category"><option value="">All categories</option>{EVENT_CATEGORIES.map((category) => <option key={category} value={category}>{category.replaceAll("_", " ")}</option>)}</select></label>
+          <label className="text-xs font-medium text-slate-400">Year<select className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("year") ?? ""} name="year"><option value="">All years</option>{[...EVENT_YEARS].reverse().map((year) => <option key={year} value={year}>{year}</option>)}</select></label>
           <label className="text-xs font-medium text-slate-400">From<input className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("from") ?? ""} name="from" type="date" /></label>
           <label className="text-xs font-medium text-slate-400">To<input className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("to") ?? ""} name="to" type="date" /></label>
-          <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-1">
+          <div className="flex items-end gap-2">
             <button className="h-[44px] flex-1 rounded-xl bg-slate-100 px-4 text-sm font-bold text-slate-950 outline-none transition hover:bg-white focus-visible:ring-2 focus-visible:ring-emerald-300 sm:flex-none" type="submit">Apply</button>
             {hasFilters && <button className="h-[42px] rounded-xl px-3 text-sm text-slate-400 outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" onClick={() => navigateTo(clearAllEventFilters())} type="button">Clear all filters</button>}
           </div>
@@ -289,6 +330,17 @@ function getActiveChips(params: URLSearchParams, asset: Asset | null, sort: Even
   if (asset && params.has("horizon")) chips.push({ key: "horizon", label: `Horizon: ${HORIZON_LABELS[horizon]}` });
   if (params.get("marketDataOnly") === "true") chips.push({ key: "marketDataOnly", label: "Only with market data" });
   if (params.get("source")) chips.push({ key: "source", label: `Source: ${params.get("source")}` });
+  const sourceType = params.get("sourceType") as SourceType | null;
+  if (sourceType && SOURCE_TYPES.includes(sourceType)) {
+    chips.push({ key: "sourceType", label: `Source type: ${SOURCE_TYPE_LABELS[sourceType]}` });
+  }
+  if (params.get("category")) {
+    chips.push({
+      key: "category",
+      label: `Category: ${params.get("category")?.replaceAll("_", " ")}`,
+    });
+  }
+  if (params.get("year")) chips.push({ key: "year", label: `Year: ${params.get("year")}` });
   if (params.get("from")) chips.push({ key: "from", label: `From: ${params.get("from")}` });
   if (params.get("to")) chips.push({ key: "to", label: `To: ${params.get("to")}` });
   return chips;

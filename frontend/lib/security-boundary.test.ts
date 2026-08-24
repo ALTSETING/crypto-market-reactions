@@ -21,4 +21,20 @@ describe("Supabase server/client boundary", () => {
     expect(source(".env.example")).not.toContain("NEXT_PUBLIC_SUPABASE");
     expect(source(".env.example")).not.toContain("SUPABASE_ANON_KEY=");
   });
+
+  it("applies the allowlisted source type through a parameterized Supabase filter", () => {
+    const dataModule = source("lib/data/events.ts");
+    expect(dataModule).toContain('request.eq("source_class_v2", params.sourceType)');
+    expect(dataModule).toContain('"source_type:source_class_v2"');
+    expect(dataModule).toContain('request.eq("category", params.category)');
+    expect(dataModule).not.toContain("source_type = ${");
+    expect(dataModule).not.toContain('request.eq("source_type", params.sourceType)');
+  });
+
+  it("labels production reactions without presenting candidate research as live data", () => {
+    const eventPage = source("app/events/[slug]/page.tsx");
+    expect(eventPage).toContain("Reaction V2");
+    expect(eventPage).toContain("do not establish causality");
+    expect(eventPage).toContain("Alternative research alignments are not displayed");
+  });
 });
