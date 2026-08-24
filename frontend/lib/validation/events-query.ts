@@ -70,7 +70,7 @@ export function parseEventsQuery(params: URLSearchParams): EventsQuery {
   }
   const sort = rawSort as EventSort;
 
-  const rawHorizon = params.get("horizon")?.trim().toLowerCase() ?? "average";
+  const rawHorizon = params.get("horizon")?.trim().toLowerCase() ?? "1h";
   if (!REACTION_HORIZONS.includes(rawHorizon as ReactionHorizon)) {
     throw new QueryValidationError(
       "horizon must be 1m, 5m, 15m, 1h, 4h, 24h, or average.",
@@ -117,7 +117,7 @@ export function parseEventsQuery(params: URLSearchParams): EventsQuery {
 }
 
 export function isValidEventSlug(slug: string): boolean {
-  return slug.length >= 8 && slug.length <= 180 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
+  return slug.length >= 8 && slug.length <= 180 && /^[a-z0-9]+(?:-+[a-z0-9]+)*$/.test(slug);
 }
 
 export function nextUtcDate(date: string): string {

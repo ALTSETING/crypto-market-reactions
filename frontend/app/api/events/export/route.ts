@@ -27,7 +27,7 @@ function errorResponse(
 }
 
 export async function GET(request: Request) {
-  const rate = eventsRateLimiter.consume(getClientIp(request.headers));
+  const rate = await eventsRateLimiter.consume(getClientIp(request.headers));
   const headers = rateHeaders(rate);
   if (!rate.allowed) {
     return errorResponse(429, "Too many requests. Please try again shortly.", "RATE_LIMITED", {

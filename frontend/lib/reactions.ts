@@ -1,7 +1,7 @@
 import type { Asset, EventListItem, Horizon, ReactionHorizon } from "@/types/events";
 
 export const AVERAGE_REACTION_TOOLTIP =
-  "Average of the available market returns across six time horizons. At least three values are required.";
+  "Simple mean of available horizons. At least three values are required; this is descriptive, not a trading signal.";
 
 export const HORIZON_LABELS: Record<ReactionHorizon, string> = {
   "1m": "1 minute",

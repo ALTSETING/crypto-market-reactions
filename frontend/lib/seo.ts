@@ -105,7 +105,7 @@ export function buildEventSeoTitle(event: SeoEventData): string {
 export function buildEventSeoDescription(event: SeoEventData): string {
   const source = trimAtWord(normalizeWhitespace(event.source) || "the original source", 28);
   const prefix = `See how ${assetNames(event)} reacted after “`;
-  const suffix = `”, an event from ${source}. Explore verified returns at 1m, 5m, 15m, 1h, 4h and 24h.`;
+  const suffix = `”, an event from ${source}. Explore historical returns at 1m, 5m, 15m, 1h, 4h and 24h.`;
   const title = trimAtWord(normalizeWhitespace(event.title) || "this historical crypto event", Math.max(28, 166 - prefix.length - suffix.length));
   let description = `${prefix}${title}${suffix}`;
   if (description.length < 140) description += " Missing values are not estimated.";

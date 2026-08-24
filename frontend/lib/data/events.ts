@@ -5,6 +5,7 @@ import { reactionColumn } from "@/lib/reactions";
 import { isValidEventSlug, nextUtcDate } from "@/lib/validation/events-query";
 import type {
   EventDetail,
+  DatasetStats,
   EventListItem,
   EventsPage,
   EventsQuery,
@@ -183,4 +184,35 @@ export async function getSitemapEvents(): Promise<SitemapEvent[]> {
     uniqueSlugs.add(event.slug);
   }
   return events;
+}
+
+export async function getDatasetStats(): Promise<DatasetStats> {
+  const supabase = getSupabaseServerClient();
+  const [firstResult, lastResult] = await Promise.all([
+    supabase.from("events").select("published_at", { count: "exact" }).order("published_at", { ascending: true }).limit(1).maybeSingle(),
+    supabase.from("events").select("published_at").order("published_at", { ascending: false }).limit(1).maybeSingle(),
+  ]);
+  if (firstResult.error || lastResult.error || !firstResult.data || !lastResult.data) {
+    throw new EventsDataError("Dataset statistics are temporarily unavailable.");
+  }
+  const firstYear = new Date(firstResult.data.published_at).getUTCFullYear();
+  const lastYear = new Date(lastResult.data.published_at).getUTCFullYear();
+  const years = Array.from({ length: lastYear - firstYear + 1 }, (_, index) => firstYear + index);
+  const counts = await Promise.all(
+    years.map(async (year) => {
+      const { count, error } = await supabase
+        .from("events")
+        .select("event_id", { count: "exact", head: true })
+        .gte("published_at", `${year}-01-01T00:00:00.000Z`)
+        .lt("published_at", `${year + 1}-01-01T00:00:00.000Z`);
+      if (error) throw new EventsDataError("Dataset coverage is temporarily unavailable.");
+      return { year, events: count ?? 0 };
+    }),
+  );
+  return {
+    events: firstResult.count ?? counts.reduce((sum, row) => sum + row.events, 0),
+    firstYear,
+    lastYear,
+    eventsByYear: counts,
+  };
 }

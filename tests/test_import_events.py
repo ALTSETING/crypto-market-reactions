@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from scripts.database.import_events import (
     DEFAULT_DATASET,
@@ -12,9 +13,19 @@ from scripts.database.import_events import (
 )
 
 
+def dataset_content_available() -> bool:
+    if not DEFAULT_DATASET.is_file():
+        return False
+    return not DEFAULT_DATASET.read_bytes()[:64].startswith(b"version https://git-lfs")
+
+
+@pytest.mark.skipif(
+    not dataset_content_available(),
+    reason="the website dataset is a Git LFS artifact and was not downloaded",
+)
 def test_prepare_current_dataset_contract_and_slugs():
     frame = prepare_dataset(DEFAULT_DATASET)
-    assert len(frame) == 7_878
+    assert len(frame) == len(pd.read_parquet(DEFAULT_DATASET))
     assert frame.event_id.is_unique
     assert frame.slug.is_unique
     assert frame.slug.str.match(r"^[a-z0-9-]+$").all()

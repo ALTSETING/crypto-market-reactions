@@ -15,12 +15,26 @@ export function ReactionTable({ event }: { event: EventDetail }) {
   });
 
   if (availableAssets.length === 0) {
-    return <p className="text-sm text-slate-400">No verified reaction metrics are available.</p>;
+    return <p className="text-sm text-slate-400">No historical reaction metrics are available.</p>;
   }
 
+  const relatedAssets = availableAssets.filter((asset) => event.related_assets.includes(asset));
+  const contextAssets = availableAssets.filter((asset) => !event.related_assets.includes(asset));
+
   return (
-    <div className="space-y-4">
-      {availableAssets.map((asset) => {
+    <div className="space-y-7">
+      {relatedAssets.length > 0 && <ReactionGroup assets={relatedAssets} event={event} title="Related asset reactions" />}
+      {contextAssets.length > 0 && <ReactionGroup assets={contextAssets} event={event} title="Broader market context" />}
+    </div>
+  );
+}
+
+function ReactionGroup({ assets, event, title }: { assets: Asset[]; event: EventDetail; title: string }) {
+  return (
+    <section aria-label={title}>
+      <h3 className="mb-3 text-sm font-semibold text-slate-300">{title}</h3>
+      <div className="space-y-4">
+      {assets.map((asset) => {
         const source = event[`${asset.toLowerCase()}_reaction_source` as keyof EventDetail] as
           | string
           | null;
@@ -31,7 +45,7 @@ export function ReactionTable({ event }: { event: EventDetail }) {
           `${asset.toLowerCase()}_reference_latency_minutes` as keyof EventDetail
         ] as number | null;
         return (
-          <section className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5" key={asset}>
+          <div className="min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5" key={asset}>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="text-sm font-bold tracking-[0.15em] text-white">{asset}</h3>
               {(referenceTime || latency !== null) && (
@@ -58,9 +72,10 @@ export function ReactionTable({ event }: { event: EventDetail }) {
               })}
             </dl>
             {source && <p className="mt-3 break-words text-xs text-slate-500">Source: {source}</p>}
-          </section>
+          </div>
         );
       })}
-    </div>
+      </div>
+    </section>
   );
 }

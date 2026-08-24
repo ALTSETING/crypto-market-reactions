@@ -19,7 +19,7 @@ describe("event filter URL state", () => {
     expect(Object.fromEntries(next)).toMatchObject({
       asset: "ETH",
       sort: "growth",
-      horizon: "average",
+      horizon: "1h",
       marketDataOnly: "true",
     });
     expect(next.get("page")).toBeNull();
@@ -28,7 +28,7 @@ describe("event filter URL state", () => {
   it("configures Top losers", () => {
     const next = applyQuickAction(new URLSearchParams("asset=SOL"), "losers");
     expect(next.get("sort")).toBe("decline");
-    expect(next.get("horizon")).toBe("average");
+    expect(next.get("horizon")).toBe("1h");
     expect(next.get("marketDataOnly")).toBe("true");
   });
 

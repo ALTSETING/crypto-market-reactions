@@ -33,7 +33,7 @@ export function applyQuickAction(
   if (!current.get("asset")) return new URLSearchParams(current.toString());
   return applyFilterUpdates(current, {
     sort: action === "gainers" ? "growth" : "decline",
-    horizon: "average",
+    horizon: "1h",
     marketDataOnly: "true",
     page: null,
   });

@@ -4,9 +4,8 @@ SELECT
     count(*) AS total_rows,
     count(DISTINCT event_id) AS unique_event_id,
     count(DISTINCT slug) AS unique_slug,
-    count(*) = 7878 AS expected_total_pass,
-    count(DISTINCT event_id) = 7878 AS event_id_unique_pass,
-    count(DISTINCT slug) = 7878 AS slug_unique_pass
+    count(*) = count(DISTINCT event_id) AS event_id_unique_pass,
+    count(*) = count(DISTINCT slug) AS slug_unique_pass
 FROM public.events;
 
 SELECT source_url, count(*) AS occurrences
@@ -36,7 +35,7 @@ SELECT
         AND sol_4h IS NOT NULL AND sol_24h IS NOT NULL) AS sol_full_reaction_coverage
 FROM public.events;
 
--- Expected current values: BTC 7285, ETH 7412, SOL 101.
+-- Compare coverage with the release manifest/report; no release size is hardcoded here.
 
 -- Full-text search: "ethereum ETF".
 SELECT event_id, slug, title, source, published_at,

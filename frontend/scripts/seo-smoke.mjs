@@ -1,6 +1,6 @@
 const baseUrl = (process.env.SMOKE_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 const expectedSiteUrl = (process.env.SITE_URL ?? baseUrl).replace(/\/$/, "");
-const expectedEventCount = Number(process.env.EXPECTED_EVENT_COUNT ?? "7878");
+let expectedEventCount = Number(process.env.EXPECTED_EVENT_COUNT ?? "");
 const googlebot = {
   headers: {
     "User-Agent":
@@ -51,6 +51,13 @@ function seededSample(values, count) {
 }
 
 const sitemapResponse = await read(`${baseUrl}/sitemap.xml`);
+if (!Number.isInteger(expectedEventCount) || expectedEventCount <= 0) {
+  const apiResponse = await fetch(`${baseUrl}/api/events?pageSize=1`);
+  assert(apiResponse.status === 200, "Could not derive the event count from the public API");
+  const apiPayload = await apiResponse.json();
+  expectedEventCount = Number(apiPayload.total);
+  assert(Number.isInteger(expectedEventCount) && expectedEventCount > 0, "API returned an invalid total");
+}
 assert(sitemapResponse.response.status === 200, "sitemap.xml did not return HTTP 200");
 matches(sitemapResponse.body, /^<\?xml[^>]*>/, "XML declaration");
 matches(sitemapResponse.body, /<urlset[^>]*xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/, "sitemap namespace");
@@ -71,7 +78,7 @@ for (const url of sitemapUrls) {
   const parsed = new URL(url);
   assert(parsed.origin === expectedSiteUrl, `Unexpected sitemap origin: ${parsed.origin}`);
   assert(!parsed.search && !parsed.hash, `Sitemap URL contains search state: ${url}`);
-  assert(parsed.pathname === "/" || /^\/events\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(parsed.pathname), `Malformed sitemap URL: ${url}`);
+  assert(parsed.pathname === "/" || /^\/events\/[a-z0-9]+(?:-+[a-z0-9]+)*$/.test(parsed.pathname), `Malformed sitemap URL: ${url}`);
 }
 
 const slugAuditUrls = seededSample(eventUrls, 100);

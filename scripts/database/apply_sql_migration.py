@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 import psycopg2
 from dotenv import load_dotenv
@@ -19,6 +20,7 @@ MIGRATIONS = (ROOT / "database" / "migrations").resolve()
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("migration", type=Path)
+    parser.add_argument("--expected-project-ref")
     args = parser.parse_args()
     migration = args.migration.resolve()
     if migration.parent != MIGRATIONS or migration.suffix.lower() != ".sql":
@@ -28,6 +30,10 @@ def main() -> int:
     database_url = normalize_database_url(os.getenv("DATABASE_URL", ""))
     if not database_url:
         raise RuntimeError("DATABASE_URL is required")
+    parsed = urlparse(database_url)
+    target_identity = f"{parsed.hostname or ''} {parsed.username or ''}"
+    if args.expected_project_ref and args.expected_project_ref not in target_identity:
+        raise RuntimeError("DATABASE_URL does not identify the explicitly confirmed project")
     connection = psycopg2.connect(database_url)
     try:
         with connection:
@@ -49,6 +55,7 @@ def main() -> int:
         json.dumps(
             {
                 "migration": str(migration.relative_to(ROOT)),
+                "project_ref": args.expected_project_ref,
                 "related_assets_constraint": constraint,
             },
             indent=2,
