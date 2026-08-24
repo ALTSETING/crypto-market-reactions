@@ -97,19 +97,33 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
     ? data.result.matched
     : data.result.kind === "comparison"
       ? data.result.left.sampleSize + data.result.right.sampleSize
-      : data.result.sampleSize;
+      : data.result.kind === "multi_horizon"
+        ? Math.max(...data.result.rows.map((row) => row.sampleSize))
+        : data.result.sampleSize;
   return (
     <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => <span className="rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400" key={chip}>{chip}</span>)}
       </div>
       <p className="mt-3 text-base font-semibold leading-7 text-white">{data.answer}</p>
-      <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-3">
+      <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
         <div><dt className="text-slate-500">Asset</dt><dd className="text-slate-200">{data.intent.asset ?? "All"}</dd></div>
-        <div><dt className="text-slate-500">Horizon</dt><dd className="text-slate-200">{data.intent.horizon ?? "Not applicable"}</dd></div>
+        <div><dt className="text-slate-500">Horizon</dt><dd className="text-slate-200">{data.intent.horizon ?? "All horizons"}</dd></div>
+        <div><dt className="text-slate-500">Metric</dt><dd className="text-slate-200">{data.intent.metric}</dd></div>
         <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
       </dl>
-      <p className="mt-2 text-sm leading-6 text-slate-400"><span className="font-semibold text-slate-300">Calculation:</span> {data.calculation}</p>
+      {data.result.kind === "multi_horizon" && sampleSize > 0 && (
+        <div className="mt-4 overflow-hidden rounded-lg border border-white/10 text-sm">
+          {data.result.rows.map((row) => (
+            <div className="grid grid-cols-3 border-b border-white/10 px-3 py-2 last:border-b-0" key={row.horizon}>
+              <span className="font-medium text-slate-200">{row.horizon}</span>
+              <span className="text-right text-white">{row.value === null ? "—" : `${row.value > 0 ? "+" : ""}${Math.round((row.value + Number.EPSILON) * 100) / 100}%`}</span>
+              <span className="text-right text-slate-500">n={row.sampleSize}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      {data.calculation && <p className="mt-2 text-sm leading-6 text-slate-400"><span className="font-semibold text-slate-300">Summary:</span> {data.calculation}</p>}
       {data.result.kind === "ranking" && data.result.items.length > 0 && (
         <ol className="mt-4 grid gap-2">
           {data.result.items.map((item) => (
@@ -128,7 +142,7 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
             </li>
           ))}
         </ul>
-      ) : <p className="mt-4 text-sm text-slate-500">No cited events matched this fixture query.</p>}
+      ) : null}
       <p className="mt-4 text-xs text-slate-500">{data.basedOn}. {data.disclaimer}</p>
     </div>
   );
