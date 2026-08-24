@@ -114,13 +114,24 @@ export interface ComparisonAnalyticsResult {
   citations: AiCitation[];
 }
 
+export interface MultiHorizonAnalyticsResult {
+  kind: "multi_horizon";
+  metric: "mean" | "median";
+  rows: Array<{ horizon: Horizon; value: number | null; sampleSize: number }>;
+  median24h: number | null;
+  positivePercent24h: number | null;
+  sampleSize24h: number;
+  citations: AiCitation[];
+}
+
 export type AnalyticsResult =
   | SearchAnalyticsResult
   | CountAnalyticsResult
   | ScalarAnalyticsResult
   | ShareAnalyticsResult
   | RankingAnalyticsResult
-  | ComparisonAnalyticsResult;
+  | ComparisonAnalyticsResult
+  | MultiHorizonAnalyticsResult;
 
 export interface AiSearchSuccess {
   status: "ok";

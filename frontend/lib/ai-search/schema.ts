@@ -89,9 +89,12 @@ export function validateIntent(input: unknown): AiSearchIntent {
     comparison = { field: "sourceClass", left, right };
   }
 
-  const needsReaction = intent === "aggregate" || intent === "rank" || intent === "compare";
-  if (needsReaction && (!asset || !horizon)) {
-    throw new IntentValidationError("Reaction analytics require one explicit asset and horizon.");
+  const needsAsset = intent === "aggregate" || intent === "rank" || intent === "compare";
+  if (needsAsset && !asset) {
+    throw new IntentValidationError("Reaction analytics require one explicit asset.");
+  }
+  if ((intent === "rank" || intent === "compare") && !horizon) {
+    throw new IntentValidationError("Ranking and comparison require one explicit horizon.");
   }
   if (intent === "compare" && (!comparison || !["mean", "median"].includes(metric))) {
     throw new IntentValidationError("Comparison requires two source classes and a mean or median metric.");

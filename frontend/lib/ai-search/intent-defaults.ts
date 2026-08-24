@@ -42,7 +42,7 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     Object.assign(facts, { intent: "aggregate", metric: "median" });
   } else if (/\baverage\b|\bmean\b|середн/iu.test(question)) {
     Object.assign(facts, { intent: "aggregate", metric: "mean" });
-  } else if (/\breact(?:ed|ion)?\b|реагув/iu.test(question)) {
+  } else if (/\breact(?:ed|ion)?\b|реаг/iu.test(question)) {
     Object.assign(facts, { intent: "aggregate", metric: "mean" });
   }
   return facts;
@@ -51,9 +51,6 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
 function humanClarification(intent: Partial<AiSearchIntent>): IntentResolution | null {
   if (["aggregate", "rank", "compare"].includes(intent.intent ?? "") && !intent.asset) {
     return { status: "clarification", message: "Which asset should I analyze: BTC, ETH or SOL?" };
-  }
-  if (["aggregate", "rank", "compare"].includes(intent.intent ?? "") && !intent.horizon) {
-    return { status: "clarification", message: "Which reaction horizon should I use: 1h, 4h or 24h?" };
   }
   return null;
 }
