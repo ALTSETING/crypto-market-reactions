@@ -109,6 +109,15 @@ export const eventsRateLimiter: RateLimiter =
     ? new SupabaseRateLimiter(supabaseUrl, supabaseServerKey, localEventsRateLimiter)
     : localEventsRateLimiter;
 
+export function createDistributedRateLimiter(
+  limit: number,
+  windowMs: number,
+): RateLimiter | null {
+  if (!supabaseUrl || !supabaseServerKey) return null;
+  const fallback = new InMemoryRateLimiter(limit, windowMs);
+  return new SupabaseRateLimiter(supabaseUrl, supabaseServerKey, fallback, limit, windowMs);
+}
+
 export function getClientIp(headers: Headers): string {
   const forwarded = headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const candidate = forwarded || headers.get("x-real-ip")?.trim() || "unknown";

@@ -7,7 +7,10 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   resolve: {
-    alias: { "@": root },
+    alias: {
+      "@": root,
+      "server-only": path.resolve(root, "test/server-only.ts"),
+    },
   },
   test: {
     environment: "node",
