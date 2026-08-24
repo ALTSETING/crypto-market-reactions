@@ -11,14 +11,14 @@ import { OpenAiIntentProvider, type ProviderUsage } from "@/lib/ai-search/provid
 
 loadEnvConfig(process.cwd());
 
-const HARD_CALL_CAP = 100;
+const HARD_CALL_CAP = 20;
 const PLANNED_CALLS = 20;
 const PER_REQUEST_COST_CAP_USD = 0.01;
 
 describe.skipIf(process.env.AI_LIVE_TESTS !== "1" || !process.env.OPENAI_API_KEY)("budgeted live gpt-5-mini evaluation", () => {
   it("passes supported, ambiguous, unsupported, and adversarial gates", async () => {
     const budget = Number(process.env.AI_LIVE_TEST_BUDGET_USD ?? "0");
-    expect(Number.isFinite(budget) && budget > 0 && budget <= 5).toBe(true);
+    expect(Number.isFinite(budget) && budget > 0 && budget <= 0.05).toBe(true);
     const cases = [
       ...AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "supported").slice(0, 10),
       ...AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "ambiguous").slice(0, 3),

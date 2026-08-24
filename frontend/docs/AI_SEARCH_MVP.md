@@ -18,4 +18,4 @@ The fixture adapter is intentionally local. Analytics use only `reactionV2`, exc
 
 `ProductionAiSearchDataAdapter` implements the read-only server contract. Independent production parity covers 30 intents across every asset and horizon, all source classes, and count/mean/median/share/ranking/comparison. No new RPC or migration is used.
 
-Paid evaluation is separately authorized by `AI_LIVE_TESTS=1` and `AI_LIVE_TEST_BUDGET_USD`. The harness hard-stops at 100 calls or the configured cumulative budget and writes only an ignored aggregate usage summary.
+Paid evaluation is separately authorized by `AI_LIVE_TESTS=1` and `AI_LIVE_TEST_BUDGET_USD`. The harness hard-stops at 20 calls or the configured cumulative budget and writes only an ignored aggregate usage summary.
