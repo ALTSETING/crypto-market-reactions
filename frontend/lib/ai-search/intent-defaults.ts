@@ -58,6 +58,10 @@ function humanClarification(intent: Partial<AiSearchIntent>): IntentResolution |
   return null;
 }
 
+export function explicitQuestionClarification(question: string): IntentResolution | null {
+  return humanClarification(explicitFacts(question));
+}
+
 export function applyExplicitQuestionDefaults(question: string, resolution: IntentResolution): IntentResolution {
   const facts = explicitFacts(question);
   const source = resolution.status === "ready" ? resolution.intent : EMPTY_INTENT;
