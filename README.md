@@ -117,7 +117,7 @@ before making the repository public; without one, reuse rights are not granted.
 
 ## PostgreSQL/Supabase status
 
-Website dataset із 7 878 canonical events імпортовано до live Supabase `public.events`. Migration, повторний idempotent import, full-text search, filters, slug lookup, RLS та 20-row smoke test пройшли перевірку. Деталі й measured query times наведені у live import report вище.
+Production Supabase `public.events` містить 9 073 унікальні події та slug: захищений 7 878-event Reaction V2 dataset і 1 195 історичних подій, доданих у режимі insert-new-only. Migration 006 та manifest-driven import застосовані; migration 008 підготовлена, але навмисно не застосована. Search, filters, slug lookup, RLS, server-only access і post-import identity checks пройшли перевірку.
 
 Детальний checklist: [docs/POSTGRES_IMPORT_PREPARATION.md](docs/POSTGRES_IMPORT_PREPARATION.md).
 

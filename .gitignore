@@ -25,5 +25,33 @@ build/
 Thumbs.db
 .idea/
 .vscode/
-# Historical datasets are part of the product foundation and must not be
-# silently excluded from future preservation/versioning decisions.
+
+# Private production/release artifacts. Existing tracked historical LFS
+# objects remain tracked; these rules prevent new operational data from being
+# added accidentally.
+data/website/backups/
+data/website/release_candidates/
+data/backfill_v2/
+data/backfill_v3/
+data/quality_v2/
+data/reactions_v2/
+data/raw/binance/
+reports/USER_REVIEW_PACKAGE/
+reports/*.csv
+reports/*.parquet
+reports/*.json
+reports/*.jsonl
+reports/*.md
+reports/*batch_input*.jsonl
+reports/*batch_output*.jsonl
+reports/*retry_input*.jsonl
+reports/*retry_output*.jsonl
+*.dump
+*.dump.gz
+*.sql.gz
+*.backup
+*.pgdump
+
+# One-off local production diagnostics are preserved locally but are not
+# release source.
+scripts/database/diagnose_release_copy.py

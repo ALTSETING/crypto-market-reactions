@@ -244,7 +244,7 @@ try {
     average_metric_visible: mobile.metric?.startsWith("Average ETH reaction") ?? false,
     top_losers_url:
       quickAction.url.includes("sort=decline") &&
-      quickAction.url.includes("horizon=average") &&
+      quickAction.url.includes("horizon=1h") &&
       quickAction.url.includes("marketDataOnly=true"),
     specific_horizon_metric: horizon.metric?.startsWith("ETH after 1 hour") ?? false,
     search_does_not_run_per_letter: beforeTyping === afterTyping,

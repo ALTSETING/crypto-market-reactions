@@ -33,9 +33,21 @@ const assetOptions: Array<{ label: string; value: Asset | null }> = [
 const sortLabels: Record<EventSort, string> = {
   newest: "Newest",
   oldest: "Oldest",
-  growth: "Highest average growth",
-  decline: "Highest average decline",
+  growth: "Highest gain",
+  decline: "Largest decline",
 };
+
+const sourceOptions = [
+  ["CoinDesk", "coindesk"],
+  ["Decrypt", "decrypt"],
+  ["Cointelegraph", "cointelegraph"],
+  ["SEC", "sec"],
+  ["Ethereum GitHub", "ethereum_github"],
+  ["ETH GitHub", "eth_github"],
+  ["Bitcoin GitHub", "btc_github"],
+  ["Solana GitHub", "sol_github"],
+  ["Ethereum Foundation", "ethereum_foundation"],
+] as const;
 
 export function EventsExplorer() {
   const router = useRouter();
@@ -49,10 +61,10 @@ export function EventsExplorer() {
   const currentSort = EVENT_SORTS.includes(rawSort as EventSort)
     ? (rawSort as EventSort)
     : "newest";
-  const rawHorizon = searchParams.get("horizon") ?? "average";
+  const rawHorizon = searchParams.get("horizon") ?? "1h";
   const currentHorizon = REACTION_HORIZONS.includes(rawHorizon as ReactionHorizon)
     ? (rawHorizon as ReactionHorizon)
-    : "average";
+    : "1h";
   const marketDataOnly = searchParams.get("marketDataOnly") === "true";
   const [data, setData] = useState<EventsPage | null>(null);
   const [requestError, setRequestError] = useState<string | null>(null);
@@ -186,13 +198,13 @@ export function EventsExplorer() {
             <select aria-describedby={!currentAsset ? "reaction-sort-hint" : undefined} className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" onChange={(event) => selectSort(event.target.value as EventSort)} value={currentSort}>
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
-              <option disabled={!currentAsset} value="growth">Highest average growth</option>
-              <option disabled={!currentAsset} value="decline">Highest average decline</option>
+              <option disabled={!currentAsset} value="growth">Highest gain</option>
+              <option disabled={!currentAsset} value="decline">Largest decline</option>
             </select>
           </label>
           <label className="text-xs font-medium text-slate-400">
             Reaction horizon
-            <select aria-label="Reaction horizon" className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none disabled:cursor-not-allowed disabled:opacity-45 focus:border-emerald-400/60" disabled={!currentAsset} onChange={(event) => replaceParams({ horizon: event.target.value === "average" ? null : event.target.value, page: null })} value={currentHorizon}>
+            <select aria-label="Reaction horizon" className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none disabled:cursor-not-allowed disabled:opacity-45 focus:border-emerald-400/60" disabled={!currentAsset} onChange={(event) => replaceParams({ horizon: event.target.value === "1h" ? null : event.target.value, page: null })} value={currentHorizon}>
               {REACTION_HORIZONS.map((horizon) => <option key={horizon} value={horizon}>{HORIZON_LABELS[horizon]}</option>)}
             </select>
           </label>
@@ -211,7 +223,7 @@ export function EventsExplorer() {
         {!currentAsset && <p className="mt-2 text-xs text-slate-500" id="reaction-sort-hint">Select BTC, ETH, or SOL to sort by market reaction.</p>}
 
         <form className="mt-5 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-2 lg:grid-cols-[1fr_160px_160px_auto]" key={`${searchParams.get("source")}-${searchParams.get("from")}-${searchParams.get("to")}`} onSubmit={applyAdvancedFilters}>
-          <label className="text-xs font-medium text-slate-400">Source<input className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("source") ?? ""} maxLength={80} name="source" placeholder="e.g. coindesk" /></label>
+          <label className="text-xs font-medium text-slate-400">Source<select className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("source") ?? ""} name="source"><option value="">All sources</option>{sourceOptions.map(([label, value]) => <option key={value} value={value}>{label}</option>)}</select></label>
           <label className="text-xs font-medium text-slate-400">From<input className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("from") ?? ""} name="from" type="date" /></label>
           <label className="text-xs font-medium text-slate-400">To<input className="mt-1.5 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2.5 text-sm text-white outline-none focus:border-emerald-400/60" defaultValue={searchParams.get("to") ?? ""} name="to" type="date" /></label>
           <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-1">

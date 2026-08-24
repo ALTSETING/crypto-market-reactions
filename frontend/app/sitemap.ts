@@ -6,7 +6,7 @@ import { siteUrl } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-const getCachedSitemapEvents = unstable_cache(getSitemapEvents, ["public-events-sitemap"], {
+const getCachedSitemapEvents = unstable_cache(getSitemapEvents, ["public-events-sitemap-v9073"], {
   revalidate: 3_600,
   tags: ["public-events-sitemap"],
 });

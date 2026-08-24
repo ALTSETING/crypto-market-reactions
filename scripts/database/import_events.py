@@ -14,6 +14,7 @@ import io
 import json
 import os
 import re
+import sys
 import unicodedata
 from pathlib import Path
 from typing import Any, Iterable
@@ -26,8 +27,8 @@ from dotenv import load_dotenv
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 DEFAULT_DATASET = ROOT / "data" / "website" / "events_mvp.parquet"
-EXPECTED_ROWS = 7_878
 ASSETS = {"BTC", "ETH", "SOL"}
 HORIZONS = ("1m", "5m", "15m", "1h", "4h", "24h")
 
@@ -159,13 +160,13 @@ def validate_arrow_schema(path: Path) -> None:
         raise DatasetValidationError(f"Unexpected Arrow types: {mismatches}")
 
 
-def prepare_dataset(path: Path, expected_rows: int = EXPECTED_ROWS) -> pd.DataFrame:
+def prepare_dataset(path: Path, expected_rows: int | None = None) -> pd.DataFrame:
     path = path.resolve()
     if not path.is_file():
         raise DatasetValidationError(f"Dataset does not exist: {path}")
     validate_arrow_schema(path)
     frame = pd.read_parquet(path)
-    if len(frame) != expected_rows:
+    if expected_rows is not None and len(frame) != expected_rows:
         raise DatasetValidationError(f"Expected {expected_rows} rows, found {len(frame)}")
     if frame.event_id.nunique(dropna=False) != len(frame):
         raise DatasetValidationError("event_id is not unique")
@@ -410,10 +411,21 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--batch-size", type=int, default=1_000)
-    parser.add_argument("--expected-rows", type=int, default=EXPECTED_ROWS)
+    parser.add_argument(
+        "--manifest", type=Path,
+        help="Validate or insert only the new IDs from a release manifest",
+    )
     parser.add_argument(
         "--dry-run", action="store_true",
         help="Validate and generate slugs without connecting to PostgreSQL",
+    )
+    parser.add_argument(
+        "--preflight", action="store_true",
+        help="Run manifest and read-only target validation without writing",
+    )
+    parser.add_argument(
+        "--confirm-production-write",
+        help="Exact confirmation token required for every database write",
     )
     parser.add_argument(
         "--classification-only",
@@ -423,11 +435,64 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def run_manifest_mode(args: argparse.Namespace) -> int:
+    from scripts.database.release_backfill import (
+        ReleasePreflightError,
+        insert_new_events,
+        preflight_database,
+    )
+    from scripts.database.release_contract import ReleaseValidationError, validate_manifest
+
+    try:
+        if args.classification_only:
+            raise ReleasePreflightError("--classification-only is incompatible with --manifest")
+        if args.dry_run:
+            _, manifest, stats = validate_manifest(args.manifest)
+            result = {
+                "status": "PASS", "mode": "dry-run", **stats,
+                "dataset_sha256": manifest["dataset"]["sha256"],
+                "content_sha256": manifest["dataset"]["content_sha256"],
+                "new_ids_sha256": manifest["identity"]["new_ids_sha256"],
+                "production_updated": False,
+            }
+        else:
+            load_dotenv(ROOT / ".env")
+            database_url = os.getenv("DATABASE_URL", "").strip()
+            if not database_url:
+                raise ReleasePreflightError("DATABASE_URL is required for manifest preflight/import")
+            if args.preflight:
+                result = preflight_database(database_url, args.manifest)
+            elif args.confirm_production_write:
+                result = insert_new_events(
+                    database_url, args.manifest, args.confirm_production_write
+                )
+            else:
+                raise ReleasePreflightError(
+                    "Manifest mode requires --dry-run, --preflight, or explicit production confirmation"
+                )
+        print(json.dumps(result, indent=2))
+        return 0
+    except (ReleasePreflightError, ReleaseValidationError) as exc:
+        print(json.dumps({
+            "status": "FAIL",
+            "mode": "preflight" if args.preflight else "manifest-validation",
+            "error_type": type(exc).__name__,
+            "error": str(exc),
+            "production_updated": False,
+        }, indent=2))
+        return 1
+
+
 def main() -> int:
     args = parse_args()
     if args.batch_size <= 0:
         raise ValueError("--batch-size must be positive")
-    frame = prepare_dataset(args.dataset, expected_rows=args.expected_rows)
+    if args.manifest:
+        return run_manifest_mode(args)
+
+    if args.preflight:
+        raise ValueError("--preflight requires --manifest")
+    frame = prepare_dataset(args.dataset)
     if args.dry_run:
         print(json.dumps(dry_run_summary(frame, args.dataset), ensure_ascii=False, indent=2))
         return 0
@@ -436,6 +501,13 @@ def main() -> int:
     database_url = os.getenv("DATABASE_URL", "").strip()
     if not database_url:
         raise RuntimeError("DATABASE_URL is required; copy .env.example to .env outside version control")
+    expected_confirmation = (
+        "LEGACY-CLASSIFICATION-UPDATE" if args.classification_only else "LEGACY-FULL-IMPORT"
+    )
+    if args.confirm_production_write != expected_confirmation:
+        raise RuntimeError(
+            f"Legacy database write requires --confirm-production-write {expected_confirmation}"
+        )
     if args.classification_only:
         result = update_event_classification(frame, database_url)
         mode = "classification-update"

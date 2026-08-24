@@ -87,6 +87,13 @@ export interface SitemapEvent {
   updated_at: string;
 }
 
+export interface DatasetStats {
+  events: number;
+  firstYear: number;
+  lastYear: number;
+  eventsByYear: Array<{ year: number; events: number }>;
+}
+
 export interface ApiErrorBody {
   error: string;
   code: string;

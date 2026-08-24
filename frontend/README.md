@@ -1,6 +1,6 @@
 # Crypto Market Reaction Database — frontend MVP
 
-Responsive read-only Next.js frontend for the 7,878-event Supabase dataset.
+Responsive read-only Next.js frontend for the 9,073-event Supabase dataset.
 The browser calls same-origin, bounded Next.js routes; only server code calls
 the Supabase Data API. Elevated Supabase credentials are isolated in modules
 guarded by `server-only` and are never returned to the browser.
@@ -81,7 +81,7 @@ npm run smoke:seo
   the server uses `VERCEL_PROJECT_PRODUCTION_URL`; localhost is only the final
   development fallback.
 - Event and sitemap data use one-hour server cache/revalidation windows, so the
-  build does not pre-render or query all 7,878 event pages.
+  build does not pre-render or query all 9,073 event pages.
 
 See `../docs/SEO_MVP_REPORT.md` for the verified URL counts, tests, limitations,
 and post-deployment Google Search Console checklist.
@@ -144,5 +144,5 @@ policy at Cloudflare/Vercel. The API/data layer does not need to be rewritten.
 - There is no authentication, payment, or unrestricted bulk download endpoint.
 - Public SEO pages remain individually crawlable, so a determined distributed
   scraper can still collect public fields over many throttled requests.
-- Counts use Supabase exact count, which is appropriate for 7,878 rows but
+- Counts use Supabase exact count, which is appropriate for 9,073 rows but
   should be revisited if the dataset grows by orders of magnitude.

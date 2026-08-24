@@ -16,7 +16,7 @@ import {
 
 export const revalidate = 3_600;
 
-const getCachedEvent = unstable_cache(getEventBySlug, ["public-event-by-slug"], {
+const getCachedEvent = unstable_cache(getEventBySlug, ["public-event-by-slug-v9073"], {
   revalidate,
   tags: ["public-events"],
 });
@@ -52,8 +52,8 @@ export async function generateMetadata({ params, searchParams }: EventPageProps)
       description,
       url: canonical,
       type: "article",
-      siteName: SITE_NAME,
       publishedTime: event.published_at,
+      siteName: SITE_NAME,
     },
     twitter: {
       card: "summary",
@@ -72,14 +72,15 @@ export default async function EventPage({ params }: EventPageProps) {
   const canonical = siteUrl(`/events/${event.slug}`);
   const structuredData = JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "WebPage",
+    name: event.title,
     headline: event.title,
+    description: buildEventSeoDescription(event),
     datePublished: event.published_at,
     url: canonical,
-    publisher: {
-      "@type": "Organization",
-      name: event.source,
-    },
+    citation: sourceUrl,
+    about: event.related_assets.map((asset) => ({ "@type": "Thing", name: asset })),
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: siteUrl("/") },
   }).replace(/</g, "\\u003c");
 
   return (
@@ -145,7 +146,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
           <section className="mt-10" aria-labelledby="reactions-title">
             <div className="mb-5">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Verified market data</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Historical market reactions</p>
               <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl" id="reactions-title">
                 Price reactions
               </h2>
@@ -169,6 +170,10 @@ export default async function EventPage({ params }: EventPageProps) {
                 <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Sentiment score</dt><dd className="font-mono text-slate-200">{event.sentiment_score.toFixed(2)}</dd></div>
               )}
               <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Value unit</dt><dd className="text-slate-200">Percentage return</dd></div>
+              <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Publication date</dt><dd className="text-slate-200">{formatDate(event.published_at, true)} UTC</dd></div>
+              <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Source</dt><dd className="text-slate-200">{event.source}</dd></div>
+              <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Related assets</dt><dd className="text-slate-200">{event.related_assets.length ? event.related_assets.join(", ") : "None assigned"}</dd></div>
+              <div className="flex flex-wrap justify-between gap-2"><dt className="text-slate-500">Data availability</dt><dd className="text-slate-200">Missing horizons remain blank</dd></div>
             </dl>
           </section>
 

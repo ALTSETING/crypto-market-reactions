@@ -8,7 +8,7 @@ describe("parseEventsQuery", () => {
       query: "ethereum etf",
       asset: null,
       sort: "newest",
-      horizon: "average",
+      horizon: "1h",
       marketDataOnly: false,
       page: 1,
       pageSize: 25,
@@ -75,7 +75,9 @@ describe("parseEventsQuery", () => {
 describe("event helpers", () => {
   it("validates canonical slugs", () => {
     expect(isValidEventSlug("ethereum-etf-approved-2024-a1b2c3d4")).toBe(true);
+    expect(isValidEventSlug("truncated-headline--a1b2c3d4")).toBe(true);
     expect(isValidEventSlug("../unsafe")).toBe(false);
+    expect(isValidEventSlug("-leading-a1b2c3d4")).toBe(false);
   });
 
   it("creates an exclusive UTC upper date bound", () => {
