@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { unstable_cache } from "next/cache";
 
 import { EventsExplorer } from "@/components/events-explorer";
+import { AiSearch } from "@/components/ai-search";
 import { getDatasetStats } from "@/lib/data/events";
 import { HOME_DESCRIPTION, HOME_TITLE, siteUrl } from "@/lib/seo";
 
@@ -34,6 +35,7 @@ export default async function HomePage() {
   const stats = await getCachedDatasetStats();
   const eventCount = stats.events.toLocaleString("en-US");
   const dateRange = `${stats.firstYear}–${stats.lastYear}`;
+  const aiSearchEnabled = process.env.AI_SEARCH_ENABLED === "true";
   return (
     <main className="min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(circle_at_25%_0%,rgba(16,185,129,0.11),transparent_38%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.07),transparent_32%)]" />
@@ -57,6 +59,8 @@ export default async function HomePage() {
             <Stat label="Horizons" value="6 per asset" />
           </dl>
         </header>
+
+        {aiSearchEnabled ? <AiSearch /> : null}
 
         <Suspense fallback={<div className="mt-10 h-72 animate-pulse rounded-3xl border border-white/8 bg-slate-900/40" />}>
           <EventsExplorer />

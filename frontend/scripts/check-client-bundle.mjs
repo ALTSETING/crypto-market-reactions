@@ -6,6 +6,7 @@ const forbidden = [
   "DATABASE_URL",
   "SUPABASE_SECRET_KEY",
   "SUPABASE_SERVICE_ROLE",
+  "OPENAI_API_KEY",
   "service_role",
   "postgresql://",
   "postgres://",
@@ -15,6 +16,7 @@ const configuredSecrets = [
   process.env.SUPABASE_SECRET_KEY,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
   process.env.DATABASE_URL,
+  process.env.OPENAI_API_KEY,
 ].filter((value) => typeof value === "string" && value.length >= 16);
 
 async function filesBelow(directory) {

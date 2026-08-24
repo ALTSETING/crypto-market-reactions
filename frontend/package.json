@@ -13,6 +13,7 @@
     "smoke:browser": "node scripts/browser-smoke.mjs",
     "smoke:seo": "node scripts/seo-smoke.mjs",
     "smoke:security": "node scripts/access-security-smoke.mjs",
+    "smoke:ai-search": "node scripts/ai-search-smoke.mjs",
     "security:bundle": "node scripts/check-client-bundle.mjs"
   },
   "dependencies": {
