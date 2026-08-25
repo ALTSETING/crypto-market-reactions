@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { mean, median, runAnalytics, runMultiHorizonAnalytics } from "@/lib/ai-search/analytics";
 import { formatPercent } from "@/lib/ai-search/format";
+import { applyExplicitQuestionDefaults } from "@/lib/ai-search/intent-defaults";
 import { MockAiIntentProvider } from "@/lib/ai-search/provider";
 import { validateIntent } from "@/lib/ai-search/schema";
 import { matchesTopic } from "@/lib/ai-search/topic-matcher";
@@ -68,6 +69,14 @@ describe("AI topic architecture", () => {
       status: "ready",
       intent: { sentiment: "positive", reactionSign: null, horizon: null, metric: "count" },
     });
+  });
+
+  it("ignores a provider-invented horizon when the question asks for a general reaction", () => {
+    const resolution = applyExplicitQuestionDefaults("How did ETH react to ETF news?", {
+      status: "ready",
+      intent: { ...baseIntent, topic: "etf", horizon: "24h" },
+    });
+    expect(resolution).toMatchObject({ status: "ready", intent: { topic: "etf", horizon: null } });
   });
 
   it("rejects arbitrary topic strings at the strict schema boundary", () => {

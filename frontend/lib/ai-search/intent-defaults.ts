@@ -113,11 +113,11 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
   } else if (/\b(?:biggest|largest)(?:\s+\w+){0,2}\s+(?:gains|rises)\b|найбільш\S*\s+зростан/iu.test(question)) {
     Object.assign(facts, { intent: "rank", metric: "reaction", sort: "gainers", horizon: facts.horizon ?? "24h" });
   } else if (/\bmedian\b|медіан/iu.test(question)) {
-    Object.assign(facts, { intent: "aggregate", metric: "median" });
+    Object.assign(facts, { intent: "aggregate", metric: "median", horizon: facts.horizon ?? null });
   } else if (/\baverage\b|\bmean\b|середн/iu.test(question)) {
-    Object.assign(facts, { intent: "aggregate", metric: "mean" });
+    Object.assign(facts, { intent: "aggregate", metric: "mean", horizon: facts.horizon ?? null });
   } else if (/\breact(?:ed|ion)?\b|реаг/iu.test(question)) {
-    Object.assign(facts, { intent: "aggregate", metric: "mean" });
+    Object.assign(facts, { intent: "aggregate", metric: "mean", horizon: facts.horizon ?? null });
   }
   return facts;
 }
