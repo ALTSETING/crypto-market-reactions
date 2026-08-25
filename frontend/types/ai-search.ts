@@ -15,6 +15,46 @@ export type AiImportance = (typeof AI_IMPORTANCE)[number];
 export const AI_SENTIMENTS = ["positive", "neutral", "negative"] as const;
 export type AiSentiment = (typeof AI_SENTIMENTS)[number];
 
+export const AI_TOPICS = [
+  "sec",
+  "sec_filings",
+  "etf",
+  "hack",
+  "listing",
+  "lawsuit",
+  "macro",
+  "fed",
+  "cpi",
+  "upgrade",
+  "staking",
+  "large_investment",
+  "institutional_purchase",
+  "funding",
+  "acquisition",
+] as const;
+export type AiTopic = (typeof AI_TOPICS)[number];
+
+export const AI_TOPIC_LABELS: Record<AiTopic, string> = {
+  sec: "SEC actions",
+  sec_filings: "SEC filings",
+  etf: "ETF",
+  hack: "Hacks and exploits",
+  listing: "Listings",
+  lawsuit: "Lawsuits",
+  macro: "Macro",
+  fed: "Federal Reserve",
+  cpi: "CPI",
+  upgrade: "Protocol upgrades",
+  staking: "Staking",
+  large_investment: "Large investments",
+  institutional_purchase: "Institutional purchases",
+  funding: "Funding",
+  acquisition: "Acquisitions",
+};
+
+export const AI_REACTION_SIGNS = ["positive", "negative"] as const;
+export type AiReactionSign = (typeof AI_REACTION_SIGNS)[number];
+
 export interface AiComparison {
   field: "sourceClass";
   left: SourceType;
@@ -27,8 +67,10 @@ export interface AiSearchIntent {
   dateFrom: string | null;
   dateTo: string | null;
   category: EventCategory | null;
+  topic: AiTopic | null;
   sourceClass: SourceType | null;
   sentiment: AiSentiment | null;
+  reactionSign: AiReactionSign | null;
   importance: AiImportance | null;
   horizon: Horizon | null;
   metric: AiMetric;
@@ -126,7 +168,13 @@ export interface MultiHorizonAnalyticsResult {
   citations: AiCitation[];
 }
 
-export type AnalyticsResult =
+export interface TopicFilterSummary {
+  topic: AiTopic;
+  broadSampleSize: number;
+  matchedSampleSize: number;
+}
+
+type CoreAnalyticsResult =
   | SearchAnalyticsResult
   | CountAnalyticsResult
   | ScalarAnalyticsResult
@@ -134,6 +182,10 @@ export type AnalyticsResult =
   | RankingAnalyticsResult
   | ComparisonAnalyticsResult
   | MultiHorizonAnalyticsResult;
+
+export type AnalyticsResult = CoreAnalyticsResult & {
+  topicFilter?: TopicFilterSummary;
+};
 
 export interface AiSearchSuccess {
   status: "ok";

@@ -2,8 +2,10 @@ import {
   AI_IMPORTANCE,
   AI_INTENTS,
   AI_METRICS,
+  AI_REACTION_SIGNS,
   AI_SENTIMENTS,
   AI_SORTS,
+  AI_TOPICS,
   type AiSearchIntent,
 } from "@/types/ai-search";
 import { ASSETS, EVENT_CATEGORIES, HORIZONS, SOURCE_TYPES } from "@/types/events";
@@ -47,8 +49,8 @@ export function validateIntent(input: unknown): AiSearchIntent {
   }
   const value = input as Record<string, unknown>;
   const allowedKeys = new Set([
-    "intent", "asset", "dateFrom", "dateTo", "category", "sourceClass", "sentiment",
-    "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
+    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "sourceClass", "sentiment",
+    "reactionSign", "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
   ]);
   if (Object.keys(value).some((key) => !allowedKeys.has(key))) {
     throw new IntentValidationError("Structured intent contains unsupported fields.");
@@ -59,8 +61,10 @@ export function validateIntent(input: unknown): AiSearchIntent {
   const dateFrom = nullableDate(value.dateFrom, "dateFrom");
   const dateTo = nullableDate(value.dateTo, "dateTo");
   const category = nullableEnum(value.category, EVENT_CATEGORIES, "category");
+  const topic = nullableEnum(value.topic, AI_TOPICS, "topic");
   const sourceClass = nullableEnum(value.sourceClass, SOURCE_TYPES, "sourceClass");
   const sentiment = nullableEnum(value.sentiment, AI_SENTIMENTS, "sentiment");
+  const reactionSign = nullableEnum(value.reactionSign, AI_REACTION_SIGNS, "reactionSign");
   const importance = nullableEnum(value.importance, AI_IMPORTANCE, "importance");
   const horizon = nullableEnum(value.horizon, HORIZONS, "horizon");
   const metric = enumValue(value.metric, AI_METRICS, "metric");
@@ -105,9 +109,12 @@ export function validateIntent(input: unknown): AiSearchIntent {
   if (intent === "rank" && !["gainers", "losers"].includes(sort)) {
     throw new IntentValidationError("Ranking requires gainers or losers sort.");
   }
+  if (reactionSign && (!asset || !horizon)) {
+    throw new IntentValidationError("Reaction sign filtering requires one asset and horizon.");
+  }
 
   return {
-    intent, asset, dateFrom, dateTo, category, sourceClass, sentiment, importance,
+    intent, asset, dateFrom, dateTo, category, topic, sourceClass, sentiment, reactionSign, importance,
     horizon, metric, sort, groupBy, comparison, limit: value.limit as number,
   };
 }
@@ -116,8 +123,8 @@ export const AI_INTENT_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: [
-    "intent", "asset", "dateFrom", "dateTo", "category", "sourceClass", "sentiment",
-    "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
+    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "sourceClass", "sentiment",
+    "reactionSign", "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
   ],
   properties: {
     intent: { type: "string", enum: AI_INTENTS },
@@ -125,8 +132,10 @@ export const AI_INTENT_JSON_SCHEMA = {
     dateFrom: { anyOf: [{ type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" }, { type: "null" }] },
     dateTo: { anyOf: [{ type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" }, { type: "null" }] },
     category: { anyOf: [{ type: "string", enum: EVENT_CATEGORIES }, { type: "null" }] },
+    topic: { anyOf: [{ type: "string", enum: AI_TOPICS }, { type: "null" }] },
     sourceClass: { anyOf: [{ type: "string", enum: SOURCE_TYPES }, { type: "null" }] },
     sentiment: { anyOf: [{ type: "string", enum: AI_SENTIMENTS }, { type: "null" }] },
+    reactionSign: { anyOf: [{ type: "string", enum: AI_REACTION_SIGNS }, { type: "null" }] },
     importance: { anyOf: [{ type: "string", enum: AI_IMPORTANCE }, { type: "null" }] },
     horizon: { anyOf: [{ type: "string", enum: HORIZONS }, { type: "null" }] },
     metric: { type: "string", enum: AI_METRICS },

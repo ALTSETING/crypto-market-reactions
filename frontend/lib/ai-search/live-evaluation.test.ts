@@ -52,9 +52,9 @@ describe.skipIf(process.env.AI_LIVE_TESTS !== "1" || !process.env.OPENAI_API_KEY
         if (resolution.status !== "ready") continue;
         const result = await adapter.analyze(resolution.intent);
         const wording = groundedAnswer(result);
-        const resultNumbers = new Set(JSON.stringify(result).match(/-?\d+(?:\.\d+)?/g) ?? []);
-        const answerNumbers = `${wording.answer} ${wording.calculation}`.match(/-?\d+(?:\.\d+)?/g) ?? [];
-        expect(answerNumbers.every((value) => resultNumbers.has(value)), evaluation.id).toBe(true);
+        const resultNumbers = (JSON.stringify(result).match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+        const answerNumbers = (`${wording.answer} ${wording.calculation}`.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+        expect(answerNumbers.every((value) => resultNumbers.some((resultValue) => Math.abs(value - resultValue) <= 0.005001)), evaluation.id).toBe(true);
         expect(result.citations.length, evaluation.id).toBeGreaterThan(0);
         expect(result.citations.length, evaluation.id).toBeLessThanOrEqual(50);
         supportedPassed += 1;

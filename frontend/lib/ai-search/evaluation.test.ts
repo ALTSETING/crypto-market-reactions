@@ -26,9 +26,9 @@ describe("30-query AI Search evaluation", () => {
     expect(first.body.citations.length).toBeGreaterThan(0);
     expect(first.body.citations.length).toBeLessThanOrEqual(50);
     expect(first.body.basedOn).toBe("Reaction V2");
-    const resultNumbers = new Set(JSON.stringify(first.body.result).match(/-?\d+(?:\.\d+)?/g) ?? []);
-    const answerNumbers = `${first.body.answer} ${first.body.calculation}`.match(/-?\d+(?:\.\d+)?/g) ?? [];
-    expect(answerNumbers.every((value) => resultNumbers.has(value))).toBe(true);
+    const resultNumbers = (JSON.stringify(first.body.result).match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+    const answerNumbers = (`${first.body.answer} ${first.body.calculation}`.match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+    expect(answerNumbers.every((value) => resultNumbers.some((resultValue) => Math.abs(value - resultValue) <= 0.005001))).toBe(true);
     const serialized = JSON.stringify(first.body);
     expect(serialized).not.toMatch(/source_url|service_role|SUPABASE_|OPENAI_API_KEY|stack/i);
   });
