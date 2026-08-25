@@ -166,9 +166,11 @@ try {
   await evaluate(
     cdp,
     `(() => {
-      const select = [...document.querySelectorAll('select')][1];
+      const select = document.querySelector('select[aria-label="Reaction horizon"]');
+      if (!select) return false;
       Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(select, '1h');
       select.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
     })()`,
   );
   await delay(1800);
@@ -229,6 +231,19 @@ try {
     })`,
   );
   const eventMobileScreenshot = await screenshot(cdp, "event-mobile.png");
+  await cdp.send("Page.navigate", { url: `${baseUrl}/ai` });
+  await delay(1800);
+  const aiMobile = await evaluate(
+    cdp,
+    `({
+      innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+      heading: document.querySelector('h1')?.textContent.trim(),
+      input: Boolean(document.querySelector('#ai-search-question')),
+      navigation: document.body.innerText.includes('Events') && document.body.innerText.includes('AI Research')
+    })`,
+  );
+  const aiMobileScreenshot = await screenshot(cdp, "ai-research-mobile.png");
 
   const checks = {
     mobile_no_horizontal_scroll: mobile.scrollWidth <= mobile.innerWidth,
@@ -241,6 +256,8 @@ try {
     event_mobile_no_horizontal_scroll: eventMobile.scrollWidth <= eventMobile.innerWidth,
     event_mobile_loaded:
       Boolean(eventMobile.heading) && eventMobile.reactions && !eventMobile.error,
+    ai_mobile_no_horizontal_scroll: aiMobile.scrollWidth <= aiMobile.innerWidth,
+    ai_mobile_loaded: aiMobile.heading === "Ask Crypto Market History" && aiMobile.input && aiMobile.navigation,
     average_metric_visible: mobile.metric?.startsWith("Average ETH reaction") ?? false,
     top_losers_url:
       quickAction.url.includes("sort=decline") &&
@@ -257,7 +274,7 @@ try {
   if (Object.values(checks).some((value) => !value)) {
     throw new Error(`Browser smoke test failed: ${JSON.stringify({ checks, mobile, quickAction, horizon })}`);
   }
-  console.log(JSON.stringify({ checks, mobile, quickAction, horizon, eventMobile, screenshots: { mobileScreenshot, darkScreenshot, desktopScreenshot, eventMobileScreenshot } }, null, 2));
+  console.log(JSON.stringify({ checks, mobile, quickAction, horizon, eventMobile, aiMobile, screenshots: { mobileScreenshot, darkScreenshot, desktopScreenshot, eventMobileScreenshot, aiMobileScreenshot } }, null, 2));
 } finally {
   cdp?.close();
   browser.kill();

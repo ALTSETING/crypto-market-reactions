@@ -3,7 +3,6 @@ import type { AiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { AiSearchDataError } from "@/lib/ai-search/adapter";
 import type { AiIntentProvider } from "@/lib/ai-search/provider";
 import { checkQuestionSafety } from "@/lib/ai-search/safety";
-import { HORIZONS } from "@/types/events";
 import type { AiSearchErrorBody, AiSearchSuccess, AnalyticsResult } from "@/types/ai-search";
 
 export type AiSearchServiceResult =
@@ -33,26 +32,7 @@ export async function executeAiSearch(
   let result: AnalyticsResult;
   try {
     if (resolution.intent.intent === "aggregate" && resolution.intent.horizon === null) {
-      const metric: "mean" | "median" = resolution.intent.metric === "median" ? "median" : "mean";
-      const perHorizon = await Promise.all(HORIZONS.map((horizon) => adapter.analyze({
-        ...resolution.intent, horizon, metric,
-      })));
-      const median24 = await adapter.analyze({ ...resolution.intent, horizon: "24h", metric: "median" });
-      const share24 = await adapter.analyze({ ...resolution.intent, horizon: "24h", metric: "sign_share" });
-      const citations = [...new Map(perHorizon.flatMap((entry) => entry.citations).map((citation) => [citation.eventId, citation])).values()].slice(0, 50);
-      result = {
-        kind: "multi_horizon" as const,
-        metric,
-        rows: perHorizon.map((entry, index) => ({
-          horizon: HORIZONS[index],
-          value: entry.kind === "scalar" ? entry.value : null,
-          sampleSize: entry.kind === "scalar" ? entry.sampleSize : 0,
-        })),
-        median24h: median24.kind === "scalar" ? median24.value : null,
-        positivePercent24h: share24.kind === "share" ? share24.positivePercent : null,
-        sampleSize24h: share24.kind === "share" ? share24.sampleSize : 0,
-        citations,
-      };
+      result = await adapter.analyzeOverview(resolution.intent);
     } else {
       result = await adapter.analyze(resolution.intent);
     }

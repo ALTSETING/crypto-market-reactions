@@ -10,9 +10,9 @@ const adapter = new FixtureAiSearchDataAdapter();
 
 describe("30-query AI Search evaluation", () => {
   it("contains the required balanced evaluation set", () => {
-    expect(AI_SEARCH_EVALUATION).toHaveLength(30);
-    expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "supported")).toHaveLength(15);
-    expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "ambiguous")).toHaveLength(5);
+    expect(AI_SEARCH_EVALUATION).toHaveLength(35);
+    expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "supported")).toHaveLength(21);
+    expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "ambiguous")).toHaveLength(4);
     expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "unsupported")).toHaveLength(5);
     expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "adversarial")).toHaveLength(5);
   });

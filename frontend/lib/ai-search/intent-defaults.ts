@@ -24,20 +24,33 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.dateFrom = `${year}-01-01`;
     facts.dateTo = `${year}-12-31`;
   }
-  if (/\bSEC\s+filings?\b/i.test(question)) facts.category = "regulation";
+  if (/\bSEC\b|регуляц|рішення\s+SEC/iu.test(question)) facts.category = "regulation";
   if (/\bETF\b/i.test(question)) facts.category = "etf";
+  if (/\bhack(?:ed|s)?\b|злам/iu.test(question)) facts.category = "hack";
+  if (/\b(?:CPI|Fed|macro)\b|макро/iu.test(question)) facts.category = "macro";
+  if (/\blisting\b|лістинг/iu.test(question)) facts.category = "exchange";
+  if (/\blawsuit\b|позов/iu.test(question)) facts.category = "legal_action";
+  if (/\bupgrade\b|оновлен/iu.test(question)) facts.category = "protocol_upgrade";
   if (/\bnews media\b/i.test(question)) facts.sourceClass = "news_media";
   if (/\bpositive\b|позитивн/iu.test(question)) facts.sentiment = "positive";
   if (/\bnegative\b|негативн/iu.test(question)) facts.sentiment = "negative";
 
   const limit = question.match(/\b(\d{1,2})\s+(?:biggest|largest|top)\b/i)?.[1];
   if (limit) facts.limit = Math.min(50, Number(limit));
-  if (/\b(?:how many|count|number of)\b|\bскільки\b/iu.test(question)) {
+  if (/\bcompare\b|порівн/iu.test(question)) {
+    const hasPrimary = /primary documents?|первинн\S*\s+документ/iu.test(question);
+    const hasNews = /news media|новинн\S*\s+медіа/iu.test(question);
+    Object.assign(facts, {
+      intent: "compare", metric: /median|медіан/iu.test(question) ? "median" : "mean",
+      groupBy: "source_class",
+      comparison: hasPrimary && hasNews ? { field: "sourceClass", left: "primary_document", right: "news_media" } : null,
+    });
+  } else if (/\b(?:how many|count|number of)\b|\bскільки\b/iu.test(question)) {
     Object.assign(facts, { intent: "count", metric: "count", sort: "newest" });
   } else if (/\b(?:biggest|largest)(?:\s+\w+){0,2}\s+(?:drops|losses|falls)\b|найбільш\S*\s+падін/iu.test(question)) {
-    Object.assign(facts, { intent: "rank", metric: "reaction", sort: "losers" });
+    Object.assign(facts, { intent: "rank", metric: "reaction", sort: "losers", horizon: facts.horizon ?? "24h" });
   } else if (/\b(?:biggest|largest)(?:\s+\w+){0,2}\s+(?:gains|rises)\b|найбільш\S*\s+зростан/iu.test(question)) {
-    Object.assign(facts, { intent: "rank", metric: "reaction", sort: "gainers" });
+    Object.assign(facts, { intent: "rank", metric: "reaction", sort: "gainers", horizon: facts.horizon ?? "24h" });
   } else if (/\bmedian\b|медіан/iu.test(question)) {
     Object.assign(facts, { intent: "aggregate", metric: "median" });
   } else if (/\baverage\b|\bmean\b|середн/iu.test(question)) {
