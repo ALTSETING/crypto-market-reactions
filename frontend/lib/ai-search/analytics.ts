@@ -4,6 +4,8 @@ import type {
   AnalyticsEvent,
   AnalyticsResult,
 } from "@/types/ai-search";
+import type { MultiHorizonAnalyticsResult } from "@/types/ai-search";
+import { HORIZONS } from "@/types/events";
 import type { SourceType } from "@/types/events";
 
 const round = (value: number): number => Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
@@ -100,4 +102,33 @@ export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearch
   const metric = intent.metric as "mean" | "median";
   const sample = rows.map(({ value }) => value);
   return { kind: "scalar", metric, value: metric === "mean" ? mean(sample) : median(sample), sampleSize: sample.length, unit: "percent", citations };
+}
+
+export function runMultiHorizonAnalytics(events: readonly AnalyticsEvent[], intent: AiSearchIntent): MultiHorizonAnalyticsResult {
+  const results = HORIZONS.map((horizon) => {
+    const base = { ...intent, intent: "aggregate" as const, horizon };
+    const meanResult = runAnalytics(events, { ...base, metric: "mean" });
+    const medianResult = runAnalytics(events, { ...base, metric: "median" });
+    const shareResult = runAnalytics(events, { ...base, metric: "sign_share" });
+    return {
+      horizon,
+      mean: meanResult.kind === "scalar" ? meanResult.value : null,
+      median: medianResult.kind === "scalar" ? medianResult.value : null,
+      positivePercent: shareResult.kind === "share" ? shareResult.positivePercent : null,
+      sampleSize: meanResult.kind === "scalar" ? meanResult.sampleSize : 0,
+      citations: meanResult.citations,
+    };
+  });
+  const citations = [...new Map(results.flatMap((row) => row.citations).map((citation) => [citation.eventId, citation])).values()].slice(0, 50);
+  return {
+    kind: "multi_horizon",
+    rows: results.map((row) => ({
+      horizon: row.horizon,
+      mean: row.mean,
+      median: row.median,
+      positivePercent: row.positivePercent,
+      sampleSize: row.sampleSize,
+    })),
+    citations,
+  };
 }

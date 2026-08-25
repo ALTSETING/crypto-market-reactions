@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { AiSearchDataAdapter } from "@/lib/ai-search/adapter";
-import type { AiSearchIntent, AnalyticsResult } from "@/types/ai-search";
+import type { AiSearchIntent, AnalyticsResult, MultiHorizonAnalyticsResult } from "@/types/ai-search";
 
 interface CacheEntry {
   expiresAt: number;
@@ -47,6 +47,16 @@ export class CachedAiSearchDataAdapter implements AiSearchDataAdapter {
       const oldest = this.entries.keys().next().value;
       if (oldest) this.entries.delete(oldest);
     }
+    this.entries.set(key, { expiresAt: now + this.ttlMs, result: structuredClone(result) });
+    return result;
+  }
+
+  async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
+    const key = `overview:${normalizedIntentCacheKey(intent)}`;
+    const now = Date.now();
+    const hit = this.entries.get(key);
+    if (hit?.expiresAt && hit.expiresAt > now && hit.result.kind === "multi_horizon") return structuredClone(hit.result);
+    const result = await this.delegate.analyzeOverview(intent);
     this.entries.set(key, { expiresAt: now + this.ttlMs, result: structuredClone(result) });
     return result;
   }

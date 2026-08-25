@@ -116,11 +116,13 @@ export interface ComparisonAnalyticsResult {
 
 export interface MultiHorizonAnalyticsResult {
   kind: "multi_horizon";
-  metric: "mean" | "median";
-  rows: Array<{ horizon: Horizon; value: number | null; sampleSize: number }>;
-  median24h: number | null;
-  positivePercent24h: number | null;
-  sampleSize24h: number;
+  rows: Array<{
+    horizon: Horizon;
+    mean: number | null;
+    median: number | null;
+    positivePercent: number | null;
+    sampleSize: number;
+  }>;
   citations: AiCitation[];
 }
 

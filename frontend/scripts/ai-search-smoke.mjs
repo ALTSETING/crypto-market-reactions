@@ -1,9 +1,9 @@
 const baseUrl = process.env.AI_SEARCH_SMOKE_URL ?? "http://127.0.0.1:3100";
 
-const homepage = await fetch(baseUrl);
-const homepageHtml = await homepage.text();
-if (homepage.status !== 200 || !homepageHtml.includes("AI Search") || !homepageHtml.includes("Search historical events")) {
-  throw new Error("AI Search or existing Events Explorer is missing from the homepage");
+const aiPage = await fetch(`${baseUrl}/ai`);
+const aiPageHtml = await aiPage.text();
+if (aiPage.status !== 200 || !aiPageHtml.includes("Ask Crypto Market History") || !aiPageHtml.includes("AI Research")) {
+  throw new Error("Dedicated AI Research page is missing");
 }
 
 async function post(question, contentType = "application/json") {

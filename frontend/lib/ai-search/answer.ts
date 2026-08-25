@@ -47,8 +47,8 @@ export function groundedAnswer(result: AnalyticsResult): { answer: string; calcu
       };
     case "multi_horizon":
       return {
-        answer: "Historical reaction across all Reaction V2 horizons.",
-        calculation: `24h median: ${percent(result.median24h)}; positive 24h: ${percent(result.positivePercent24h)}; n=${result.sampleSize24h}.`,
+        answer: "Historical reaction across all horizons.",
+        calculation: "Mean, median, positive share, and sample size are shown for each horizon.",
       };
   }
 }

@@ -13,7 +13,7 @@ const result: AnalyticsResult = { kind: "count", value: 2, sampleSize: 2, citati
 describe("AI Search result cache", () => {
   it("uses a stable normalized key and caches only completed analytics results", async () => {
     const analyze = vi.fn().mockResolvedValue(result);
-    const cache = new CachedAiSearchDataAdapter({ analyze }, 30_000, 10);
+    const cache = new CachedAiSearchDataAdapter({ analyze, analyzeOverview: vi.fn() }, 30_000, 10);
     expect(normalizedIntentCacheKey(intent)).toBe(normalizedIntentCacheKey({ ...intent }));
     await expect(cache.analyze(intent)).resolves.toEqual(result);
     await expect(cache.analyze({ ...intent })).resolves.toEqual(result);
@@ -22,7 +22,7 @@ describe("AI Search result cache", () => {
 
   it("does not cache provider/adapter errors", async () => {
     const analyze = vi.fn().mockRejectedValueOnce(new Error("temporary")).mockResolvedValue(result);
-    const cache = new CachedAiSearchDataAdapter({ analyze });
+    const cache = new CachedAiSearchDataAdapter({ analyze, analyzeOverview: vi.fn() });
     await expect(cache.analyze(intent)).rejects.toThrow("temporary");
     await expect(cache.analyze(intent)).resolves.toEqual(result);
     expect(analyze).toHaveBeenCalledTimes(2);

@@ -2,11 +2,11 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import { runAnalytics } from "@/lib/ai-search/analytics";
+import { runAnalytics, runMultiHorizonAnalytics } from "@/lib/ai-search/analytics";
 import { CachedAiSearchDataAdapter } from "@/lib/ai-search/cache";
 import { AI_SEARCH_FIXTURES } from "@/lib/ai-search/fixtures";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import type { AiSearchIntent, AnalyticsEvent, AnalyticsResult } from "@/types/ai-search";
+import type { AiSearchIntent, AnalyticsEvent, AnalyticsResult, MultiHorizonAnalyticsResult } from "@/types/ai-search";
 import { ASSETS, EVENT_CATEGORIES, HORIZONS, SOURCE_TYPES, type Asset, type EventCategory, type Horizon, type SourceType } from "@/types/events";
 
 const MAX_SCAN_ROWS = 10_000;
@@ -74,11 +74,16 @@ export class AiSearchDataError extends Error {
 
 export interface AiSearchDataAdapter {
   analyze(intent: AiSearchIntent): Promise<AnalyticsResult>;
+  analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult>;
 }
 
 export class FixtureAiSearchDataAdapter implements AiSearchDataAdapter {
   async analyze(intent: AiSearchIntent): Promise<AnalyticsResult> {
     return runAnalytics(AI_SEARCH_FIXTURES, intent);
+  }
+
+  async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
+    return runMultiHorizonAnalytics(AI_SEARCH_FIXTURES, intent);
   }
 }
 
@@ -108,9 +113,38 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     }
   }
 
-  private selectColumns(intent: AiSearchIntent): string {
+  async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
+    if (!intent.asset) throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Choose BTC, ETH or SOL.");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
+      const countQuery = this.baseQuery(intent, "exact", true).limit(1).abortSignal(controller.signal);
+      const { error: countError, count } = await executeQuery(countQuery);
+      if (countError) throw new Error(countError.message);
+      if ((count ?? 0) > MAX_SCAN_ROWS) throw new AiSearchDataError("QUERY_TOO_BROAD", "Too many events match. Try a topic or date range.");
+      const rows: ProductionRow[] = [];
+      for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
+        const page = this.baseQuery(intent, undefined, true)
+          .order("event_id", { ascending: true })
+          .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
+          .abortSignal(controller.signal);
+        const { data, error } = await executeQuery(page);
+        if (error) throw new Error(error.message);
+        rows.push(...((data ?? []) as unknown as ProductionRow[]));
+      }
+      return runMultiHorizonAnalytics(this.rowsToEvents(rows, intent, true), intent);
+    } catch (error) {
+      if (error instanceof AiSearchDataError) throw error;
+      throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Historical analytics are temporarily unavailable.");
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  private selectColumns(intent: AiSearchIntent, allHorizons = false): string {
     const reaction = intent.asset && intent.horizon ? REACTION_COLUMN[intent.asset][intent.horizon] : null;
-    return [...PUBLIC_BASE_COLUMNS, ...(reaction ? [reaction] : [])].join(",");
+    const overview = allHorizons && intent.asset ? HORIZONS.map((horizon) => REACTION_COLUMN[intent.asset!][horizon]) : [];
+    return [...PUBLIC_BASE_COLUMNS, ...overview, ...(reaction ? [reaction] : [])].join(",");
   }
 
   private applyFilters(builder: QueryBuilder, intent: AiSearchIntent): QueryBuilder {
@@ -129,10 +163,10 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     return query;
   }
 
-  private baseQuery(intent: AiSearchIntent, count: "exact" | undefined = undefined): QueryBuilder {
+  private baseQuery(intent: AiSearchIntent, count: "exact" | undefined = undefined, allHorizons = false): QueryBuilder {
     const builder = this.client
       .from("events")
-      .select(this.selectColumns(intent), count ? { count } : undefined) as unknown as QueryBuilder;
+      .select(this.selectColumns(intent, allHorizons), count ? { count } : undefined) as unknown as QueryBuilder;
     return this.applyFilters(builder, intent);
   }
 
@@ -193,7 +227,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     return runAnalytics(this.rowsToEvents(rows, intent), intent);
   }
 
-  private rowsToEvents(rows: ProductionRow[], intent: AiSearchIntent): AnalyticsEvent[] {
+  private rowsToEvents(rows: ProductionRow[], intent: AiSearchIntent, allHorizons = false): AnalyticsEvent[] {
     return rows.map((row) => {
       if (!Array.isArray(row.related_assets) || !row.related_assets.every((asset) => ASSETS.includes(asset as Asset))) {
         throw new Error("Invalid related_assets in public analytics row");
@@ -204,10 +238,13 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
         asset,
         Object.fromEntries(HORIZONS.map((horizon) => [horizon, null])),
       ])) as AnalyticsEvent["reactionV2"];
-      if (intent.asset && intent.horizon) {
-        const raw = row[REACTION_COLUMN[intent.asset][intent.horizon]];
-        if (raw !== null && typeof raw !== "number") throw new Error("Invalid Reaction V2 value");
-        reactionV2[intent.asset][intent.horizon] = raw as number | null;
+      if (intent.asset && (intent.horizon || allHorizons)) {
+        const selectedHorizons = allHorizons ? HORIZONS : [intent.horizon!];
+        for (const horizon of selectedHorizons) {
+          const raw = row[REACTION_COLUMN[intent.asset][horizon]];
+          if (raw !== null && typeof raw !== "number") throw new Error("Invalid Reaction V2 value");
+          reactionV2[intent.asset][horizon] = raw as number | null;
+        }
       }
       const sentiment = row.sentiment === "positive" || row.sentiment === "bullish"
         ? "positive"
