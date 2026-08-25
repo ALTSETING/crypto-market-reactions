@@ -5,7 +5,8 @@ import type { AiSearchIntent, AnalyticsResult } from "@/types/ai-search";
 
 const intent: AiSearchIntent = {
   intent: "count", asset: "BTC", dateFrom: null, dateTo: null, category: null,
-  sourceClass: null, sentiment: null, importance: null, horizon: null, metric: "count",
+  topic: null, sourceClass: null, sentiment: null, reactionSign: null, importance: null,
+  horizon: null, metric: "count",
   sort: "newest", groupBy: "none", comparison: null, limit: 10,
 };
 const result: AnalyticsResult = { kind: "count", value: 2, sampleSize: 2, citations: [] };

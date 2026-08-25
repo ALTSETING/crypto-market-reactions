@@ -4,8 +4,8 @@ import { OpenAiIntentProvider } from "@/lib/ai-search/provider";
 
 const validIntent = {
   intent: "count", asset: "ETH", dateFrom: "2023-01-01", dateTo: "2023-12-31",
-  category: null, sourceClass: null, sentiment: "positive", importance: null,
-  horizon: null, metric: "count", sort: "newest", groupBy: "none", comparison: null, limit: 10,
+  category: null, topic: null, sourceClass: null, sentiment: null, reactionSign: "positive", importance: null,
+  horizon: "24h", metric: "count", sort: "newest", groupBy: "none", comparison: null, limit: 10,
 };
 const validResolution = { status: "ready", intent: validIntent, message: null };
 

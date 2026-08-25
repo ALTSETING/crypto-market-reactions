@@ -28,6 +28,7 @@ const PUBLIC_BASE_COLUMNS = [
 interface QueryBuilder {
   contains(column: string, value: unknown): QueryBuilder;
   gte(column: string, value: unknown): QueryBuilder;
+  gt(column: string, value: unknown): QueryBuilder;
   lte(column: string, value: unknown): QueryBuilder;
   lt(column: string, value: unknown): QueryBuilder;
   eq(column: string, value: unknown): QueryBuilder;
@@ -98,9 +99,15 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
       if (intent.intent === "search" || intent.intent === "count") {
-        return await this.runCountOrSearch(intent, controller.signal);
+        return intent.topic
+          ? await this.runTopicCountOrSearch(intent, controller.signal)
+          : await this.runCountOrSearch(intent, controller.signal);
       }
-      if (intent.intent === "rank") return await this.runRanking(intent, controller.signal);
+      if (intent.intent === "rank") {
+        return intent.topic
+          ? await this.runTopicRanking(intent, controller.signal)
+          : await this.runRanking(intent, controller.signal);
+      }
       return await this.runAggregate(intent, controller.signal);
     } catch (error) {
       if (error instanceof AiSearchDataError) throw error;
@@ -157,6 +164,10 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     if (intent.sentiment === "positive") query = query.in("sentiment", ["positive", "bullish"]);
     if (intent.sentiment === "negative") query = query.in("sentiment", ["negative", "bearish"]);
     if (intent.sentiment === "neutral") query = query.eq("sentiment", "neutral");
+    if (intent.reactionSign && intent.asset && intent.horizon) {
+      const reactionColumn = REACTION_COLUMN[intent.asset][intent.horizon];
+      query = intent.reactionSign === "positive" ? query.gt(reactionColumn, 0) : query.lt(reactionColumn, 0);
+    }
     if (intent.importance === "low") query = query.lt("importance", 0.33);
     if (intent.importance === "medium") query = query.gte("importance", 0.33).lt("importance", 0.67);
     if (intent.importance === "high") query = query.gte("importance", 0.67);
@@ -187,6 +198,26 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     throw new Error("Unexpected bounded analytics result");
   }
 
+  private async runTopicCountOrSearch(intent: AiSearchIntent, signal: AbortSignal): Promise<AnalyticsResult> {
+    const countQuery = this.baseQuery(intent, "exact").limit(1).abortSignal(signal);
+    const { error: countError, count } = await executeQuery(countQuery);
+    if (countError) throw new Error(countError.message);
+    if ((count ?? 0) > MAX_SCAN_ROWS) {
+      throw new AiSearchDataError("QUERY_TOO_BROAD", "Too many events match. Add an asset, date, category, or source filter.");
+    }
+    const rows: ProductionRow[] = [];
+    for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
+      const page = this.baseQuery(intent)
+        .order("event_id", { ascending: true })
+        .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
+        .abortSignal(signal);
+      const { data, error } = await executeQuery(page);
+      if (error) throw new Error(error.message);
+      rows.push(...((data ?? []) as unknown as ProductionRow[]));
+    }
+    return runAnalytics(this.rowsToEvents(rows, intent), intent);
+  }
+
   private async runRanking(intent: AiSearchIntent, signal: AbortSignal): Promise<AnalyticsResult> {
     if (!intent.asset || !intent.horizon) throw new Error("Validated ranking is missing asset or horizon");
     const reactionColumn = REACTION_COLUMN[intent.asset][intent.horizon];
@@ -203,10 +234,35 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     return { ...result, sampleSize: count ?? 0 };
   }
 
+  private async runTopicRanking(intent: AiSearchIntent, signal: AbortSignal): Promise<AnalyticsResult> {
+    if (!intent.asset || !intent.horizon) throw new Error("Validated ranking is missing asset or horizon");
+    const countQuery = this.baseQuery(intent, "exact")
+      .limit(1)
+      .abortSignal(signal);
+    const { error: countError, count } = await executeQuery(countQuery);
+    if (countError) throw new Error(countError.message);
+    if ((count ?? 0) > MAX_SCAN_ROWS) {
+      throw new AiSearchDataError("QUERY_TOO_BROAD", "Too many events match. Add an asset, date, category, or source filter.");
+    }
+    const rows: ProductionRow[] = [];
+    for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
+      const page = this.baseQuery(intent)
+        .order("event_id", { ascending: true })
+        .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
+        .abortSignal(signal);
+      const { data, error } = await executeQuery(page);
+      if (error) throw new Error(error.message);
+      rows.push(...((data ?? []) as unknown as ProductionRow[]));
+    }
+    return runAnalytics(this.rowsToEvents(rows, intent), intent);
+  }
+
   private async runAggregate(intent: AiSearchIntent, signal: AbortSignal): Promise<AnalyticsResult> {
     if (!intent.asset || !intent.horizon) throw new Error("Validated aggregate is missing asset or horizon");
     const reactionColumn = REACTION_COLUMN[intent.asset][intent.horizon];
-    const countQuery = this.baseQuery(intent, "exact").not(reactionColumn, "is", null).limit(1).abortSignal(signal);
+    let countQuery = this.baseQuery(intent, "exact");
+    if (!intent.topic) countQuery = countQuery.not(reactionColumn, "is", null);
+    countQuery = countQuery.limit(1).abortSignal(signal);
     const { error: countError, count } = await executeQuery(countQuery);
     if (countError) throw new Error(countError.message);
     if ((count ?? 0) > MAX_SCAN_ROWS) {
@@ -215,9 +271,9 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
 
     const rows: ProductionRow[] = [];
     for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
-      const page = this.baseQuery(intent)
-        .not(reactionColumn, "is", null)
-        .order("event_id", { ascending: true })
+      let page = this.baseQuery(intent);
+      if (!intent.topic) page = page.not(reactionColumn, "is", null);
+      page = page.order("event_id", { ascending: true })
         .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
         .abortSignal(signal);
       const { data, error } = await executeQuery(page);

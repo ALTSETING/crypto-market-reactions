@@ -1,10 +1,11 @@
 import { SOURCE_TYPE_LABELS } from "@/types/events";
 import type { AnalyticsResult } from "@/types/ai-search";
+import { formatPercent } from "@/lib/ai-search/format";
 
 const number = (value: number | null): string => value === null
   ? "—"
   : String(Math.round((value + Number.EPSILON) * 100) / 100);
-const percent = (value: number | null): string => value === null ? "—" : `${number(value)}%`;
+const percent = (value: number | null): string => formatPercent(value);
 
 export function groundedAnswer(result: AnalyticsResult): { answer: string; calculation: string } {
   const empty = result.kind === "search" ? result.matched === 0
@@ -30,7 +31,7 @@ export function groundedAnswer(result: AnalyticsResult): { answer: string; calcu
       };
     case "share":
       return {
-        answer: `Positive: ${percent(result.positivePercent)}; negative: ${percent(result.negativePercent)}; neutral: ${percent(result.neutralPercent)}.`,
+        answer: `Positive: ${formatPercent(result.positivePercent, false)}; negative: ${formatPercent(result.negativePercent, false)}; neutral: ${formatPercent(result.neutralPercent, false)}.`,
         calculation: `Sign shares over ${result.sampleSize} non-null historical reaction observations.`,
       };
     case "ranking":

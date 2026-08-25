@@ -2,7 +2,9 @@
 
 import { FormEvent, useState } from "react";
 
-import type { AiSearchErrorBody, AiSearchSuccess } from "@/types/ai-search";
+import { AI_TOPIC_LABELS, type AiSearchErrorBody, type AiSearchSuccess } from "@/types/ai-search";
+import { formatPercent } from "@/lib/ai-search/format";
+import { SOURCE_TYPE_LABELS } from "@/types/events";
 
 const EXAMPLES = [
   "How did ETH react to ETF news?",
@@ -100,9 +102,14 @@ export function AiSearch() {
 }
 
 function AiResult({ data }: { data: AiSearchSuccess }) {
-  const formatPercent = (value: number | null) => value === null ? "—" : `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
   const metricLabel = data.result.kind === "count" ? "Count" : data.result.kind === "ranking" ? "Reaction ranking" : data.result.kind === "multi_horizon" ? "Reaction overview" : data.intent.metric === "mean" ? "Average reaction" : data.intent.metric === "median" ? "Median reaction" : "Historical events";
-  const chips = [data.intent.asset, data.intent.horizon, data.intent.sourceClass, data.intent.category].filter(Boolean);
+  const chips = [
+    data.intent.asset,
+    data.intent.horizon,
+    data.intent.topic ? AI_TOPIC_LABELS[data.intent.topic] : null,
+    data.intent.sourceClass ? SOURCE_TYPE_LABELS[data.intent.sourceClass] : null,
+    data.intent.category ? data.intent.category.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase()) : null,
+  ].filter((chip): chip is string => Boolean(chip));
   const sampleSize = data.result.kind === "search"
     ? data.result.matched
     : data.result.kind === "comparison"
@@ -123,6 +130,12 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
         <div><dt className="text-slate-500">Metric</dt><dd className="text-slate-200">{metricLabel}</dd></div>
         <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
       </dl>
+      {data.result.topicFilter && (
+        <p className="mt-3 text-sm text-slate-400">
+          Topic match: <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize}</span>
+          {" of "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> broadly filtered events
+        </p>
+      )}
       {data.result.kind === "multi_horizon" && sampleSize > 0 && (
         <div className="mt-4 overflow-x-auto rounded-lg border border-white/10 text-sm">
           <div className="grid min-w-[540px] grid-cols-5 bg-white/[0.04] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -133,7 +146,7 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
               <span className="font-medium text-slate-200">{row.horizon}</span>
               <span className="text-right text-white">{formatPercent(row.mean)}</span>
               <span className="text-right text-white">{formatPercent(row.median)}</span>
-              <span className="text-right text-white">{row.positivePercent === null ? "—" : `${row.positivePercent.toFixed(1)}%`}</span>
+              <span className="text-right text-white">{formatPercent(row.positivePercent, false, 2)}</span>
               <span className="text-right text-slate-500">{row.sampleSize}</span>
             </div>
           ))}

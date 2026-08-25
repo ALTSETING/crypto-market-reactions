@@ -13,7 +13,7 @@ describe("AI Search usable defaults", () => {
     const response = await executeAiSearch("Як ефір реагує на новини ETF?", provider, adapter);
     expect(response.statusCode).toBe(200);
     if (response.statusCode !== 200) throw new Error("Expected a grounded result");
-    expect(response.body.intent).toMatchObject({ asset: "ETH", category: "etf", horizon: null, metric: "mean" });
+    expect(response.body.intent).toMatchObject({ asset: "ETH", category: null, topic: "etf", horizon: null, metric: "mean" });
     expect(response.body.result).toMatchObject({ kind: "multi_horizon" });
     if (response.body.result.kind !== "multi_horizon") throw new Error("Expected multi-horizon analytics");
     expect(response.body.result.rows.map(({ horizon }) => horizon)).toEqual(["1m", "5m", "15m", "1h", "4h", "24h"]);
@@ -21,12 +21,12 @@ describe("AI Search usable defaults", () => {
 
   it("counts positive ETH events across the full stated year", async () => {
     const response = await executeAiSearch("How many positive ETH events were there in 2023?", provider, adapter);
-    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", metric: "count", dateFrom: "2023-01-01", dateTo: "2023-12-31" } } });
+    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", metric: "count", reactionSign: "positive", sentiment: null, horizon: "24h", dateFrom: "2023-01-01", dateTo: "2023-12-31" } } });
   });
 
   it("uses only explicit 24h for ETH SEC filings in 2024", async () => {
     const response = await executeAiSearch("How did ETH react to SEC filings in 2024 after 24h?", provider, adapter);
-    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", category: "regulation", horizon: "24h", metric: "mean" }, result: { kind: "scalar" } } });
+    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", category: null, topic: "sec_filings", horizon: "24h", metric: "mean" }, result: { kind: "scalar" } } });
   });
 
   it("uses a human empty state when no events match", async () => {
@@ -36,7 +36,7 @@ describe("AI Search usable defaults", () => {
 
   it("rounds percentages to at most two decimals", () => {
     const output = groundedAnswer({ kind: "share", positivePercent: 33.333333, negativePercent: 66.666667, neutralPercent: 0, sampleSize: 3, unit: "percent", citations: [] });
-    expect(output.answer).toBe("Positive: 33.33%; negative: 66.67%; neutral: 0%.");
+    expect(output.answer).toBe("Positive: 33.33%; negative: 66.67%; neutral: 0.00%.");
   });
 
   it("ranks the ten biggest SOL news-media drops at 1h", async () => {
@@ -51,12 +51,12 @@ describe("AI Search usable defaults", () => {
 
   it("recognizes Ukrainian bitcoin and SEC", async () => {
     const response = await executeAiSearch("Як біткоїн реагував на рішення SEC?", provider, adapter);
-    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "BTC", category: "regulation", horizon: null }, result: { kind: "multi_horizon" } } });
+    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "BTC", category: null, topic: "sec", horizon: null }, result: { kind: "multi_horizon" } } });
   });
 
   it("infers median for a Ukrainian ETH ETF question", async () => {
     const response = await executeAiSearch("Яка медіана ETH після ETF новин?", provider, adapter);
-    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", category: "etf", metric: "median", horizon: null }, result: { kind: "multi_horizon" } } });
+    expect(response).toMatchObject({ statusCode: 200, body: { intent: { asset: "ETH", category: null, topic: "etf", metric: "median", horizon: null }, result: { kind: "multi_horizon" } } });
   });
 
   it("asks only for the asset when the market is genuinely ambiguous", async () => {
