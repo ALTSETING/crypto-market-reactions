@@ -1,0 +1,143 @@
+{
+  "generated_at": "2026-08-26T09:18:18.374061+00:00",
+  "audit_mode": "read_only",
+  "production_events_n": 9073,
+  "production_event_at_n": 0,
+  "production_event_at_coverage_pct": 0.0,
+  "sample_n": 120,
+  "sample_by_source_class": {
+    "news_media": 60,
+    "primary_document": 60
+  },
+  "sample_event_at_n": 0,
+  "sample_manual_canonical_truth_n": 0,
+  "high_confidence_news_primary_pair_n": 0,
+  "measured_reaction_pair_cells_n": 0,
+  "lag_metrics": [
+    {
+      "source_class": "news_media",
+      "sample_n": 60,
+      "event_at_n": 0,
+      "event_at_coverage_pct": 0.0,
+      "valid_nonnegative_lag_n": 0,
+      "negative_lag_n": 0,
+      "median_lag_minutes": null,
+      "p75_lag_minutes": null,
+      "p90_lag_minutes": null,
+      "pct_lag_gt_5m": null,
+      "pct_lag_gt_15m": null,
+      "pct_lag_gt_1h": null,
+      "status": "unavailable"
+    },
+    {
+      "source_class": "primary_document",
+      "sample_n": 60,
+      "event_at_n": 0,
+      "event_at_coverage_pct": 0.0,
+      "valid_nonnegative_lag_n": 0,
+      "negative_lag_n": 0,
+      "median_lag_minutes": null,
+      "p75_lag_minutes": null,
+      "p90_lag_minutes": null,
+      "pct_lag_gt_5m": null,
+      "pct_lag_gt_15m": null,
+      "pct_lag_gt_1h": null,
+      "status": "unavailable"
+    }
+  ],
+  "reaction_bias": [
+    {
+      "horizon": "1m",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    },
+    {
+      "horizon": "5m",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    },
+    {
+      "horizon": "15m",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    },
+    {
+      "horizon": "1h",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    },
+    {
+      "horizon": "4h",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    },
+    {
+      "horizon": "24h",
+      "eligible_pair_n": 0,
+      "complete_pair_n": 0,
+      "article_anchor_mean_pct": null,
+      "primary_anchor_mean_pct": null,
+      "mean_delta_pp": null,
+      "median_abs_delta_pp": null,
+      "direction_flip_n": 0,
+      "direction_flip_pct": null,
+      "status": "unavailable"
+    }
+  ],
+  "contextual_reaction_start_evidence": {
+    "status": "available_context_only",
+    "interpretation": "Market pre-move diagnostics are proxies, not canonical event-time pairs.",
+    "artifacts": [
+      "reports/stage13a_eth_summary.json",
+      "reports/stage135_publication_delay.csv",
+      "data/stage135/market_futures_primary_timing.parquet"
+    ],
+    "stage13a_events_analyzed": 6851,
+    "stage13a_late_publication_proxy_rate_0_10pct": 0.2839001605605021,
+    "stage13a_conclusion": "PUBLISHED_AT_OFTEN_LAGS_MARKET_MOVE",
+    "stage135_overall_late_publication_proxy_rate_0_10pct": 0.3466647204787622,
+    "stage135_primary_timing_rows": 6851,
+    "stage135_pre_primary_source_found_n": 0,
+    "canonical_pair_usable": false
+  },
+  "evidence_status": "insufficient",
+  "decision_gate": "B",
+  "recommendation": "Plan Reaction V3 around a separately reviewed canonical event timestamp; do not build or migrate V3 in this task, and leave all Reaction V2 values unchanged.",
+  "recommendation_caveat": "Exact canonical lag and reaction deltas remain unavailable. However, zero canonical coverage plus a material prior pre-publication-move subset make Reaction V2 insufficient for claims about reaction from the event itself.",
+  "v3_evidence_required": "Populate a separately reviewed canonical timestamp set, link news articles to primary announcements, then rerun lag and reaction-anchor comparisons before a V3 decision."
+}

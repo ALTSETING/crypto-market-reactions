@@ -35,7 +35,7 @@ describe("AI Search usable defaults", () => {
   });
 
   it("rounds percentages to at most two decimals", () => {
-    const output = groundedAnswer({ kind: "share", positivePercent: 33.333333, negativePercent: 66.666667, neutralPercent: 0, sampleSize: 3, unit: "percent", citations: [] });
+    const output = groundedAnswer({ kind: "share", positivePercent: 33.333333, negativePercent: 66.666667, neutralPercent: 0, positive95Ci: { low: 6.149, high: 79.234 }, sampleSize: 3, unit: "percent", citations: [] });
     expect(output.answer).toBe("Positive: 33.33%; negative: 66.67%; neutral: 0.00%.");
   });
 

@@ -6,6 +6,7 @@ import { runAnalytics, runMultiHorizonAnalytics } from "@/lib/ai-search/analytic
 import { CachedAiSearchDataAdapter } from "@/lib/ai-search/cache";
 import { AI_SEARCH_FIXTURES } from "@/lib/ai-search/fixtures";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { requiresSemanticMatching } from "@/lib/ai-search/semantic-matcher";
 import type { AiSearchIntent, AnalyticsEvent, AnalyticsResult, MultiHorizonAnalyticsResult } from "@/types/ai-search";
 import { ASSETS, EVENT_CATEGORIES, HORIZONS, SOURCE_TYPES, type Asset, type EventCategory, type Horizon, type SourceType } from "@/types/events";
 
@@ -21,7 +22,7 @@ const REACTION_COLUMN: Record<Asset, Record<Horizon, string>> = Object.fromEntri
 ) as Record<Asset, Record<Horizon, string>>;
 
 const PUBLIC_BASE_COLUMNS = [
-  "event_id", "slug", "title", "published_at", "related_assets", "category",
+  "event_id", "slug", "title", "published_at", "primary_asset", "related_assets", "category",
   "source_class_v2", "sentiment", "importance",
 ] as const;
 
@@ -56,6 +57,7 @@ interface ProductionRow {
   title: string;
   published_at: string;
   related_assets: unknown;
+  primary_asset: unknown;
   category: unknown;
   source_class_v2: unknown;
   sentiment: unknown;
@@ -99,12 +101,12 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
       if (intent.intent === "search" || intent.intent === "count") {
-        return intent.topic
+        return requiresSemanticMatching(intent)
           ? await this.runTopicCountOrSearch(intent, controller.signal)
           : await this.runCountOrSearch(intent, controller.signal);
       }
       if (intent.intent === "rank") {
-        return intent.topic
+        return requiresSemanticMatching(intent)
           ? await this.runTopicRanking(intent, controller.signal)
           : await this.runRanking(intent, controller.signal);
       }
@@ -261,7 +263,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     if (!intent.asset || !intent.horizon) throw new Error("Validated aggregate is missing asset or horizon");
     const reactionColumn = REACTION_COLUMN[intent.asset][intent.horizon];
     let countQuery = this.baseQuery(intent, "exact");
-    if (!intent.topic) countQuery = countQuery.not(reactionColumn, "is", null);
+    if (!requiresSemanticMatching(intent)) countQuery = countQuery.not(reactionColumn, "is", null);
     countQuery = countQuery.limit(1).abortSignal(signal);
     const { error: countError, count } = await executeQuery(countQuery);
     if (countError) throw new Error(countError.message);
@@ -272,7 +274,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
     const rows: ProductionRow[] = [];
     for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
       let page = this.baseQuery(intent);
-      if (!intent.topic) page = page.not(reactionColumn, "is", null);
+      if (!requiresSemanticMatching(intent)) page = page.not(reactionColumn, "is", null);
       page = page.order("event_id", { ascending: true })
         .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
         .abortSignal(signal);
@@ -290,6 +292,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
       }
       if (!EVENT_CATEGORIES.includes(row.category as EventCategory)) throw new Error("Invalid category in public analytics row");
       if (!SOURCE_TYPES.includes(row.source_class_v2 as SourceType)) throw new Error("Invalid source class in public analytics row");
+      if (row.primary_asset != null && !ASSETS.includes(row.primary_asset as Asset)) throw new Error("Invalid primary asset in public analytics row");
       const reactionV2 = Object.fromEntries(ASSETS.map((asset) => [
         asset,
         Object.fromEntries(HORIZONS.map((horizon) => [horizon, null])),
@@ -316,6 +319,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
         title: row.title,
         publishedAt: row.published_at,
         assets: row.related_assets as Asset[],
+        primaryAsset: (row.primary_asset ?? null) as Asset | null,
         category: row.category as EventCategory,
         sourceClass: row.source_class_v2 as SourceType,
         sentiment,

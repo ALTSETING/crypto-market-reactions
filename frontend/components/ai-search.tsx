@@ -7,10 +7,10 @@ import { formatPercent } from "@/lib/ai-search/format";
 import { SOURCE_TYPE_LABELS } from "@/types/events";
 
 const EXAMPLES = [
-  "How did ETH react to ETF news?",
-  "Biggest SOL drops after news media at 1h",
-  "BTC reaction to SEC actions",
-  "How many positive ETH events were there in 2023?",
+  "How does ETH react to large institutional purchases?",
+  "How does ETH react to sales by large investors?",
+  "How does BTC react to ETF inflows?",
+  "How does SOL react to large purchases?",
 ] as const;
 const QUICK_FILTERS = ["BTC", "ETH", "SOL", "ETF", "SEC", "Macro"] as const;
 
@@ -107,6 +107,9 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
     data.intent.asset,
     data.intent.horizon,
     data.intent.topic ? AI_TOPIC_LABELS[data.intent.topic] : null,
+    data.intent.direction !== "unknown" ? data.intent.direction === "inflow" ? "Capital inflow" : data.intent.direction === "outflow" ? "Capital outflow" : "Neutral direction" : null,
+    data.intent.magnitude === "large" ? "Large transactions (≥ $50M)" : null,
+    data.intent.assetRole === "primary" ? "Primary asset only" : data.intent.assetRole === "secondary" ? "Secondary context" : null,
     data.intent.sourceClass ? SOURCE_TYPE_LABELS[data.intent.sourceClass] : null,
     data.intent.category ? data.intent.category.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase()) : null,
   ].filter((chip): chip is string => Boolean(chip));
@@ -132,9 +135,24 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
       </dl>
       {data.result.topicFilter && (
         <p className="mt-3 text-sm text-slate-400">
-          Topic match: <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize}</span>
-          {" of "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> broadly filtered events
+          Matched <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize} high-relevance events</span>
+          {" from "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> bounded candidates
+          {data.result.topicFilter.heuristicMatches > 0 ? ` (${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches)` : ""}.
         </p>
+      )}
+      {sampleSize > 0 && sampleSize < 10 && (
+        <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
+          {sampleSize < 5 ? "Very small sample — statistical reliability is low." : "Small sample — interpret cautiously."}
+        </p>
+      )}
+      {data.result.kind === "scalar" && data.result.sampleSize > 0 && (
+        <p className="mt-2 text-xs text-slate-500">
+          5% trimmed mean: {formatPercent(data.result.trimmedMean5Percent)}
+          {data.result.standardDeviation !== null ? ` · SD ${formatPercent(data.result.standardDeviation, false)} · SE ${formatPercent(data.result.standardError, false)}` : ""}
+        </p>
+      )}
+      {data.result.kind === "share" && data.result.positive95Ci && (
+        <p className="mt-2 text-xs text-slate-500">Positive-share 95% CI: {formatPercent(data.result.positive95Ci.low, false)}–{formatPercent(data.result.positive95Ci.high, false)}</p>
       )}
       {data.result.kind === "multi_horizon" && sampleSize > 0 && (
         <div className="mt-4 overflow-x-auto rounded-lg border border-white/10 text-sm">

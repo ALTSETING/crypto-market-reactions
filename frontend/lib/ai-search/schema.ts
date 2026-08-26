@@ -1,6 +1,12 @@
 import {
+  AI_ACTIONS,
+  AI_ACTOR_TYPES,
+  AI_AMOUNT_CURRENCIES,
+  AI_ASSET_ROLES,
+  AI_DIRECTIONS,
   AI_IMPORTANCE,
   AI_INTENTS,
+  AI_MAGNITUDES,
   AI_METRICS,
   AI_REACTION_SIGNS,
   AI_SENTIMENTS,
@@ -14,6 +20,7 @@ export const AI_SEARCH_MAX_QUESTION_LENGTH = 500;
 export const AI_SEARCH_MAX_LIMIT = 50;
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const NORMALIZED_ENTITY = /^[\p{L}\p{N}][\p{L}\p{N} .&'’_-]{0,79}$/u;
 
 export class IntentValidationError extends Error {
   readonly code = "INVALID_INTENT";
@@ -49,7 +56,8 @@ export function validateIntent(input: unknown): AiSearchIntent {
   }
   const value = input as Record<string, unknown>;
   const allowedKeys = new Set([
-    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "sourceClass", "sentiment",
+    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "actorType", "action", "direction",
+    "magnitude", "amount", "entity", "assetRole", "sourceClass", "sentiment",
     "reactionSign", "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
   ]);
   if (Object.keys(value).some((key) => !allowedKeys.has(key))) {
@@ -62,6 +70,31 @@ export function validateIntent(input: unknown): AiSearchIntent {
   const dateTo = nullableDate(value.dateTo, "dateTo");
   const category = nullableEnum(value.category, EVENT_CATEGORIES, "category");
   const topic = nullableEnum(value.topic, AI_TOPICS, "topic");
+  const actorType = enumValue(value.actorType ?? "unknown", AI_ACTOR_TYPES, "actorType");
+  const action = nullableEnum(value.action ?? null, AI_ACTIONS, "action");
+  const direction = enumValue(value.direction ?? "unknown", AI_DIRECTIONS, "direction");
+  const magnitude = enumValue(value.magnitude ?? "unknown", AI_MAGNITUDES, "magnitude");
+  const assetRole = enumValue(value.assetRole ?? (asset ? "primary" : "any"), AI_ASSET_ROLES, "assetRole");
+  let amount: AiSearchIntent["amount"] = null;
+  if (value.amount !== null && value.amount !== undefined) {
+    if (!value.amount || typeof value.amount !== "object" || Array.isArray(value.amount)) {
+      throw new IntentValidationError("amount must be null or a bounded object.");
+    }
+    const candidate = value.amount as Record<string, unknown>;
+    if (Object.keys(candidate).sort().join(",") !== "currency,value") {
+      throw new IntentValidationError("amount contains unsupported fields.");
+    }
+    const currency = enumValue(candidate.currency, AI_AMOUNT_CURRENCIES, "amount.currency");
+    if (typeof candidate.value !== "number" || !Number.isFinite(candidate.value) || candidate.value <= 0 || candidate.value > 1_000_000_000_000_000) {
+      throw new IntentValidationError("amount.value is outside the supported range.");
+    }
+    amount = { currency, value: candidate.value };
+  }
+  const entity = value.entity === null || value.entity === undefined
+    ? null
+    : typeof value.entity === "string" && NORMALIZED_ENTITY.test(value.entity) && value.entity === value.entity.normalize("NFKC").trim()
+      ? value.entity
+      : (() => { throw new IntentValidationError("entity must be a bounded normalized value."); })();
   const sourceClass = nullableEnum(value.sourceClass, SOURCE_TYPES, "sourceClass");
   const sentiment = nullableEnum(value.sentiment, AI_SENTIMENTS, "sentiment");
   const reactionSign = nullableEnum(value.reactionSign, AI_REACTION_SIGNS, "reactionSign");
@@ -114,7 +147,8 @@ export function validateIntent(input: unknown): AiSearchIntent {
   }
 
   return {
-    intent, asset, dateFrom, dateTo, category, topic, sourceClass, sentiment, reactionSign, importance,
+    intent, asset, dateFrom, dateTo, category, topic, actorType, action, direction, magnitude, amount, entity, assetRole,
+    sourceClass, sentiment, reactionSign, importance,
     horizon, metric, sort, groupBy, comparison, limit: value.limit as number,
   };
 }
@@ -123,7 +157,8 @@ export const AI_INTENT_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: [
-    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "sourceClass", "sentiment",
+    "intent", "asset", "dateFrom", "dateTo", "category", "topic", "actorType", "action", "direction",
+    "magnitude", "amount", "entity", "assetRole", "sourceClass", "sentiment",
     "reactionSign", "importance", "horizon", "metric", "sort", "groupBy", "comparison", "limit",
   ],
   properties: {
@@ -133,6 +168,24 @@ export const AI_INTENT_JSON_SCHEMA = {
     dateTo: { anyOf: [{ type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" }, { type: "null" }] },
     category: { anyOf: [{ type: "string", enum: EVENT_CATEGORIES }, { type: "null" }] },
     topic: { anyOf: [{ type: "string", enum: AI_TOPICS }, { type: "null" }] },
+    actorType: { type: "string", enum: AI_ACTOR_TYPES },
+    action: { anyOf: [{ type: "string", enum: AI_ACTIONS }, { type: "null" }] },
+    direction: { type: "string", enum: AI_DIRECTIONS },
+    magnitude: { type: "string", enum: AI_MAGNITUDES },
+    amount: {
+      anyOf: [
+        { type: "null" },
+        {
+          type: "object", additionalProperties: false, required: ["currency", "value"],
+          properties: {
+            currency: { type: "string", enum: AI_AMOUNT_CURRENCIES },
+            value: { type: "number", exclusiveMinimum: 0, maximum: 1_000_000_000_000_000 },
+          },
+        },
+      ],
+    },
+    entity: { anyOf: [{ type: "string", minLength: 1, maxLength: 80, pattern: "^[\\p{L}\\p{N}][\\p{L}\\p{N} .&'’_-]{0,79}$" }, { type: "null" }] },
+    assetRole: { type: "string", enum: AI_ASSET_ROLES },
     sourceClass: { anyOf: [{ type: "string", enum: SOURCE_TYPES }, { type: "null" }] },
     sentiment: { anyOf: [{ type: "string", enum: AI_SENTIMENTS }, { type: "null" }] },
     reactionSign: { anyOf: [{ type: "string", enum: AI_REACTION_SIGNS }, { type: "null" }] },

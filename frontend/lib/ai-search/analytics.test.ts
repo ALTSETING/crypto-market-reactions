@@ -7,7 +7,8 @@ import type { AiSearchIntent } from "@/types/ai-search";
 
 const base: AiSearchIntent = {
   intent: "aggregate", asset: "ETH", dateFrom: "2024-01-01", dateTo: "2024-12-31",
-  category: "regulation", topic: null, sourceClass: "primary_document", sentiment: null,
+  category: "regulation", topic: null, actorType: "unknown", action: null, direction: "unknown",
+  magnitude: "unknown", amount: null, entity: null, assetRole: "any", sourceClass: "primary_document", sentiment: null,
   reactionSign: null, importance: null,
   horizon: "24h", metric: "mean", sort: "newest", groupBy: "none", comparison: null, limit: 50,
 };

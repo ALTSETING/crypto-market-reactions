@@ -73,6 +73,12 @@ const TOPIC_PATTERNS: Record<AiTopic, readonly RegExp[]> = {
     /\binstitutional\s+(?:buy|buys|buyer|purchase|purchases|purchased)\b/iu,
     /\btreasury\s+(?:buy|buys|purchase|purchases|purchased|reserve)\b/iu,
   ],
+  institutional_selling: [
+    /\binstitutional\s+(?:sell|sells|selling|sales)\b/iu,
+    /\b(?:fund|institution|whale|investor)\b[^.]{0,60}\b(?:sell|sells|sold|redemptions?)\b/iu,
+  ],
+  capital_inflow: [/\b(?:capital\s+)?inflows?\b/iu],
+  capital_outflow: [/\b(?:capital\s+)?outflows?\b/iu, /\bredemptions?\b/iu],
   funding: [
     /\bfund(?:ing|ed)\b/iu,
     /\bfundrais(?:e|es|ed|ing)\b/iu,
@@ -83,6 +89,9 @@ const TOPIC_PATTERNS: Record<AiTopic, readonly RegExp[]> = {
     /\bacqui(?:res?|red|sition|sitions)\b/iu,
     /\btakeovers?\b/iu,
   ],
+  liquidation: [/\bliquidat(?:e|es|ed|ion|ions)\b/iu],
+  etf_inflow: [/\bETFs?\b[^.]{0,50}\binflows?\b|\binflows?\b[^.]{0,50}\bETFs?\b/iu],
+  etf_outflow: [/\bETFs?\b[^.]{0,50}\boutflows?\b|\boutflows?\b[^.]{0,50}\bETFs?\b/iu],
 };
 
 export function matchesTopic(event: Pick<AnalyticsEvent, "title">, topic: AiTopic): boolean {

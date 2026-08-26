@@ -5,15 +5,21 @@ import type {
   AnalyticsResult,
 } from "@/types/ai-search";
 import type { MultiHorizonAnalyticsResult } from "@/types/ai-search";
-import { matchesTopic } from "@/lib/ai-search/topic-matcher";
+import {
+  classifySemanticEvent,
+  requiresSemanticMatching,
+  SEMANTIC_CONFIDENCE_THRESHOLD,
+  type SemanticEventMatch,
+} from "@/lib/ai-search/semantic-matcher";
 import { HORIZONS } from "@/types/events";
 import type { SourceType } from "@/types/events";
 
 const round = (value: number): number => Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
-const cite = (event: AnalyticsEvent): AiCitation => ({
+const cite = (event: AnalyticsEvent, match?: SemanticEventMatch): AiCitation => ({
   eventId: event.eventId,
   title: event.title,
   href: `/events/${encodeURIComponent(event.slug)}`,
+  ...(match ? { relevanceConfidence: match.confidence, assetRole: match.assetRole } : {}),
 });
 
 function broadFiltered(events: readonly AnalyticsEvent[], intent: AiSearchIntent): AnalyticsEvent[] {
@@ -37,16 +43,26 @@ function broadFiltered(events: readonly AnalyticsEvent[], intent: AiSearchIntent
 function filtered(events: readonly AnalyticsEvent[], intent: AiSearchIntent): {
   matches: AnalyticsEvent[];
   topicFilter: AnalyticsResult["topicFilter"];
+  semanticMatches: Map<string, SemanticEventMatch>;
 } {
   const broad = broadFiltered(events, intent);
-  const matches = intent.topic ? broad.filter((event) => matchesTopic(event, intent.topic!)) : broad;
+  const semanticMatches = new Map<string, SemanticEventMatch>();
+  const semantic = requiresSemanticMatching(intent);
+  const matches = semantic ? broad.filter((event) => {
+    const match = classifySemanticEvent(event, intent);
+    if (match.matched) semanticMatches.set(event.eventId, match);
+    return match.matched;
+  }) : broad;
   return {
     matches,
     topicFilter: intent.topic ? {
       topic: intent.topic,
       broadSampleSize: broad.length,
       matchedSampleSize: matches.length,
+      confidenceThreshold: SEMANTIC_CONFIDENCE_THRESHOLD,
+      heuristicMatches: [...semanticMatches.values()].filter(({ confidence }) => confidence === SEMANTIC_CONFIDENCE_THRESHOLD).length,
     } : undefined,
+    semanticMatches,
   };
 }
 
@@ -73,6 +89,35 @@ export function median(numbers: readonly number[]): number | null {
   return sorted.length % 2 === 0 ? round((sorted[middle - 1] + sorted[middle]) / 2) : sorted[middle];
 }
 
+export function standardDeviation(numbers: readonly number[]): number | null {
+  if (numbers.length < 2) return null;
+  const average = numbers.reduce((sum, value) => sum + value, 0) / numbers.length;
+  const variance = numbers.reduce((sum, value) => sum + ((value - average) ** 2), 0) / (numbers.length - 1);
+  return round(Math.sqrt(variance));
+}
+
+export function standardError(numbers: readonly number[]): number | null {
+  const deviation = standardDeviation(numbers);
+  return deviation === null ? null : round(deviation / Math.sqrt(numbers.length));
+}
+
+export function trimmedMean(numbers: readonly number[], fraction = 0.05): number | null {
+  if (numbers.length === 0) return null;
+  const sorted = [...numbers].sort((a, b) => a - b);
+  const trim = Math.floor(sorted.length * fraction);
+  return mean(trim > 0 && trim * 2 < sorted.length ? sorted.slice(trim, -trim) : sorted);
+}
+
+export function wilson95Interval(successes: number, sampleSize: number): { low: number; high: number } | null {
+  if (sampleSize === 0) return null;
+  const z = 1.959963984540054;
+  const proportion = successes / sampleSize;
+  const denominator = 1 + (z * z) / sampleSize;
+  const center = (proportion + (z * z) / (2 * sampleSize)) / denominator;
+  const margin = z * Math.sqrt((proportion * (1 - proportion) + (z * z) / (4 * sampleSize)) / sampleSize) / denominator;
+  return { low: round(Math.max(0, (center - margin) * 100)), high: round(Math.min(100, (center + margin) * 100)) };
+}
+
 function comparisonSide(
   rows: Array<{ event: AnalyticsEvent; value: number }>,
   sourceClass: SourceType,
@@ -85,24 +130,25 @@ function comparisonSide(
 export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearchIntent): AnalyticsResult {
   const filteredResult = filtered(events, intent);
   const matches = filteredResult.matches.sort(stableNewest);
+  const semanticMatch = (event: AnalyticsEvent) => filteredResult.semanticMatches.get(event.eventId);
   const topic = filteredResult.topicFilter ? { topicFilter: filteredResult.topicFilter } : {};
   if (intent.intent === "search") {
     const selected = (intent.sort === "oldest" ? [...matches].reverse() : matches).slice(0, intent.limit);
-    return { kind: "search", matched: matches.length, returned: selected.length, citations: selected.map(cite), ...topic };
+    return { kind: "search", matched: matches.length, returned: selected.length, citations: selected.map((event) => cite(event, semanticMatch(event))), ...topic };
   }
   if (intent.intent === "count") {
     const selected = matches.slice(0, intent.limit);
-    return { kind: "count", value: matches.length, sampleSize: matches.length, citations: selected.map(cite), ...topic };
+    return { kind: "count", value: matches.length, sampleSize: matches.length, citations: selected.map((event) => cite(event, semanticMatch(event))), ...topic };
   }
 
   const rows = values(matches, intent);
-  const citations = rows.slice(0, intent.limit).map(({ event }) => cite(event));
+  const citations = rows.slice(0, intent.limit).map(({ event }) => cite(event, semanticMatch(event)));
   if (intent.intent === "rank") {
     const direction = intent.sort as "gainers" | "losers";
     const ordered = [...rows].sort((a, b) =>
       (direction === "gainers" ? b.value - a.value : a.value - b.value) || a.event.eventId.localeCompare(b.event.eventId),
     ).slice(0, intent.limit);
-    const items = ordered.map(({ event, value }) => ({ ...cite(event), reaction: value }));
+    const items = ordered.map(({ event, value }) => ({ ...cite(event, semanticMatch(event)), reaction: value }));
     return { kind: "ranking", direction, sampleSize: rows.length, items, unit: "percent", citations: items.map(({ eventId, title, href }) => ({ eventId, title, href })), ...topic };
   }
   if (intent.intent === "compare" && intent.comparison) {
@@ -113,7 +159,7 @@ export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearch
     const comparisonCitations = rows
       .filter(({ event }) => event.sourceClass === intent.comparison!.left || event.sourceClass === intent.comparison!.right)
       .slice(0, intent.limit)
-      .map(({ event }) => cite(event));
+      .map(({ event }) => cite(event, semanticMatch(event)));
     return { kind: "comparison", metric, left, right, difference, unit: "percentage_points", citations: comparisonCitations, ...topic };
   }
   if (intent.metric === "sign_share") {
@@ -121,11 +167,15 @@ export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearch
     const negative = rows.filter(({ value }) => value < 0).length;
     const neutral = rows.length - positive - negative;
     const percent = (count: number) => rows.length === 0 ? null : round(count * 100 / rows.length);
-    return { kind: "share", positivePercent: percent(positive), negativePercent: percent(negative), neutralPercent: percent(neutral), sampleSize: rows.length, unit: "percent", citations, ...topic };
+    return { kind: "share", positivePercent: percent(positive), negativePercent: percent(negative), neutralPercent: percent(neutral), sampleSize: rows.length, positive95Ci: wilson95Interval(positive, rows.length), unit: "percent", citations, ...topic };
   }
   const metric = intent.metric as "mean" | "median";
   const sample = rows.map(({ value }) => value);
-  return { kind: "scalar", metric, value: metric === "mean" ? mean(sample) : median(sample), sampleSize: sample.length, unit: "percent", citations, ...topic };
+  return {
+    kind: "scalar", metric, value: metric === "mean" ? mean(sample) : median(sample), sampleSize: sample.length,
+    standardDeviation: standardDeviation(sample), standardError: standardError(sample), trimmedMean5Percent: trimmedMean(sample),
+    unit: "percent", citations, ...topic,
+  };
 }
 
 export function runMultiHorizonAnalytics(events: readonly AnalyticsEvent[], intent: AiSearchIntent): MultiHorizonAnalyticsResult {
@@ -140,6 +190,10 @@ export function runMultiHorizonAnalytics(events: readonly AnalyticsEvent[], inte
       median: medianResult.kind === "scalar" ? medianResult.value : null,
       positivePercent: shareResult.kind === "share" ? shareResult.positivePercent : null,
       sampleSize: meanResult.kind === "scalar" ? meanResult.sampleSize : 0,
+      standardDeviation: meanResult.kind === "scalar" ? meanResult.standardDeviation : null,
+      standardError: meanResult.kind === "scalar" ? meanResult.standardError : null,
+      trimmedMean5Percent: meanResult.kind === "scalar" ? meanResult.trimmedMean5Percent : null,
+      positive95Ci: shareResult.kind === "share" ? shareResult.positive95Ci : null,
       citations: meanResult.citations,
       topicFilter: meanResult.topicFilter,
     };
@@ -153,6 +207,10 @@ export function runMultiHorizonAnalytics(events: readonly AnalyticsEvent[], inte
       median: row.median,
       positivePercent: row.positivePercent,
       sampleSize: row.sampleSize,
+      standardDeviation: row.standardDeviation,
+      standardError: row.standardError,
+      trimmedMean5Percent: row.trimmedMean5Percent,
+      positive95Ci: row.positive95Ci,
     })),
     citations,
     ...(results[0]?.topicFilter ? { topicFilter: results[0].topicFilter } : {}),
