@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 
-import { AI_TOPIC_LABELS, type AiSearchErrorBody, type AiSearchSuccess } from "@/types/ai-search";
+import { AI_TOPIC_LABELS, type AiHybridSuccess, type AiResearchSuccess, type AiSearchErrorBody, type AiSearchSuccess } from "@/types/ai-search";
 import { formatPercent } from "@/lib/ai-search/format";
 import { SOURCE_TYPE_LABELS } from "@/types/events";
 
@@ -11,14 +11,20 @@ const EXAMPLES = [
   "How does ETH react to sales by large investors?",
   "How does BTC react to ETF inflows?",
   "How does SOL react to large purchases?",
+  "What is crypto staking?",
+  "Чому ETF важливі для крипторинку?",
+  "What are ETF inflows, and how does BTC react to them historically?",
+  "Що таке стейкінг і як ETH історично реагує на новини про стейкінг?",
 ] as const;
 const QUICK_FILTERS = ["BTC", "ETH", "SOL", "ETF", "SEC", "Macro"] as const;
 
 type State =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "success"; data: AiSearchSuccess }
+  | { kind: "success"; data: AiResearchSuccess }
   | { kind: "clarification"; message: string }
+  | { kind: "live_unsupported"; message: string }
+  | { kind: "refusal"; message: string }
   | { kind: "error"; message: string };
 
 export function AiSearch() {
@@ -36,10 +42,14 @@ export function AiSearch() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
       });
-      const body = await response.json() as AiSearchSuccess | AiSearchErrorBody;
+      const body = await response.json() as AiResearchSuccess | AiSearchErrorBody;
       if (!response.ok || body.status !== "ok") {
         if (body.status !== "ok" && body.status === "clarification") {
           setState({ kind: "clarification", message: body.message });
+        } else if (body.status !== "ok" && body.status === "live_unsupported") {
+          setState({ kind: "live_unsupported", message: body.message });
+        } else if (body.status !== "ok" && (body.status === "refusal" || body.status === "rejected")) {
+          setState({ kind: "refusal", message: body.message });
         } else {
           setState({ kind: "error", message: body.status === "ok" ? "AI Search request failed." : body.message });
         }
@@ -56,9 +66,9 @@ export function AiSearch() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-white">Ask a question</h2>
-          <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">English and Ukrainian supported. Every number is calculated from historical data.</p>
+          <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">English and Ukrainian supported. Historical numbers come from Reaction V2; general answers use no live sources.</p>
         </div>
-        <span className="w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">Based on Reaction V2</span>
+        <span className="w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">Based on Reaction V2 + general explanations</span>
       </div>
 
       <form className="mt-5" onSubmit={submit}>
@@ -94,6 +104,8 @@ export function AiSearch() {
         {state.kind !== "idle" && submittedQuestion && <p className="mb-3 text-sm text-slate-500"><span className="font-medium text-slate-300">You:</span> {submittedQuestion}</p>}
         {state.kind === "loading" && <div className="h-28 animate-pulse rounded-2xl bg-white/[0.035]" />}
         {state.kind === "clarification" && <p className="rounded-xl border border-sky-200/20 bg-sky-200/5 p-4 text-sm text-sky-200"><span className="font-semibold">Please clarify:</span> {state.message}</p>}
+        {state.kind === "live_unsupported" && <p className="rounded-xl border border-amber-200/20 bg-amber-200/5 p-4 text-sm text-amber-100"><span className="font-semibold">Live data unavailable:</span> {state.message}</p>}
+        {state.kind === "refusal" && <p className="rounded-xl border border-amber-200/20 bg-amber-200/5 p-4 text-sm text-amber-100"><span className="font-semibold">Request not supported:</span> {state.message}</p>}
         {state.kind === "error" && <p className="rounded-xl border border-rose-300/20 bg-rose-300/5 p-4 text-sm text-rose-200">{state.message}</p>}
         {state.kind === "success" && <AiResult data={state.data} />}
       </div>
@@ -101,7 +113,21 @@ export function AiSearch() {
   );
 }
 
-function AiResult({ data }: { data: AiSearchSuccess }) {
+export function AiResult({ data }: { data: AiResearchSuccess }) {
+  if (data.mode === "general") {
+    return (
+      <div className="rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5">
+        <span className="inline-flex rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200">{data.modeLabel}</span>
+        <h3 className="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-400">General explanation</h3>
+        <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-white">{data.answer}</p>
+        <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
+      </div>
+    );
+  }
+  return <DatabaseResult data={data} />;
+}
+
+function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
   const metricLabel = data.result.kind === "count" ? "Count" : data.result.kind === "ranking" ? "Reaction ranking" : data.result.kind === "multi_horizon" ? "Reaction overview" : data.intent.metric === "mean" ? "Average reaction" : data.intent.metric === "median" ? "Median reaction" : "Historical events";
   const chips = [
     data.intent.asset,
@@ -122,6 +148,16 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
         : data.result.sampleSize;
   return (
     <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
+      <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${data.mode === "hybrid" ? "border-violet-300/20 bg-violet-300/10 text-violet-200" : "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"}`}>{data.modeLabel}</span>
+      {data.mode === "hybrid" && (
+        <section className="mt-4 rounded-xl border border-violet-300/15 bg-violet-300/[0.04] p-4" aria-label="General explanation">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-violet-200">General explanation</h3>
+          <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-200">{data.generalExplanation}</p>
+          <p className="mt-2 text-xs text-slate-500">No live sources or database rows were used for this explanation.</p>
+        </section>
+      )}
+      <section className={data.mode === "hybrid" ? "mt-5" : "mt-4"} aria-label="Historical database analysis">
+      {data.mode === "hybrid" && <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Historical database analysis</h3>}
       <div className="flex flex-wrap gap-2">
         {chips.map((chip) => <span className="rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400" key={chip}>{chip}</span>)}
       </div>
@@ -191,6 +227,7 @@ function AiResult({ data }: { data: AiSearchSuccess }) {
         </ul>
       ) : null}
       <p className="mt-4 text-xs text-slate-500">{data.basedOn}. {data.disclaimer}</p>
+      </section>
     </div>
   );
 }

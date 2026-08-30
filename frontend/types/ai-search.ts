@@ -252,6 +252,9 @@ export type AnalyticsResult = CoreAnalyticsResult & {
 
 export interface AiSearchSuccess {
   status: "ok";
+  mode: "database";
+  modeLabel: "Historical database analysis";
+  language: "en" | "uk";
   basedOn: "Reaction V2";
   intent: AiSearchIntent;
   answer: string;
@@ -261,8 +264,26 @@ export interface AiSearchSuccess {
   disclaimer: string;
 }
 
+export interface AiGeneralSuccess {
+  status: "ok";
+  mode: "general";
+  modeLabel: "General AI explanation — no live sources";
+  language: "en" | "uk";
+  answer: string;
+  citations: [];
+  disclaimer: string;
+}
+
+export interface AiHybridSuccess extends Omit<AiSearchSuccess, "mode" | "modeLabel"> {
+  mode: "hybrid";
+  modeLabel: "Combined explanation + historical database analysis";
+  generalExplanation: string;
+}
+
+export type AiResearchSuccess = AiSearchSuccess | AiGeneralSuccess | AiHybridSuccess;
+
 export interface AiSearchErrorBody {
-  status: "error" | "clarification" | "rejected";
+  status: "error" | "clarification" | "rejected" | "refusal" | "live_unsupported";
   code: string;
   message: string;
 }

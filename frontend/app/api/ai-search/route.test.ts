@@ -24,6 +24,28 @@ describe("POST /api/ai-search", () => {
     expect(response.headers.get("cache-control")).toBe("private, no-store");
   });
 
+  it("returns explicit general, hybrid, and live-unsupported modes", async () => {
+    const general = await POST(new Request("http://localhost/api/ai-search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": "198.51.100.31" },
+      body: JSON.stringify({ question: "What is Bitcoin?" }),
+    }));
+    await expect(general.json()).resolves.toMatchObject({ status: "ok", mode: "general", citations: [] });
+    const hybrid = await POST(new Request("http://localhost/api/ai-search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": "198.51.100.32" },
+      body: JSON.stringify({ question: "What are ETF inflows, and how does BTC react to them historically?" }),
+    }));
+    await expect(hybrid.json()).resolves.toMatchObject({ status: "ok", mode: "hybrid", basedOn: "Reaction V2" });
+    const live = await POST(new Request("http://localhost/api/ai-search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": "198.51.100.33" },
+      body: JSON.stringify({ question: "What is the current BTC price?" }),
+    }));
+    expect(live.status).toBe(422);
+    await expect(live.json()).resolves.toMatchObject({ status: "live_unsupported", code: "LIVE_DATA_UNSUPPORTED" });
+  });
+
   it("requires JSON and rejects malformed or oversized bodies safely", async () => {
     expect((await POST(request("question=x", "text/plain"))).status).toBe(415);
     expect((await POST(request("{"))).status).toBe(400);
