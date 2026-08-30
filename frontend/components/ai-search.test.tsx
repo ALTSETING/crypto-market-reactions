@@ -9,7 +9,9 @@ describe("AI Search prototype", () => {
     expect(html).toContain("Ask a question");
     expect(html).toContain("Based on Reaction V2");
     expect(html).toContain("How does ETH react to large institutional purchases?");
+    expect(html).toContain("How does ETH react to sales by large investors?");
     expect(html).toContain("How does BTC react to ETF inflows?");
+    expect(html).toContain("How does SOL react to large purchases?");
     expect(html).toContain("Ask a specific historical question");
     expect(html).toContain("maxLength=\"500\"");
   });

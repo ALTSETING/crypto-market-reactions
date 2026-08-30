@@ -1,6 +1,6 @@
 import "server-only";
 
-import { applyExplicitQuestionDefaults, explicitQuestionClarification, resolveExplicitQuestion } from "@/lib/ai-search/intent-defaults";
+import { applyExplicitQuestionDefaults, resolveDeterministicConstraints, resolveExplicitQuestion } from "@/lib/ai-search/intent-defaults";
 import { parseMockIntent } from "@/lib/ai-search/mock-provider";
 import { AI_RESOLUTION_JSON_SCHEMA, validateResolutionEnvelope } from "@/lib/ai-search/schema";
 import type { IntentResolution } from "@/types/ai-search";
@@ -11,7 +11,11 @@ export interface AiIntentProvider {
 
 export class MockAiIntentProvider implements AiIntentProvider {
   async resolve(question: string): Promise<IntentResolution> {
-    return applyExplicitQuestionDefaults(question, parseMockIntent(question));
+    const constraints = resolveDeterministicConstraints(question);
+    if (constraints.status !== "ready") return constraints;
+    const deterministic = resolveExplicitQuestion(question, constraints.constraints);
+    if (deterministic) return deterministic;
+    return applyExplicitQuestionDefaults(question, parseMockIntent(question), constraints.constraints);
   }
 }
 
@@ -56,9 +60,9 @@ export class OpenAiIntentProvider implements AiIntentProvider {
   }
 
   async resolve(question: string): Promise<IntentResolution> {
-    const clarification = explicitQuestionClarification(question);
-    if (clarification) return clarification;
-    const deterministic = resolveExplicitQuestion(question);
+    const constraints = resolveDeterministicConstraints(question);
+    if (constraints.status !== "ready") return constraints;
+    const deterministic = resolveExplicitQuestion(question, constraints.constraints);
     if (deterministic) return deterministic;
     const estimatedInputCeiling = Math.ceil((question.length + PROVIDER_INSTRUCTIONS.length + JSON.stringify(AI_RESOLUTION_JSON_SCHEMA).length) / 2);
     const configuredMaxCost = this.options.maxCostUsd ?? 0.01;
@@ -126,7 +130,7 @@ export class OpenAiIntentProvider implements AiIntentProvider {
         const text = body.output_text ?? body.output?.flatMap((item) => item.content ?? []).find((item) => item.type === "output_text")?.text;
         if (!text || text.length > 12_000) return { status: "rejected", message: "The AI provider returned an invalid structured response." };
         try {
-          return applyExplicitQuestionDefaults(question, validateResolutionEnvelope(JSON.parse(text)));
+          return applyExplicitQuestionDefaults(question, validateResolutionEnvelope(JSON.parse(text)), constraints.constraints);
         } catch {
           return { status: "rejected", message: "The AI provider returned an invalid structured response." };
         }

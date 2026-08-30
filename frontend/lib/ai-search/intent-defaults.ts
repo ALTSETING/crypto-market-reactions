@@ -1,5 +1,6 @@
 import { validateIntent } from "@/lib/ai-search/schema";
 import type { AiSearchIntent, IntentResolution } from "@/types/ai-search";
+import type { Horizon } from "@/types/events";
 
 const EMPTY_INTENT: AiSearchIntent = {
   intent: "search", asset: null, dateFrom: null, dateTo: null, category: null,
@@ -9,20 +10,89 @@ const EMPTY_INTENT: AiSearchIntent = {
   metric: "events", sort: "newest", groupBy: "none", comparison: null, limit: 10,
 };
 
+const ASSET_TERMS = [
+  [/(?:\bETH\b|\bethereum\b|ефір(?:у|ом|а)?)/iu, "ETH"],
+  [/(?:\bBTC\b|\bbitcoin\b|біткоїн(?:у|ом|а)?)/iu, "BTC"],
+  [/(?:\bSOL\b|\bsolana\b|солан(?:а|и|у|ою)?)/iu, "SOL"],
+] as const;
+const ETF_TERM = /\bETFs?\b|exchange[- ]traded\s+funds?/iu;
+const INFLOW_TERM = /\binflows?\b|приплив\p{L}*|надходжен\p{L}*/iu;
+const OUTFLOW_TERM = /\boutflows?\b|\bwithdrawals?\b|відток\p{L}*|відплив\p{L}*|виведен\p{L}*/iu;
+const BUYING_TERM = /\b(?:buy|buys|buying|purchases?|purchasing)\b|купівл\p{L}*|покуп\p{L}*/iu;
+const SELLING_TERM = /\b(?:sell|sells|selling|sales?)\b|продаж\p{L}*|розпродаж\p{L}*/iu;
+
+export type DeterministicConstraintResolution =
+  | { status: "ready"; constraints: Partial<AiSearchIntent> }
+  | { status: "clarification" | "rejected"; message: string };
+
+function durationHorizon(value: number, unit: string): Horizon | null {
+  if (/^m(?:in(?:ute)?s?)?$/iu.test(unit)) {
+    return ({ 1: "1m", 5: "5m", 15: "15m" } as Record<number, Horizon>)[value] ?? null;
+  }
+  if (/^h(?:ours?)?$/iu.test(unit)) {
+    return ({ 1: "1h", 4: "4h", 24: "24h" } as Record<number, Horizon>)[value] ?? null;
+  }
+  if (/^days?$/iu.test(unit)) return value === 1 ? "24h" : null;
+  if (/^хвилин/iu.test(unit)) return ({ 1: "1m", 5: "5m", 15: "15m" } as Record<number, Horizon>)[value] ?? null;
+  if (/^годин/iu.test(unit)) return ({ 1: "1h", 4: "4h", 24: "24h" } as Record<number, Horizon>)[value] ?? null;
+  if (/^д(?:ень|ні|нів)$/iu.test(unit)) return value === 1 ? "24h" : null;
+  return null;
+}
+
+function explicitHorizons(question: string): { values: Horizon[]; unsupported: boolean } {
+  const values = new Set<Horizon>();
+  let unsupported = false;
+  const add = (rawValue: string, unit: string) => {
+    const horizon = durationHorizon(Number(rawValue), unit);
+    if (horizon) values.add(horizon);
+    else unsupported = true;
+  };
+  for (const match of question.matchAll(/\b(\d+)\s*(m|h)\b/giu)) add(match[1], match[2]);
+  for (const match of question.matchAll(/\bafter\s+(\d+)\s+(minutes?|hours?|days?)\b/giu)) add(match[1], match[2]);
+  for (const match of question.matchAll(/\b(\d+)\s+(minutes?|hours?|days?)\s+later\b/giu)) add(match[1], match[2]);
+  for (const match of question.matchAll(/\b(\d+)\s+(minutes?|hours?|days?)\s+after\b/giu)) add(match[1], match[2]);
+  for (const match of question.matchAll(/через\s+(\d+)\s+(хвилин\p{L}*|годин\p{L}*|д(?:ень|ні|нів))/giu)) add(match[1], match[2]);
+  if (/через\s+добу/iu.test(question)) values.add("24h");
+  return { values: [...values], unsupported };
+}
+
+export function resolveDeterministicConstraints(question: string): DeterministicConstraintResolution {
+  const assets = ASSET_TERMS.filter(([pattern]) => pattern.test(question)).map(([, asset]) => asset);
+  if (new Set(assets).size > 1) {
+    return { status: "clarification", message: "Choose one asset: BTC, ETH or SOL." };
+  }
+  const horizons = explicitHorizons(question);
+  if (horizons.unsupported) {
+    return { status: "clarification", message: "Use one supported horizon: 1m, 5m, 15m, 1h, 4h or 24h." };
+  }
+  if (horizons.values.length > 1) {
+    return { status: "clarification", message: "Choose one Reaction V2 horizon." };
+  }
+  if (INFLOW_TERM.test(question) && OUTFLOW_TERM.test(question)) {
+    return { status: "clarification", message: "Please choose either inflows or outflows." };
+  }
+  if (BUYING_TERM.test(question) && SELLING_TERM.test(question)) {
+    return { status: "clarification", message: "Please choose either buying or selling." };
+  }
+  return { status: "ready", constraints: explicitFacts(question) };
+}
+
 function explicitFacts(question: string): Partial<AiSearchIntent> {
   const facts: Partial<AiSearchIntent> = {};
-  const assetMatches = [
-    [/(?:\bETH\b|\bethereum\b|ефір(?:у|ом|а)?)/iu, "ETH"],
-    [/(?:\bBTC\b|\bbitcoin\b|біткоїн(?:у|ом|а)?)/iu, "BTC"],
-    [/(?:\bSOL\b|\bsolana\b|солан(?:а|и|у|ою)?)/iu, "SOL"],
-  ] as const;
-  const assets = assetMatches.filter(([pattern]) => pattern.test(question)).map(([, asset]) => asset);
+  const assets = ASSET_TERMS.filter(([pattern]) => pattern.test(question)).map(([, asset]) => asset);
   if (new Set(assets).size === 1) facts.asset = assets[0];
 
-  const horizon = question.match(/\b(24h|4h|1h|15m|5m|1m)\b/i)?.[1]?.toLowerCase();
-  if (horizon) facts.horizon = horizon as AiSearchIntent["horizon"];
-  const year = question.match(/\b(20\d{2})\b/)?.[1];
-  if (year) {
+  const horizons = explicitHorizons(question).values;
+  if (horizons.length === 1) facts.horizon = horizons[0];
+  const dates = [...question.matchAll(/\b(20\d{2}-\d{2}-\d{2})\b/g)].map((match) => match[1]);
+  const year = dates.length === 0 ? question.match(/\b(20\d{2})\b/)?.[1] : undefined;
+  if (dates.length >= 2) {
+    facts.dateFrom = dates[0];
+    facts.dateTo = dates[1];
+  } else if (dates.length === 1) {
+    facts.dateFrom = dates[0];
+    facts.dateTo = dates[0];
+  } else if (year) {
     facts.dateFrom = `${year}-01-01`;
     facts.dateTo = `${year}-12-31`;
   }
@@ -42,7 +112,13 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.topic = "sec";
     facts.category = null;
   }
-  if (/\bETF\b|exchange[- ]traded\s+fund/iu.test(question)) {
+  if (ETF_TERM.test(question) && INFLOW_TERM.test(question)) {
+    Object.assign(facts, { topic: "etf_inflow", actorType: "ETF", action: "deposit", direction: "inflow", assetRole: "primary" });
+    facts.category = null;
+  } else if (ETF_TERM.test(question) && OUTFLOW_TERM.test(question)) {
+    Object.assign(facts, { topic: "etf_outflow", actorType: "ETF", action: "withdraw", direction: "outflow", assetRole: "primary" });
+    facts.category = null;
+  } else if (ETF_TERM.test(question)) {
     facts.topic = "etf";
     facts.category = null;
   }
@@ -76,7 +152,9 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.topic = "staking";
     facts.category = null;
   }
-  if (/large\s+(?:financial\s+)?investments?|велик\S*\s+(?:фінансов\S*\s+)?інвестиці|больш\S*\s+инвестиц/iu.test(question)) {
+  if (facts.topic === "etf_inflow" || facts.topic === "etf_outflow") {
+    // Direction-specific ETF constraints always outrank generic topic wording.
+  } else if (/large\s+(?:financial\s+)?investments?|велик\S*\s+(?:фінансов\S*\s+)?інвестиці|больш\S*\s+инвестиц/iu.test(question)) {
     facts.topic = "large_investment";
     facts.action = "invest";
     facts.direction = "inflow";
@@ -91,7 +169,7 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.magnitude = /\blarge\b|велик/iu.test(question) ? "large" : "unknown";
     facts.assetRole = "primary";
     facts.category = null;
-  } else if (/institutional\s+(?:sell|selling|sales)|продаж\S*\s+(?:великими\s+)?інвестор|інституційн\S*\s+продаж|продаж\S*\s+крупн\S*\s+инвестор/iu.test(question)) {
+  } else if (/institutional\s+(?:sell|selling|sales)|sales?\s+by\s+(?:large\s+)?investors?|(?:large\s+)?investors?\s+(?:sell|selling|sales)|(?:продаж|розпродаж)\S*\s+(?:великими\s+)?інвестор|інституційн\S*\s+(?:продаж|розпродаж)|продаж\S*\s+крупн\S*\s+инвестор/iu.test(question)) {
     facts.topic = "institutional_selling";
     facts.actorType = /інвестор|investor/iu.test(question) ? "investor" : "institution";
     facts.action = "sell";
@@ -108,20 +186,6 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.topic = "capital_inflow";
     facts.action = "deposit";
     facts.direction = "inflow";
-    facts.assetRole = "primary";
-    facts.category = null;
-  } else if (/\bETF\s+inflows?\b/iu.test(question)) {
-    facts.topic = "etf_inflow";
-    facts.actorType = "ETF";
-    facts.action = "deposit";
-    facts.direction = "inflow";
-    facts.assetRole = "primary";
-    facts.category = null;
-  } else if (/\bETF\s+outflows?\b/iu.test(question)) {
-    facts.topic = "etf_outflow";
-    facts.actorType = "ETF";
-    facts.action = "withdraw";
-    facts.direction = "outflow";
     facts.assetRole = "primary";
     facts.category = null;
   } else if (/\bfund(?:ing|raise|raising)\b|фінансуван|раунд\S*\s+фінанс/iu.test(question)) {
@@ -145,6 +209,13 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.magnitude = "large";
     facts.assetRole = "primary";
     facts.category = null;
+  }
+  if (facts.action === undefined && BUYING_TERM.test(question)) {
+    facts.action = "buy";
+    facts.direction = "inflow";
+  } else if (facts.action === undefined && SELLING_TERM.test(question)) {
+    facts.action = "sell";
+    facts.direction = "outflow";
   }
   if (/\bnews media\b/i.test(question)) facts.sourceClass = "news_media";
   if (/\bpositive\s+sentiment\b|позитивн\S*\s+сентимент/iu.test(question)) {
@@ -198,11 +269,21 @@ function humanClarification(intent: Partial<AiSearchIntent>): IntentResolution |
 }
 
 export function explicitQuestionClarification(question: string): IntentResolution | null {
-  return humanClarification(explicitFacts(question));
+  const resolution = resolveDeterministicConstraints(question);
+  if (resolution.status !== "ready") return resolution;
+  return humanClarification(resolution.constraints);
 }
 
-export function applyExplicitQuestionDefaults(question: string, resolution: IntentResolution): IntentResolution {
-  const facts = explicitFacts(question);
+export function applyExplicitQuestionDefaults(
+  question: string,
+  resolution: IntentResolution,
+  suppliedConstraints?: Partial<AiSearchIntent>,
+): IntentResolution {
+  const constraintResolution = suppliedConstraints
+    ? { status: "ready" as const, constraints: suppliedConstraints }
+    : resolveDeterministicConstraints(question);
+  if (constraintResolution.status !== "ready") return constraintResolution;
+  const facts = constraintResolution.constraints;
   const source = resolution.status === "ready" ? resolution.intent : EMPTY_INTENT;
   const candidate = { ...source, ...facts };
   const clarification = humanClarification(candidate);
@@ -218,8 +299,15 @@ export function applyExplicitQuestionDefaults(question: string, resolution: Inte
 }
 
 /** Returns a ready intent only when deterministic parsing found a complete bounded analytics question. */
-export function resolveExplicitQuestion(question: string): IntentResolution | null {
-  const facts = explicitFacts(question);
+export function resolveExplicitQuestion(
+  question: string,
+  suppliedConstraints?: Partial<AiSearchIntent>,
+): IntentResolution | null {
+  const constraintResolution = suppliedConstraints
+    ? { status: "ready" as const, constraints: suppliedConstraints }
+    : resolveDeterministicConstraints(question);
+  if (constraintResolution.status !== "ready") return constraintResolution;
+  const facts = constraintResolution.constraints;
   if (facts.intent !== "aggregate" || !facts.asset || !facts.topic) return null;
   try {
     return { status: "ready", intent: validateIntent({ ...EMPTY_INTENT, ...facts }) };
