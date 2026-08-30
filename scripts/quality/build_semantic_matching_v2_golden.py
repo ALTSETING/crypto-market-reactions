@@ -78,11 +78,11 @@ CURATED_IDS: dict[str, tuple[str, ...]] = {
         "bf3-a8305fc9b68b17ba2d99", "bf3-b7fffe64dcc573bf4a32",
     ),
     "hack": (
-        "bf3-017b1fb810c8c78d2350", "bf3-15b2baa01c770f94bcfc", "bf3-220f9ce376591cab3181",
+        "bf3-017b1fb810c8c78d2350", "bf3-e59b0f0cc006d1229bfc", "bf3-220f9ce376591cab3181",
         "bf3-2acb449014f3125ba020", "bf3-2cf581dbe5a42ead5437", "bf3-3038ebc7503964fea9f5",
         "bf3-392dd400b7ea2e9affdf", "bf3-60129d29973f157ab8bd", "bf3-610eccbb7ee4d00ab38a",
         "bf3-6fe490146c17180edc9e", "bf3-72365f568306bc9026ed", "bf3-72764b5186743fcf6519",
-        "bf3-7619d5dc21ac99f15fd2", "bf3-7f82602fdb4f73b80a14", "bf3-8545e3fc28657cf5b701",
+        "bf3-7619d5dc21ac99f15fd2", "bf3-7f82602fdb4f73b80a14", "bf3-be366ff64175a5699936",
         "bf3-8c8aee1b686795bfbcea", "bf3-937e69dfd040cc8f3a11", "bf3-aab96aaa09f2cdbcd726",
         "bf3-b2b9fcabe5044ff074cf", "bf3-cbcde057a83c36b08e98",
     ),
@@ -102,10 +102,27 @@ ASSET_RE = {
     "ETH": re.compile(r"\b(?:ETH|Ether|Ethereum)\b", re.I),
     "SOL": re.compile(r"\b(?:SOL|Solana)\b", re.I),
 }
+ASSET_OVERRIDES = {
+    # The headline contrasts BTC selling with a passive Ether-funds mention;
+    # the audited action target is BTC, irrespective of related_assets order.
+    "bf3-b9bc8685e5315d198056": "BTC",
+    # Harvard reduced BTC ETF exposure but added Ether exposure; this cohort
+    # audits the institutional purchase target, so ETH is the correct side.
+    "evt18-34ec9fcec30853741e28": "ETH",
+    # Both headlines mention Bitcoin only in a later market-analysis clause;
+    # the completed treasury purchase itself is explicitly Ethereum.
+    "evt18-0dd07c239e902c333696": "ETH",
+    "evt18-b37da6e3e147630c31eb": "ETH",
+}
 
 
 def audited_asset(row: dict[str, Any]) -> str:
     assets = [asset for asset in (row.get("related_assets") or []) if asset in ASSET_RE]
+    override = ASSET_OVERRIDES.get(str(row["event_id"]))
+    if override:
+        if override not in assets:
+            raise ValueError(f"curated asset override is not related: {row['event_id']}")
+        return override
     direct = [asset for asset in assets if ASSET_RE[asset].search(str(row["title"]))]
     if not assets:
         raise ValueError(f"curated event has no audited asset: {row['event_id']}")

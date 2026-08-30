@@ -7,8 +7,8 @@ import { describe, expect, it } from "vitest";
 
 import { ProductionAiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { MockAiIntentProvider } from "@/lib/ai-search/provider";
+import { classifySemanticEvent } from "@/lib/ai-search/semantic-matcher";
 import { executeAiSearch } from "@/lib/ai-search/service";
-import { matchesTopic } from "@/lib/ai-search/topic-matcher";
 
 loadEnvConfig(process.cwd());
 
@@ -42,7 +42,12 @@ describe.skipIf(process.env.AI_PRODUCTION_PARITY !== "1")("production topic rele
           expect(response.body.citations).toHaveLength(0);
         } else {
           expect(response.body.citations.length).toBeGreaterThan(0);
-          expect(response.body.citations.every((citation) => matchesTopic({ title: citation.title }, response.body.intent.topic!))).toBe(true);
+          expect(response.body.citations.every((citation) => classifySemanticEvent({
+            title: citation.title,
+            assets: response.body.intent.asset ? [response.body.intent.asset] : [],
+            category: "news",
+            primaryAsset: response.body.intent.asset,
+          }, response.body.intent).matched)).toBe(true);
         }
       }
       report.push({

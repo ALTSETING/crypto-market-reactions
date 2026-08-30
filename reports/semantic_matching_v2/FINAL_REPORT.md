@@ -32,27 +32,27 @@ The old sample has 157 explicit headline amounts and 182 without one. Explicit a
 
 ## Statistical impact on existing Reaction V2
 
-The shipped TypeScript classifier finds 117 primary-ETH large-investment events, 134 primary-ETH institutional-buying events, and 130 primary-ETH institutional-selling/outflow events in the bounded 9,073-row read-only snapshot.
+The shipped TypeScript classifier finds 55 direct-primary-ETH large-investment events, 48 direct-primary-ETH institutional-buying events, and 33 direct-primary-ETH institutional-selling/outflow events in the bounded 9,073-row read-only snapshot. `related_assets` or `primary_asset` without a direct headline asset reference remains secondary and is excluded by default.
 
 | Horizon | Legacy large n / mean / median / positive | V2 large n / mean / median / positive |
 |---|---|---|
-| 1m | 339 / -0.0019 / 0.0016 / 50.74% | 117 / -0.0205 / -0.0125 / 42.74% |
-| 5m | 339 / -0.0114 / -0.0079 / 47.20% | 117 / 0.0116 / 0.0095 / 52.99% |
-| 15m | 339 / -0.0112 / -0.0030 / 49.26% | 117 / 0.0127 / 0.0469 / 52.14% |
-| 1h | 339 / -0.0629 / -0.0391 / 48.38% | 117 / 0.0070 / 0.0481 / 51.28% |
-| 4h | 339 / -0.0014 / -0.0199 / 49.26% | 117 / 0.1386 / 0.0470 / 52.14% |
-| 24h | 339 / -0.2399 / -0.2622 / 47.79% | 117 / 0.0252 / -0.4254 / 48.72% |
+| 1m | 339 / -0.0019 / 0.0016 / 50.74% | 55 / -0.0374 / -0.0162 / 41.82% |
+| 5m | 339 / -0.0114 / -0.0079 / 47.20% | 55 / 0.0480 / 0.0242 / 58.18% |
+| 15m | 339 / -0.0112 / -0.0030 / 49.26% | 55 / 0.0566 / 0.1118 / 61.82% |
+| 1h | 339 / -0.0629 / -0.0391 / 48.38% | 55 / -0.1021 / -0.1761 / 47.27% |
+| 4h | 339 / -0.0014 / -0.0199 / 49.26% | 55 / -0.2092 / -0.1433 / 47.27% |
+| 24h | 339 / -0.2399 / -0.2622 / 47.79% | 55 / -0.3474 / -0.9185 / 41.82% |
 
 | Horizon | Institutional buying n / mean / median / positive | Selling/outflow n / mean / median / positive |
 |---|---|---|
-| 1m | 134 / -0.0098 / 0.0011 / 50.00% | 130 / -0.0208 / -0.0098 / 44.62% |
-| 5m | 134 / 0.0168 / 0.0109 / 55.97% | 130 / -0.0346 / 0.0049 / 51.54% |
-| 15m | 134 / 0.0551 / 0.0532 / 54.48% | 130 / -0.0495 / -0.0075 / 50.00% |
-| 1h | 134 / 0.0568 / 0.0647 / 52.99% | 130 / 0.0496 / 0.0125 / 53.08% |
-| 4h | 134 / -0.0666 / -0.1765 / 46.27% | 130 / -0.1753 / -0.1937 / 40.00% |
-| 24h | 134 / -0.1578 / -0.2344 / 45.52% | 130 / -0.5727 / -0.2935 / 45.38% |
+| 1m | 48 / -0.0254 / -0.0082 / 43.75% | 33 / 0.0144 / -0.0121 / 42.42% |
+| 5m | 48 / 0.0301 / 0.0179 / 56.25% | 33 / 0.0052 / -0.0215 / 45.45% |
+| 15m | 48 / 0.0806 / 0.1196 / 60.42% | 33 / -0.1016 / -0.0675 / 36.36% |
+| 1h | 48 / 0.0254 / 0.1501 / 54.17% | 33 / -0.0629 / 0.0093 / 54.55% |
+| 4h | 48 / -0.0384 / -0.1087 / 47.92% | 33 / -0.2126 / -0.4349 / 30.30% |
+| 24h | 48 / 0.1486 / -0.1793 / 47.92% | 33 / -0.0400 / -0.6578 / 42.42% |
 
-The buying and selling samples are distinct and directionally meaningful; they are not reused broad keyword samples. Raw mean, median, 5% trimmed mean, sample SD, SE, and positive-share Wilson 95% CI are computed by backend analytics. At 24h, the trimmed means are -0.1677 for V2 large investments, -0.1373 for institutional buying, and -0.5813 for selling/outflow, making outlier sensitivity explicit without replacing the raw mean.
+The buying and selling samples are distinct and directionally meaningful; they are not reused broad keyword samples. Raw mean, median, 5% trimmed mean, sample SD, SE, and positive-share Wilson 95% CI are computed by backend analytics. At 24h, the trimmed means are -0.4120 for V2 large investments, 0.0939 for institutional buying, and -0.0594 for selling/outflow, making outlier sensitivity explicit without replacing the raw mean.
 
 Independent Decimal-based verification covered 30 cases for n, mean, median, positive share, and trimmed mean at tolerance `1e-9`; mismatches: **0**.
 
@@ -66,7 +66,7 @@ Decision gate: **B**. Plan a future Reaction V3 around separately reviewed canon
 
 ## Verification and limitations
 
-- Frontend: ESLint PASS; TypeScript PASS; 147 Vitest PASS, 3 opt-in suites skipped in the ordinary run; Next production build PASS.
+- Frontend: ESLint PASS; TypeScript PASS; 155 Vitest PASS, 3 opt-in suites skipped in the ordinary run; Next production build PASS.
 - Production parity: 30 legacy numeric cases at `1e-9` plus 30 semantic bounded-contract cases PASS against the 9,073-event read-only snapshot.
 - Quality: 150-event golden evaluation PASS; timestamp audit PASS; 10 required Ukrainian/English semantic API examples PASS with different normalized intents and samples.
 - Security: bounded scans at 10,000; at most 50 citations; same-origin/rate-limit/safe-error gates retained; API security smoke PASS; client bundle scan PASS; no rows sent to OpenAI.

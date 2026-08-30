@@ -83,6 +83,31 @@ describe("Semantic Event Matching V2", () => {
     expect(classifySemanticEvent(event("5", title, 1), semanticIntent({ topic: "hack" })).matched).toBe(false);
   });
 
+  it("rejects a hack and ETF flow that target another asset in a separate clause", () => {
+    const sol = { ...event("5", "Coinbase Hack, Solana Founder Reopens Debate", 1), assets: ["SOL"] as Array<"SOL"> };
+    const btc = { ...event("5", "XRP ETFs drew inflows as Bitcoin funds lost $2 billion", 1), assets: ["BTC"] as Array<"BTC"> };
+    expect(classifySemanticEvent(sol, semanticIntent({ asset: "SOL", topic: "hack" })).matched).toBe(false);
+    expect(classifySemanticEvent(btc, semanticIntent({ asset: "BTC", topic: "etf_inflow", actorType: "ETF", action: "deposit", direction: "inflow" })).matched).toBe(false);
+  });
+
+  it("rejects equity sales and investment exits as institutional asset buying/selling", () => {
+    const stockSale = "BitMine Plans $300M Preferred Stock Sale for ETH Treasury Push";
+    const exit = "Peter Thiel Exits ETHZilla Investment After Ethereum Treasury Stock Falls";
+    expect(classifySemanticEvent(event("5", stockSale, -1), semanticIntent({ topic: "institutional_selling", actorType: "institution", action: "sell", direction: "outflow" })).matched).toBe(false);
+    expect(classifySemanticEvent(event("5", exit, -1), semanticIntent({ topic: "institutional_purchase", actorType: "institution", action: "buy", direction: "inflow" })).matched).toBe(false);
+  });
+
+  it.each([
+    "Ether slides as Strategy's Bitcoin sales plan pressures the market",
+    "Strategy sells Bitcoin while Ether holds steady",
+    "Bitcoin and Ether ETFs end record multibillion outflow streak",
+  ])("rejects another asset's sale and an ended outflow streak: %s", (title) => {
+    expect(classifySemanticEvent(
+      event("5", title, -1),
+      semanticIntent({ topic: "institutional_selling", actorType: "institution", action: "sell", direction: "outflow" }),
+    ).matched).toBe(false);
+  });
+
   it("separates inflow and outflow samples deterministically", () => {
     const events = [
       event("6", "BlackRock buys $80M ETH for its institutional fund", 4),
@@ -102,7 +127,7 @@ describe("Semantic Event Matching V2", () => {
       event("8", "BlackRock fund sells $90M ETH", -2),
       semanticIntent({ topic: "institutional_selling", actorType: "investor", action: "sell", direction: "outflow" }),
     );
-    expect(result).toMatchObject({ matched: true, actorType: "fund", direction: "outflow" });
+    expect(result).toMatchObject({ matched: true, actorType: "institution", direction: "outflow" });
   });
 
   it("prefers a direct headline asset mention over an inconsistent primary_asset field", () => {
@@ -111,6 +136,22 @@ describe("Semantic Event Matching V2", () => {
       semanticIntent({ topic: "institutional_purchase", actorType: "institution", action: "buy", direction: "inflow" }),
     );
     expect(result).toMatchObject({ matched: true, assetRole: "primary" });
+  });
+
+  it("does not promote a related-only asset through an inconsistent primary_asset field", () => {
+    const result = classifySemanticEvent(
+      event("9", "Japanese company buys Bitbank for $289 million", 1, "ETH"),
+      semanticIntent({ topic: "large_investment", action: "buy", direction: "inflow", magnitude: "large" }),
+    );
+    expect(result).toMatchObject({ matched: false, assetRole: "secondary" });
+  });
+
+  it("does not infer a fund actor from the generic object 'funds'", () => {
+    const result = classifySemanticEvent(
+      event("9", "Ethereum bridge tells users to withdraw funds after breach", -1),
+      semanticIntent({ topic: "institutional_selling", actorType: "institution", action: "sell", direction: "outflow" }),
+    );
+    expect(result).toMatchObject({ matched: false, actorType: "protocol" });
   });
 
   it("binds opposite actions to their target asset in a multi-asset headline", () => {

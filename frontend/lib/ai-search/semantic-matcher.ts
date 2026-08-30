@@ -45,9 +45,9 @@ const ASSET_PATTERNS: Record<Asset, RegExp> = {
 
 const ACTION_PATTERNS: ReadonlyArray<readonly [AiAction, RegExp]> = [
   ["liquidate", /\bliquidat(?:e|es|ed|ion|ions)\b|ліквідац|ликвидац/iu],
-  ["divest", /\bdivest(?:s|ed|ment|ments)?\b/iu],
+  ["divest", /\bdivest(?:s|ed|ment|ments)?\b|\bexits?\b[^.]{0,45}\b(?:investment|stake|position)\b|\b(?:cuts?|reduces?)\b[^.]{0,35}\bstake\b/iu],
   ["sell", /\b(?:sell|sells|selling|sold|sale|sales|redemption|redemptions|offload|offloads|offloaded|dump|dumps|dumped|exits? (?:its )?position)\b|продаж|продав|викуп.*паїв/iu],
-  ["withdraw", /\b(?:withdraw|withdraws|withdrew|withdrawal|withdrawals|outflow|outflows)\b|виведен|відплив|відтік|отток/iu],
+  ["withdraw", /\b(?:withdraw|withdraws|withdrew|withdrawal|withdrawals|outflow|outflows)\b|\bETFs?\s+(?:lose|loses|lost|shed|sheds)\b|виведен|відплив|відтік|отток/iu],
   ["unstake", /\bunstak(?:e|es|ed|ing)\b/iu],
   ["delist", /\bdelist(?:s|ed|ing)?\b/iu],
   ["reject", /\b(?:reject|rejects|rejected|denies|denied)\b|відхил|отклони/iu],
@@ -68,22 +68,23 @@ const ACTION_PATTERNS: ReadonlyArray<readonly [AiAction, RegExp]> = [
 ];
 
 const STRONG_LARGE_PATTERN = /\b(?:massive investment|major purchase|billion[- ]dollar|large treasury purchase|major institutional investment)\b|масштабн\S*\s+інвестиц|велика\S*\s+казначейськ\S*\s+купівл/iu;
-const INSTITUTION_PATTERN = /\b(?:institution|institutional|bank|asset manager|pension|endowment|university endowment|family office|treasury firm|treasury|BlackRock|Fidelity|Grayscale|MicroStrategy|Strategy)\b|інституц|банк|казначейств/iu;
-const FUND_PATTERN = /\b(?:fund|funds|hedge fund|venture capital|VC)\b|фонд/iu;
+const INSTITUTION_PATTERN = /\b(?:institutions?|institutional|bank|asset manager|pension|endowment|university endowment|family office|treasury firm|treasury|BlackRock|Fidelity|Grayscale|MicroStrategy|Strategy)\b|інституц|банк|казначейств/iu;
+const FUND_PATTERN = /(?:^|:\s)funds?\b|\b(?:hedge|investment|pension|crypto|capital|large cap|mutual|sovereign)\s+funds?\b|\bventure capital\b|\bVC\b|фонд/iu;
 const ETF_PATTERN = /\b(?:ETF|ETFs|exchange[- ]traded funds?)\b/iu;
 const COMPANY_PATTERN = /\b(?:company|companies|corporation|corp\.?|Inc\.?|Ltd\.?)\b|компан/iu;
 const REGULATOR_PATTERN = /\b(?:SEC|CFTC|regulator|regulators|Securities and Exchange Commission)\b|регулятор/iu;
 const EXCHANGE_PATTERN = /\b(?:exchange|Binance|Coinbase|Kraken|OKX)\b|бірж|бирж/iu;
-const PROTOCOL_PATTERN = /\b(?:protocol|network|foundation|DAO)\b|протокол|мереж/iu;
+const PROTOCOL_PATTERN = /\b(?:protocol|network|foundation|DAO|bridge)\b|протокол|мереж/iu;
 const WHALE_PATTERN = /\bwhales?\b|кит(?:и|ів|ы|ов)?/iu;
 const INVESTOR_PATTERN = /\b(?:investor|investors|holder|holders)\b|інвестор|инвестор/iu;
 
 const CRYPTO_ASSET_SOURCE = String.raw`(?:BTC|Bitcoin|ETH|Ether|Ethereum|SOL|Solana)`;
-const TRADE_ACTION_SOURCE = String.raw`(?:buy|buys|buying|bought|purchase|purchases|purchased|adds?|added|accumulates?|accumulated|sell|sells|selling|sold|offload|offloads|offloaded|dump|dumps|dumped|divests?|divested|withdraw|withdraws|withdrew|outflow|outflows|redemption|redemptions)`;
-const NEGATED_TRADE_PATTERN = /\b(?:pause[sd]?|skip[sp]?|halt(?:s|ed)?|stop(?:s|ped)?)\b[^.]{0,45}\b(?:buy|buys|buying|purchase|purchases|purchasing)\b|\b(?:reports?\s+)?no\s+sales?\b/iu;
+const TRADE_ACTION_SOURCE = String.raw`(?:buy|buys|buying|bought|purchase|purchases|purchased|adds?|added|accumulates?|accumulated|sell|sells|selling|sold|sale|sales|offload|offloads|offloaded|dump|dumps|dumped|divests?|divested|withdraw|withdraws|withdrew|outflow|outflows|redemption|redemptions)`;
+const NEGATED_TRADE_PATTERN = /\b(?:pause[sd]?|skip[sp]?|halt(?:s|ed)?|stop(?:s|ped)?)\b[^.]{0,45}\b(?:buy|buys|buying|purchase|purchases|purchasing)\b|\bmay\s+slow\b[^.]{0,40}\b(?:buy|buys|buying|purchase|purchases)\b|\b(?:reports?\s+)?no\s+sales?\b/iu;
 const CRYPTO_TREASURY_EQUITY_PATTERN = /\b(?:Bitcoin|Ethereum|Ether|Solana|BTC|ETH|SOL)\s+(?:treasury\s+)?(?:shares?|stocks?)\b/iu;
 const HACK_INCIDENT_PATTERN = /\b(?:hack|hacks|hacked|hacking|exploit|exploits|exploited|security breach|data breach)\b/iu;
 const HACK_NON_INCIDENT_PATTERN = /\b(?:no|without|prevent|prevents|prevented|prevention|safe\s+against|avoids?|detects?|detection|den(?:y|ies|ied)|warns?\s+of\s+(?:a\s+)?potential|potential)\b[^.]{0,60}\b(?:hack|exploit|breach)|\b(?:hack|exploit|breach)\b[^.]{0,45}\b(?:prevented|avoided|detection)\b/iu;
+const NON_CRYPTO_SELL_PATTERN = /\b(?:preferred\s+)?(?:stock|shares?|equity)\s+sales?\b|\bsales?\s+of\s+(?:preferred\s+)?(?:stock|shares?|equity)\b|\bexits?\b[^,.;:]{0,45}\b(?:stock|shares?|equity)\b/iu;
 
 function round(value: number): number {
   return Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
@@ -103,6 +104,7 @@ export function extractSemanticAmount(text: string): SemanticAmount | null {
 }
 
 function inferAction(text: string, targetAsset: Asset | null): AiAction | null {
+  text = text.replace(/\b(?:end|ends|ended|ending)\b[^,.;:]{0,45}\b(?:inflow|outflow)\s+streak\b/giu, "");
   if (/\bacqui(?:re|res|red|ring)\b\s+(?:(?:more\s+than|another)\s+)?(?:\$?[\d,.]+\s*(?:million|billion|mn|bn|m|b)?\s+)?(?:in\s+)?(?:BTC|Bitcoin|ETH|Ether|Ethereum|SOL|Solana)\b|\bacqui(?:re|res|red|ring)\b[^.]{0,80}\bfor (?:its )?treasury\b/iu.test(text)) return "buy";
   if (NEGATED_TRADE_PATTERN.test(text)) return null;
   if (/\bbuys?\s+back\b|\b(?:gets?|calls?)\b[^,.;:]{0,50}\b(?:a\s+)?["'‘’]?buy["'‘’]?\b|\bbuy\s+ratings?\b|\bdid\s+you\s+buy\b/iu.test(text)) return null;
@@ -112,16 +114,43 @@ function inferAction(text: string, targetAsset: Asset | null): AiAction | null {
     if (!containsCryptoAsset || CRYPTO_TREASURY_EQUITY_PATTERN.test(equityTrade)) return null;
   }
   const targetSource = targetAsset ? ASSET_PATTERNS[targetAsset].source : CRYPTO_ASSET_SOURCE;
+  const otherAssetSource = targetAsset
+    ? (Object.keys(ASSET_PATTERNS) as Asset[])
+      .filter((asset) => asset !== targetAsset)
+      .map((asset) => ASSET_PATTERNS[asset].source)
+      .join("|")
+    : null;
+  const clauseActionGap = (distance: number) => String.raw`(?:(?!\b(?:${TRADE_ACTION_SOURCE}|as|while|but|whereas)\b)[^!?,;:]){0,${distance}}`;
+  const semanticGap = (distance: number) => String.raw`(?:(?!\b(?:${TRADE_ACTION_SOURCE}|as|while|but|whereas)\b${otherAssetSource ? `|(?:${otherAssetSource})` : ""})[^!?,;:]){0,${distance}}`;
   const directActions: ReadonlyArray<readonly [AiAction, RegExp]> = [
-    ["buy", new RegExp(String.raw`\b(?:buy|buys|buying|bought|purchase|purchases|purchased|adds?|added|accumulates?|accumulated)\b(?:(?!\b${TRADE_ACTION_SOURCE}\b)[^!?]){0,80}(?:${targetSource})`, "iu")],
-    ["sell", new RegExp(String.raw`\b(?:sell|sells|selling|sold|offload|offloads|offloaded|dump|dumps|dumped|divests?|divested)\b(?:(?!\b${TRADE_ACTION_SOURCE}\b)[^!?]){0,80}(?:${targetSource})`, "iu")],
-    ["withdraw", new RegExp(String.raw`\b(?:withdraw|withdraws|withdrew|outflow|outflows|redemption|redemptions)\b(?:(?!\b${TRADE_ACTION_SOURCE}\b)[^!?]){0,80}(?:${targetSource})`, "iu")],
+    ["buy", new RegExp(String.raw`\b(?:buy|buys|buying|bought|purchase|purchases|purchased|adds?|added|accumulates?|accumulated)\b${semanticGap(80)}(?:${targetSource})|(?:${targetSource})${semanticGap(80)}\b(?:buy|buys|buying|bought|purchase|purchases|purchased|adds?|added|accumulates?|accumulated)\b`, "iu")],
+    ["sell", new RegExp(String.raw`\b(?:sell|sells|selling|sold|offload|offloads|offloaded|dump|dumps|dumped|divests?|divested)\b${semanticGap(80)}(?:${targetSource})|(?:${targetSource})${semanticGap(80)}\b(?:sell|sells|selling|sold|sales?|offload|offloads|offloaded|dump|dumps|dumped|divests?|divested)\b`, "iu")],
+    ["withdraw", new RegExp(String.raw`\b(?:withdraw|withdraws|withdrew|outflow|outflows|redemption|redemptions)\b${semanticGap(80)}(?:${targetSource})|(?:${targetSource})${semanticGap(80)}\b(?:withdraw|withdraws|withdrew|outflow|outflows|redemption|redemptions)\b`, "iu")],
   ];
   const direct = directActions
     .map(([candidate, pattern]) => ({ candidate, index: text.search(pattern) }))
     .filter(({ index }) => index >= 0)
     .sort((left, right) => left.index - right.index)[0];
   if (direct) return direct.candidate;
+  if (targetAsset && otherAssetSource) {
+    const coordinatedListAction = text.match(new RegExp(
+      String.raw`(?:${targetSource})\s*,\s*(?:${otherAssetSource})\s+\b(buy|buys|buying|purchase|purchases|sales?|selling|outflows?|redemptions?)\b`,
+      "iu",
+    ))?.[1]?.toLowerCase();
+    if (coordinatedListAction) {
+      if (/^(?:buy|buys|buying|purchase|purchases)$/u.test(coordinatedListAction)) return "buy";
+      if (/^(?:outflow|outflows|redemption|redemptions)$/u.test(coordinatedListAction)) return "withdraw";
+      return "sell";
+    }
+  }
+  if (targetAsset) {
+    const otherAssets = (Object.keys(ASSET_PATTERNS) as Asset[]).filter((asset) => asset !== targetAsset);
+    const otherAssetTrade = otherAssets.some((asset) => new RegExp(
+      String.raw`(?:${ASSET_PATTERNS[asset].source})${clauseActionGap(60)}\b${TRADE_ACTION_SOURCE}\b|\b${TRADE_ACTION_SOURCE}\b${clauseActionGap(60)}(?:${ASSET_PATTERNS[asset].source})`, "iu",
+    ).test(text));
+    if (otherAssetTrade) return null;
+  }
+  if (NON_CRYPTO_SELL_PATTERN.test(text)) return null;
   return ACTION_PATTERNS.find(([, pattern]) => pattern.test(text))?.[0] ?? null;
 }
 
@@ -151,7 +180,6 @@ function inferDirection(action: AiAction | null, text: string): AiDirection {
 function assetRole(event: SemanticEventInput, asset: Asset | null): SemanticEventMatch["assetRole"] {
   if (!asset || !event.assets.includes(asset)) return "unknown";
   if (ASSET_PATTERNS[asset].test(event.title)) return "primary";
-  if (event.primaryAsset) return event.primaryAsset === asset ? "primary" : "secondary";
   return "secondary";
 }
 
@@ -163,7 +191,14 @@ function topicMatches(
   actor: AiActorType,
   magnitude: AiMagnitude,
   role: SemanticEventMatch["assetRole"],
+  targetAsset: Asset | null,
 ): boolean {
+  const targetSource = targetAsset ? ASSET_PATTERNS[targetAsset].source : CRYPTO_ASSET_SOURCE;
+  const clauseGap = (distance: number) => String.raw`(?:(?!\b(?:as|while|but|whereas)\b)[^,;:]){0,${distance}}`;
+  const targeted = (subjectSource: string, distance: number) => new RegExp(
+    String.raw`(?:${targetSource})${clauseGap(distance)}(?:${subjectSource})|(?:${subjectSource})${clauseGap(distance)}(?:${targetSource})`,
+    "iu",
+  ).test(text);
   switch (topic) {
     case "large_investment":
       return role === "primary" && magnitude === "large" && (action === "buy" || action === "invest");
@@ -184,9 +219,15 @@ function topicMatches(
     case "liquidation":
       return action === "liquidate";
     case "etf_inflow":
-      return ETF_PATTERN.test(text) && direction === "inflow";
+      return ETF_PATTERN.test(text) && direction === "inflow"
+        && !/\b(?:end|ends|ended|ending)\b[^,.;:]{0,35}\binflows?\s+streak\b/iu.test(text)
+        && targeted(String.raw`\b(?:ETF|ETFs|exchange[- ]traded funds?)\b`, 40)
+        && targeted(String.raw`\binflows?\b`, 80);
     case "etf_outflow":
-      return ETF_PATTERN.test(text) && direction === "outflow";
+      return ETF_PATTERN.test(text) && direction === "outflow"
+        && !/\b(?:end|ends|ended|ending)\b[^,.;:]{0,35}\boutflows?\s+streak\b/iu.test(text)
+        && targeted(String.raw`\b(?:ETF|ETFs|exchange[- ]traded funds?)\b`, 40)
+        && targeted(String.raw`\b(?:outflows?|redemptions?)\b`, 80);
     case "etf":
       return ETF_PATTERN.test(text);
     case "sec":
@@ -194,7 +235,8 @@ function topicMatches(
     case "sec_filings":
       return /\b(?:SEC\s+filings?|8-K|10-K|10-Q|S-1|19b-4|registration statement)\b/iu.test(text);
     case "hack":
-      return HACK_INCIDENT_PATTERN.test(text) && !HACK_NON_INCIDENT_PATTERN.test(text);
+      return HACK_INCIDENT_PATTERN.test(text) && !HACK_NON_INCIDENT_PATTERN.test(text)
+        && targeted(String.raw`\b(?:hack|hacks|hacked|hacking|exploit|exploits|exploited|security breach|data breach)\b`, 80);
     case "listing":
       return action === "list";
     case "lawsuit":
@@ -265,7 +307,7 @@ export function classifySemanticEvent(event: SemanticEventInput, intent: AiSearc
   if (intent.amount) {
     if (!amount || amount.currency !== intent.amount.currency || amount.value < intent.amount.value) return fail(base, "amount-below-request");
   }
-  if (intent.topic && !topicMatches(intent.topic, text, action, direction, actorType, magnitude, role)) {
+  if (intent.topic && !topicMatches(intent.topic, text, action, direction, actorType, magnitude, role, intent.asset)) {
     return fail(base, "topic-meaning-mismatch");
   }
 

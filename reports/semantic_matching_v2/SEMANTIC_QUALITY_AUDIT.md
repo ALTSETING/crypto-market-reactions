@@ -49,7 +49,7 @@ Legacy ETH large-investment sample: **339**; exact 339 confirmed: **True**.
 | true_large_eth_investment | 23 | 6.78% |
 | unrelated_false_positive | 45 | 13.27% |
 
-Candidate ETH cohorts from the shipped TypeScript classifier: `large_investment` **117**, `institutional_purchase` **134**, `institutional_selling` **130**.
+Candidate ETH cohorts from the shipped TypeScript classifier: `large_investment` **55**, `institutional_purchase` **48**, `institutional_selling` **33**.
 
 ### Reaction V2 statistical impact
 
@@ -61,41 +61,41 @@ Candidate ETH cohorts from the shipped TypeScript classifier: `large_investment`
 | eth_large_before_legacy | 1h | 339 | -0.062887 | -0.039133 | 0.483776 | -0.046607 | 0.894014 | 0.048556 |
 | eth_large_before_legacy | 4h | 339 | -0.001379 | -0.019889 | 0.492625 | 0.056777 | 1.780904 | 0.096725 |
 | eth_large_before_legacy | 24h | 339 | -0.239890 | -0.262196 | 0.477876 | -0.309798 | 3.716271 | 0.201840 |
-| eth_large_after_semantic_cleaning | 1m | 117 | -0.020493 | -0.012492 | 0.427350 | -0.014301 | 0.110993 | 0.010261 |
-| eth_large_after_semantic_cleaning | 5m | 117 | 0.011609 | 0.009476 | 0.529915 | 0.011227 | 0.217654 | 0.020122 |
-| eth_large_after_semantic_cleaning | 15m | 117 | 0.012698 | 0.046861 | 0.521368 | 0.016687 | 0.306578 | 0.028343 |
-| eth_large_after_semantic_cleaning | 1h | 117 | 0.006964 | 0.048116 | 0.512821 | -0.000019 | 0.799747 | 0.073937 |
-| eth_large_after_semantic_cleaning | 4h | 117 | 0.138623 | 0.046997 | 0.521368 | 0.104492 | 1.639731 | 0.151593 |
-| eth_large_after_semantic_cleaning | 24h | 117 | 0.025187 | -0.425415 | 0.487179 | -0.167749 | 3.978700 | 0.367831 |
-| institutional_buying | 1m | 134 | -0.009757 | 0.001074 | 0.500000 | -0.003515 | 0.113514 | 0.009806 |
-| institutional_buying | 5m | 134 | 0.016801 | 0.010890 | 0.559701 | 0.008468 | 0.240215 | 0.020751 |
-| institutional_buying | 15m | 134 | 0.055107 | 0.053159 | 0.544776 | 0.045985 | 0.420607 | 0.036335 |
-| institutional_buying | 1h | 134 | 0.056801 | 0.064678 | 0.529851 | 0.058528 | 0.793278 | 0.068529 |
-| institutional_buying | 4h | 134 | -0.066616 | -0.176496 | 0.462687 | -0.038275 | 1.645840 | 0.142179 |
-| institutional_buying | 24h | 134 | -0.157822 | -0.234446 | 0.455224 | -0.137276 | 3.692113 | 0.318950 |
-| institutional_selling_or_outflow | 1m | 130 | -0.020780 | -0.009773 | 0.446154 | -0.013408 | 0.109016 | 0.009561 |
-| institutional_selling_or_outflow | 5m | 130 | -0.034601 | 0.004901 | 0.515385 | -0.012506 | 0.302548 | 0.026535 |
-| institutional_selling_or_outflow | 15m | 130 | -0.049469 | -0.007472 | 0.500000 | -0.028851 | 0.553126 | 0.048512 |
-| institutional_selling_or_outflow | 1h | 130 | 0.049650 | 0.012533 | 0.530769 | 0.024469 | 0.784382 | 0.068795 |
-| institutional_selling_or_outflow | 4h | 130 | -0.175323 | -0.193708 | 0.400000 | -0.175272 | 1.444505 | 0.126691 |
-| institutional_selling_or_outflow | 24h | 130 | -0.572694 | -0.293541 | 0.453846 | -0.581321 | 4.689979 | 0.411338 |
+| eth_large_after_semantic_cleaning | 1m | 55 | -0.037389 | -0.016164 | 0.418182 | -0.027146 | 0.149899 | 0.020212 |
+| eth_large_after_semantic_cleaning | 5m | 55 | 0.048024 | 0.024191 | 0.581818 | 0.044484 | 0.246868 | 0.033288 |
+| eth_large_after_semantic_cleaning | 15m | 55 | 0.056623 | 0.111826 | 0.618182 | 0.060142 | 0.354490 | 0.047799 |
+| eth_large_after_semantic_cleaning | 1h | 55 | -0.102085 | -0.176134 | 0.472727 | -0.073429 | 0.719857 | 0.097066 |
+| eth_large_after_semantic_cleaning | 4h | 55 | -0.209237 | -0.143251 | 0.472727 | -0.192698 | 1.611800 | 0.217335 |
+| eth_large_after_semantic_cleaning | 24h | 55 | -0.347376 | -0.918543 | 0.418182 | -0.411995 | 4.018999 | 0.541922 |
+| institutional_buying | 1m | 48 | -0.025418 | -0.008193 | 0.437500 | -0.011363 | 0.132388 | 0.019109 |
+| institutional_buying | 5m | 48 | 0.030050 | 0.017937 | 0.562500 | 0.020812 | 0.299038 | 0.043162 |
+| institutional_buying | 15m | 48 | 0.080561 | 0.119626 | 0.604167 | 0.076207 | 0.432497 | 0.062426 |
+| institutional_buying | 1h | 48 | 0.025427 | 0.150058 | 0.541667 | 0.057345 | 0.722734 | 0.104318 |
+| institutional_buying | 4h | 48 | -0.038424 | -0.108700 | 0.479167 | -0.061289 | 1.544660 | 0.222953 |
+| institutional_buying | 24h | 48 | 0.148571 | -0.179318 | 0.479167 | 0.093940 | 3.680953 | 0.531300 |
+| institutional_selling_or_outflow | 1m | 33 | 0.014445 | -0.012090 | 0.424242 | 0.013830 | 0.134491 | 0.023412 |
+| institutional_selling_or_outflow | 5m | 33 | 0.005197 | -0.021550 | 0.454545 | -0.000426 | 0.333463 | 0.058048 |
+| institutional_selling_or_outflow | 15m | 33 | -0.101553 | -0.067544 | 0.363636 | -0.077603 | 0.477411 | 0.083107 |
+| institutional_selling_or_outflow | 1h | 33 | -0.062877 | 0.009347 | 0.545455 | -0.009328 | 0.795567 | 0.138490 |
+| institutional_selling_or_outflow | 4h | 33 | -0.212636 | -0.434896 | 0.303030 | -0.279868 | 1.238563 | 0.215606 |
+| institutional_selling_or_outflow | 24h | 33 | -0.039959 | -0.657846 | 0.424242 | -0.059408 | 4.056341 | 0.706118 |
 
 ### Cohort deltas
 
 | Comparison | Horizon | left n | right n | Mean delta | Median delta | Positive-share delta (pp) | Trimmed-mean delta |
 |---|---|---:|---:|---:|---:|---:|---:|
-| after_minus_before | 1m | 117 | 339 | -0.018642 | -0.014062 | -8.002420 | -0.014581 |
-| after_minus_before | 5m | 117 | 339 | 0.022993 | 0.017378 | 5.793813 | 0.023027 |
-| after_minus_before | 15m | 117 | 339 | 0.023910 | 0.049878 | 2.874215 | 0.027642 |
-| after_minus_before | 1h | 117 | 339 | 0.069851 | 0.087248 | 2.904470 | 0.046588 |
-| after_minus_before | 4h | 117 | 339 | 0.140002 | 0.066886 | 2.874215 | 0.047715 |
-| after_minus_before | 24h | 117 | 339 | 0.265077 | -0.163219 | 0.930338 | 0.142049 |
-| institutional_buying_minus_selling | 1m | 134 | 130 | 0.011023 | 0.010848 | 5.384615 | 0.009893 |
-| institutional_buying_minus_selling | 5m | 134 | 130 | 0.051402 | 0.005989 | 4.431688 | 0.020975 |
-| institutional_buying_minus_selling | 15m | 134 | 130 | 0.104577 | 0.060631 | 4.477612 | 0.074836 |
-| institutional_buying_minus_selling | 1h | 134 | 130 | 0.007151 | 0.052145 | -0.091848 | 0.034059 |
-| institutional_buying_minus_selling | 4h | 134 | 130 | 0.108707 | 0.017212 | 6.268657 | 0.136998 |
-| institutional_buying_minus_selling | 24h | 134 | 130 | 0.414871 | 0.059095 | 0.137773 | 0.444046 |
+| after_minus_before | 1m | 55 | 339 | -0.035537 | -0.017734 | -8.919281 | -0.027426 |
+| after_minus_before | 5m | 55 | 339 | 0.059407 | 0.032093 | 10.984178 | 0.056283 |
+| after_minus_before | 15m | 55 | 339 | 0.067835 | 0.114843 | 12.555645 | 0.071097 |
+| after_minus_before | 1h | 55 | 339 | -0.039198 | -0.137002 | -1.104854 | -0.026822 |
+| after_minus_before | 4h | 55 | 339 | -0.207858 | -0.123362 | -1.989810 | -0.249475 |
+| after_minus_before | 24h | 55 | 339 | -0.107487 | -0.656347 | -5.969429 | -0.102197 |
+| institutional_buying_minus_selling | 1m | 48 | 33 | -0.039863 | 0.003897 | 1.325758 | -0.025193 |
+| institutional_buying_minus_selling | 5m | 48 | 33 | 0.024854 | 0.039486 | 10.795455 | 0.021238 |
+| institutional_buying_minus_selling | 15m | 48 | 33 | 0.182114 | 0.187170 | 24.053030 | 0.153809 |
+| institutional_buying_minus_selling | 1h | 48 | 33 | 0.088304 | 0.140710 | -0.378788 | 0.066673 |
+| institutional_buying_minus_selling | 4h | 48 | 33 | 0.174212 | 0.326195 | 17.613636 | 0.218579 |
+| institutional_buying_minus_selling | 24h | 48 | 33 | 0.188530 | 0.478528 | 5.492424 | 0.153347 |
 
 ## Independent math verification
 
