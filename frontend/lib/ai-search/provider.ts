@@ -2,7 +2,10 @@ import "server-only";
 
 import { applyExplicitQuestionDefaults, resolveDeterministicConstraints, resolveExplicitQuestion } from "@/lib/ai-search/intent-defaults";
 import { parseMockIntent } from "@/lib/ai-search/mock-provider";
+import { OpenAiRequestError, publicOpenAiDiagnosticCode, requestOpenAiResponse, type OpenAiSafeDiagnostic } from "@/lib/ai-search/openai-diagnostics";
+import { buildStructuredResponseRequest, extractOpenAiOutputText, type OpenAiResponseBody } from "@/lib/ai-search/openai-request-factory";
 import { AI_RESOLUTION_JSON_SCHEMA, validateResolutionEnvelope } from "@/lib/ai-search/schema";
+import { StrictSchemaValidationError } from "@/lib/ai-search/strict-schema";
 import type { IntentResolution } from "@/types/ai-search";
 
 export interface AiIntentProvider {
@@ -26,6 +29,7 @@ interface OpenAiProviderOptions {
   fetchImpl?: typeof fetch;
   maxCostUsd?: number;
   onUsage?: (usage: ProviderUsage) => void;
+  onDiagnostic?: (diagnostic: OpenAiSafeDiagnostic) => void;
 }
 
 export interface ProviderUsage {
@@ -69,80 +73,91 @@ export class OpenAiIntentProvider implements AiIntentProvider {
     if (estimateGpt5MiniCost(estimatedInputCeiling, MAX_OUTPUT_TOKENS) > configuredMaxCost) {
       return { status: "rejected", message: "The configured per-request AI cost limit is too low." };
     }
-    let lastError: unknown;
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      const startedAt = performance.now();
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+    const startedAt = performance.now();
+    try {
+      const response = await requestOpenAiResponse({
+        apiKey: this.options.apiKey,
+        model: this.options.model,
+        timeoutMs: this.timeoutMs,
+        fetchImpl: this.fetchImpl,
+        onDiagnostic: this.options.onDiagnostic,
+        body: buildStructuredResponseRequest({
+          model: this.options.model,
+          instructions: PROVIDER_INSTRUCTIONS,
+          input: question,
+          maxOutputTokens: MAX_OUTPUT_TOKENS,
+          schemaName: "ai_search_resolution",
+          schema: AI_RESOLUTION_JSON_SCHEMA,
+        }),
+      });
+      let body: OpenAiResponseBody;
       try {
-        const response = await this.fetchImpl("https://api.openai.com/v1/responses", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${this.options.apiKey}`, "Content-Type": "application/json" },
-          signal: controller.signal,
-          body: JSON.stringify({
-            model: this.options.model,
-            store: false,
-            max_output_tokens: MAX_OUTPUT_TOKENS,
-            reasoning: { effort: "minimal" },
-            instructions: PROVIDER_INSTRUCTIONS,
-            input: question,
-            text: { format: { type: "json_schema", name: "ai_search_resolution", strict: true, schema: AI_RESOLUTION_JSON_SCHEMA } },
-          }),
-        });
-        if (!response.ok) {
-          if (response.status >= 500 && attempt === 0) throw new Error("Temporary provider failure");
-          return { status: "rejected", message: "The AI intent provider could not process this question." };
-        }
-        let body: {
-          output_text?: string;
-          output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
-          model?: string;
-          usage?: {
-            input_tokens?: number;
-            output_tokens?: number;
-            total_tokens?: number;
-            input_tokens_details?: { cached_tokens?: number };
-          };
+        body = await response.json() as typeof body;
+      } catch {
+        return {
+          status: "rejected", message: "The AI provider returned an invalid structured response.", diagnosticCode: "OPENAI_UNKNOWN_REJECTION",
         };
-        try {
-          body = await response.json() as typeof body;
-        } catch {
-          return { status: "rejected", message: "The AI provider returned an invalid structured response." };
-        }
-        const usage: ProviderUsage = {
-          model: body.model ?? this.options.model,
-          inputTokens: body.usage?.input_tokens ?? 0,
-          cachedInputTokens: body.usage?.input_tokens_details?.cached_tokens ?? 0,
-          outputTokens: body.usage?.output_tokens ?? 0,
-          totalTokens: body.usage?.total_tokens ?? 0,
-          latencyMs: Math.round(performance.now() - startedAt),
-          estimatedCostUsd: estimateGpt5MiniCost(
-            body.usage?.input_tokens ?? 0,
-            body.usage?.output_tokens ?? 0,
-            body.usage?.input_tokens_details?.cached_tokens ?? 0,
-          ),
-        };
-        this.options.onUsage?.(usage);
-        console.info("AI intent provider usage", usage);
-        if (usage.estimatedCostUsd > configuredMaxCost) {
-          return { status: "rejected", message: "The AI request exceeded its configured cost limit." };
-        }
-        const text = body.output_text ?? body.output?.flatMap((item) => item.content ?? []).find((item) => item.type === "output_text")?.text;
-        if (!text || text.length > 12_000) return { status: "rejected", message: "The AI provider returned an invalid structured response." };
-        try {
-          return applyExplicitQuestionDefaults(question, validateResolutionEnvelope(JSON.parse(text)), constraints.constraints);
-        } catch {
-          return { status: "rejected", message: "The AI provider returned an invalid structured response." };
-        }
-      } catch (error) {
-        lastError = error;
-        if (attempt === 1) break;
-      } finally {
-        clearTimeout(timeout);
       }
+      const usage: ProviderUsage = {
+        model: body.model ?? this.options.model,
+        inputTokens: body.usage?.input_tokens ?? 0,
+        cachedInputTokens: body.usage?.input_tokens_details?.cached_tokens ?? 0,
+        outputTokens: body.usage?.output_tokens ?? 0,
+        totalTokens: body.usage?.total_tokens ?? 0,
+        latencyMs: Math.round(performance.now() - startedAt),
+        estimatedCostUsd: estimateGpt5MiniCost(
+          body.usage?.input_tokens ?? 0,
+          body.usage?.output_tokens ?? 0,
+          body.usage?.input_tokens_details?.cached_tokens ?? 0,
+        ),
+      };
+      this.options.onUsage?.(usage);
+      console.info("AI intent provider usage", usage);
+      if (usage.estimatedCostUsd > configuredMaxCost) {
+        return { status: "rejected", message: "The AI request exceeded its configured cost limit." };
+      }
+      const text = extractOpenAiOutputText(body);
+      if (!text || text.length > 12_000) return {
+        status: "rejected", message: "The AI provider returned an invalid structured response.", diagnosticCode: "OPENAI_UNKNOWN_REJECTION",
+      };
+      try {
+        return applyExplicitQuestionDefaults(question, validateResolutionEnvelope(JSON.parse(text)), constraints.constraints);
+      } catch {
+        return {
+          status: "rejected", message: "The AI provider returned an invalid structured response.", diagnosticCode: "OPENAI_UNKNOWN_REJECTION",
+        };
+      }
+    } catch (error) {
+      if (error instanceof StrictSchemaValidationError) {
+        console.warn("OpenAI provider schema validation failed", { code: error.code });
+        return {
+          status: "rejected",
+          message: "The AI intent provider schema is invalid.",
+          diagnosticCode: "OPENAI_SCHEMA_INVALID",
+        };
+      }
+      if (!(error instanceof OpenAiRequestError)) {
+        console.warn("OpenAI provider diagnostic", {
+          category: "OPENAI_UNKNOWN_REJECTION",
+          httpStatus: null,
+          errorClass: "UnknownError",
+          errorType: null,
+          errorCode: null,
+          errorParam: null,
+          requestId: null,
+          model: this.options.model,
+          attempt: 1,
+          latencyMs: Math.round(performance.now() - startedAt),
+        } satisfies OpenAiSafeDiagnostic);
+      }
+      return {
+        status: "rejected",
+        message: "The AI intent provider is temporarily unavailable.",
+        diagnosticCode: error instanceof OpenAiRequestError
+          ? publicOpenAiDiagnosticCode(error.diagnostic.category)
+          : "OPENAI_UNKNOWN_REJECTION",
+      };
     }
-    console.warn("AI intent provider unavailable", { name: lastError instanceof Error ? lastError.name : "UnknownError" });
-    return { status: "rejected", message: "The AI intent provider is temporarily unavailable." };
   }
 }
 

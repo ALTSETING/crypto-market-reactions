@@ -26,6 +26,7 @@ export async function executeAiSearch(
         status: resolution.status === "clarification" ? "clarification" : "error",
         code: resolution.status === "clarification" ? "CLARIFICATION_REQUIRED" : "AI_PROVIDER_UNAVAILABLE",
         message: resolution.message,
+        ...(resolution.status === "rejected" && resolution.diagnosticCode ? { diagnosticCode: resolution.diagnosticCode } : {}),
       },
     };
   }
