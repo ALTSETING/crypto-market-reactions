@@ -184,7 +184,7 @@ export const AI_INTENT_JSON_SCHEMA = {
         },
       ],
     },
-    entity: { anyOf: [{ type: "string", minLength: 1, maxLength: 80, pattern: "^[\\p{L}\\p{N}][\\p{L}\\p{N} .&'’_-]{0,79}$" }, { type: "null" }] },
+    entity: { anyOf: [{ type: "string", minLength: 1, maxLength: 80 }, { type: "null" }] },
     assetRole: { type: "string", enum: AI_ASSET_ROLES },
     sourceClass: { anyOf: [{ type: "string", enum: SOURCE_TYPES }, { type: "null" }] },
     sentiment: { anyOf: [{ type: "string", enum: AI_SENTIMENTS }, { type: "null" }] },
