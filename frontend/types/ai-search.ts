@@ -129,22 +129,10 @@ export interface AiSearchIntent {
   limit: number;
 }
 
-export type PublicOpenAiDiagnosticCode =
-  | "OPENAI_SCHEMA_INVALID"
-  | "OPENAI_400_BAD_REQUEST"
-  | "OPENAI_401_AUTHENTICATION"
-  | "OPENAI_403_PERMISSION_DENIED"
-  | "OPENAI_404_MODEL_NOT_FOUND"
-  | "OPENAI_429_BILLING_OR_LIMIT"
-  | "OPENAI_5XX_UPSTREAM"
-  | "OPENAI_TIMEOUT"
-  | "OPENAI_CONNECTION_ERROR"
-  | "OPENAI_UNKNOWN_REJECTION";
-
 export type IntentResolution =
   | { status: "ready"; intent: AiSearchIntent }
   | { status: "clarification"; message: string }
-  | { status: "rejected"; message: string; diagnosticCode?: PublicOpenAiDiagnosticCode };
+  | { status: "rejected"; message: string };
 
 export interface AnalyticsEvent {
   eventId: string;
@@ -277,5 +265,4 @@ export interface AiSearchErrorBody {
   status: "error" | "clarification" | "rejected";
   code: string;
   message: string;
-  diagnosticCode?: PublicOpenAiDiagnosticCode;
 }
