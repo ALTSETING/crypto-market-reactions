@@ -27,7 +27,8 @@ describe("server-only OpenAI provider boundary", () => {
     await expect(provider.resolve("How many positive ETH events were there in 2023?")).resolves.toEqual({ status: "ready", intent: validIntent });
     expect(fetchImpl).toHaveBeenCalledTimes(2);
     const request = JSON.parse(fetchImpl.mock.calls[0][1]?.body as string);
-    expect(request).toMatchObject({ model: "gpt-5-mini", store: false, max_output_tokens: 500, reasoning: { effort: "minimal" }, text: { format: { type: "json_schema", strict: true } } });
+    expect(request).toMatchObject({ model: "gpt-5-mini", store: false, max_output_tokens: 500, text: { format: { type: "json_schema", strict: true } } });
+    expect(request).not.toHaveProperty("reasoning");
     expect(request).not.toHaveProperty("response_format");
     expect(request).not.toHaveProperty("tools");
     expect(onUsage).toHaveBeenCalledWith(expect.objectContaining({ model: "gpt-5-mini", inputTokens: 100, outputTokens: 40 }));
@@ -46,7 +47,6 @@ describe("server-only OpenAI provider boundary", () => {
           "instructions",
           "max_output_tokens",
           "model",
-          "reasoning",
           "store",
           "text",
         ],

@@ -37,7 +37,6 @@ describe("canonical OpenAI Responses request factory", () => {
       model: "gpt-5-mini",
       store: false,
       max_output_tokens: 700,
-      reasoning: { effort: "minimal" },
       instructions: "redacted instructions",
       input: "redacted input",
     });
@@ -47,7 +46,6 @@ describe("canonical OpenAI Responses request factory", () => {
         "instructions": "string:redacted",
         "max_output_tokens": "number",
         "model": "string",
-        "reasoning": "object",
         "store": "boolean",
       }
     `);

@@ -26,7 +26,6 @@ export interface PlainResponseRequest {
   model: string;
   store: false;
   max_output_tokens: number;
-  reasoning: { effort: "minimal" };
   instructions: string;
   input: string;
 }
@@ -121,7 +120,6 @@ export function buildPlainResponseRequest(options: ResponseRequestOptions): Plai
     model: options.model,
     store: false,
     max_output_tokens: options.maxOutputTokens,
-    reasoning: { effort: "minimal" },
     instructions: options.instructions,
     input: options.input,
   };
@@ -146,7 +144,7 @@ export function buildStructuredResponseRequest(options: StructuredResponseReques
 
 export function assertCanonicalResponseRequest(body: OpenAiResponseRequest): void {
   const keys = Object.keys(body).sort().join(",");
-  const plainKeys = "input,instructions,max_output_tokens,model,reasoning,store";
+  const plainKeys = "input,instructions,max_output_tokens,model,store";
   const structuredKeys = `${plainKeys},text`;
   const isStructured = "text" in body;
   if (keys !== (isStructured ? structuredKeys : plainKeys)) throw new OpenAiRequestValidationError("The request contains non-canonical parameters.");
