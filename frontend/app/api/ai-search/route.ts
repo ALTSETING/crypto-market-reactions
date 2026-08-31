@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { getAiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { getAiIntentProvider } from "@/lib/ai-search/provider";
+import { getAiResearchRouter } from "@/lib/ai-search/router";
+import { getGeneralAnswerProvider } from "@/lib/ai-search/general-provider";
 import { executeAiSearch } from "@/lib/ai-search/service";
 import { createDistributedRateLimiter, getClientIp, InMemoryRateLimiter, type RateLimiter, type RateLimitResult } from "@/lib/rate-limit";
 import type { AiSearchErrorBody } from "@/types/ai-search";
@@ -93,7 +95,7 @@ export async function POST(request: Request) {
       return error(413, "REQUEST_TOO_LARGE", "Request body is too large.", headers);
     }
     const payload = JSON.parse(rawBody) as { question?: unknown };
-    const result = await executeAiSearch(payload?.question, getAiIntentProvider(), getAiSearchDataAdapter());
+    const result = await executeAiSearch(payload?.question, getAiIntentProvider(), getAiSearchDataAdapter(), getAiResearchRouter(), getGeneralAnswerProvider());
     console.info("AI Search request completed", {
       statusCode: result.statusCode,
       latencyMs: Math.round(performance.now() - startedAt),
