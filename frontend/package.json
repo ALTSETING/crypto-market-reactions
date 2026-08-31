@@ -14,7 +14,6 @@
     "smoke:seo": "node scripts/seo-smoke.mjs",
     "smoke:security": "node scripts/access-security-smoke.mjs",
     "smoke:ai-search": "node scripts/ai-search-smoke.mjs",
-    "smoke:ai-research-router": "node scripts/ai-research-router-smoke.mjs",
     "security:bundle": "node scripts/check-client-bundle.mjs"
   },
   "dependencies": {
