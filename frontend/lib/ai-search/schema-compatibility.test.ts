@@ -37,6 +37,7 @@ describe("confirmed OpenAI structured schema compatibility", () => {
 
   it("keeps the same entity restrictions in runtime validation", () => {
     expect(validateIntent(validIntent)).toMatchObject({ entity: "BlackRock" });
+    expect(validateIntent({ ...validIntent, entity: "БлекРок" })).toMatchObject({ entity: "БлекРок" });
     expect(() => validateIntent({ ...validIntent, entity: "<invalid>" })).toThrow(IntentValidationError);
     expect(() => validateIntent({ ...validIntent, entity: "x".repeat(81) })).toThrow(IntentValidationError);
     expect(() => validateIntent({ ...validIntent, entity: " BlackRock" })).toThrow(IntentValidationError);
