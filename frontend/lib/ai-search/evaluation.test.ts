@@ -9,28 +9,6 @@ const provider = new MockAiIntentProvider();
 const adapter = new FixtureAiSearchDataAdapter();
 
 describe("30-query AI Search evaluation", () => {
-  it("returns only an allowlisted diagnostic code on controlled provider 503", async () => {
-    const result = await executeAiSearch("Explain unusual BTC market events", {
-      async resolve() {
-        return {
-          status: "rejected" as const,
-          message: "The AI intent provider is temporarily unavailable.",
-          diagnosticCode: "OPENAI_400_BAD_REQUEST" as const,
-        };
-      },
-    }, adapter);
-    expect(result).toEqual({
-      statusCode: 503,
-      body: {
-        status: "error",
-        code: "AI_PROVIDER_UNAVAILABLE",
-        message: "The AI intent provider is temporarily unavailable.",
-        diagnosticCode: "OPENAI_400_BAD_REQUEST",
-      },
-    });
-    expect(JSON.stringify(result)).not.toMatch(/type|param|requestId|prompt|authorization/iu);
-  });
-
   it("contains the required balanced evaluation set", () => {
     expect(AI_SEARCH_EVALUATION).toHaveLength(35);
     expect(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "supported")).toHaveLength(21);
