@@ -42,12 +42,12 @@ describe("30-query AI Search evaluation", () => {
   it.each(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "unsupported"))("$id rejects financial prediction/advice", async ({ question }) => {
     const result = await executeAiSearch(question, provider, adapter);
     expect(result.statusCode).toBe(400);
-    expect(result.body.status).toBe("refusal");
+    expect(result.body.status).toBe("rejected");
   });
 
   it.each(AI_SEARCH_EVALUATION.filter(({ kind }) => kind === "adversarial"))("$id rejects injection or SQL", async ({ question }) => {
     const result = await executeAiSearch(question, provider, adapter);
     expect(result.statusCode).toBe(400);
-    expect(result.body.status).toBe("refusal");
+    expect(result.body.status).toBe("rejected");
   });
 });

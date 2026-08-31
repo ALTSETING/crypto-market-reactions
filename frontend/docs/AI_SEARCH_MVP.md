@@ -2,13 +2,11 @@
 
 The MVP keeps language interpretation separate from data access and arithmetic:
 
-`question -> safety gate -> deterministic constraints -> AI router -> strict validation -> database/general/hybrid route -> grounded response`
+`question -> safety gate -> intent provider -> strict allowlist validation -> data adapter -> deterministic analytics -> grounded formatter`
 
 Local development defaults to the `mock` provider and fixture adapter. Production has no mock/fixture fallback: `AI_SEARCH_ENABLED=true` requires `AI_SEARCH_PROVIDER=openai`, `AI_SEARCH_DATA_ADAPTER=production`, `OPENAI_API_KEY`, `OPENAI_AI_SEARCH_MODEL=gpt-5-mini`, and `AI_SEARCH_USE_DISTRIBUTED_RATE_LIMITER=true`. Missing configuration produces a controlled `503`.
 
-The key is read only by modules marked `server-only`. The strict router chooses `database`, `general`, `hybrid`, `clarification`, `refusal`, or `live_unsupported`. Deterministic asset, horizon, direction, date, and topic constraints outrank router and base-intent output. Database mode retains the existing Reaction V2 pipeline. General mode produces a timeless explanation with an explicit no-live-sources label. Hybrid mode renders that explanation separately from unchanged deterministic historical statistics and citations.
-
-OpenAI receives the bounded question and strict allowlisted metadata, never event rows or Supabase credentials. Router, intent, and general providers use the Responses API with `store: false`, timeouts, bounded output, at most one retry, and configurable per-request cost ceilings. General-provider failures return a controlled `503`; production has no mock fallback. Logs contain only model, token usage, latency, and estimated cost—never question text, rows, or credentials.
+The key is read only by a module marked `server-only`. The OpenAI provider receives the question and a strict JSON Schema, never event rows or Supabase credentials. It uses the Responses API with `store: false`, a timeout, 500-token output bound, a maximum of one transient retry, and a configurable preflight/actual per-request cost ceiling. Logs contain only model, token usage, latency, and estimated cost—never question text, rows, or credentials.
 
 The production adapter uses only the Supabase query builder and an exact public-column allowlist. Asset/horizon columns come from a static map. Count and ranking use bounded database queries; mean, median, sign share, and comparison scan only the filtered non-null Reaction V2 values and reject matches above 10,000 rows. A normalized-key cache stores completed public analytics results for 30 seconds. Null reactions remain null.
 
