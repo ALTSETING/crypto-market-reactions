@@ -16,7 +16,11 @@ describe("general explanation provider", () => {
       expect(request.store).toBe(false);
       expect(request.max_output_tokens).toBe(700);
       expect(request.input).toContain('"topic":"staking"');
-      return response({ output_text: "Staking helps proof-of-stake networks coordinate validators without implying guaranteed returns.", model: "gpt-5-mini", usage: { input_tokens: 30, output_tokens: 15, total_tokens: 45 } });
+      return response({
+        output: [{ type: "message", content: [{ type: "output_text", text: "Staking helps proof-of-stake networks coordinate validators without implying guaranteed returns." }] }],
+        model: "gpt-5-mini",
+        usage: { input_tokens: 30, output_tokens: 15, total_tokens: 45 },
+      });
     });
     const provider = new OpenAiGeneralAnswerProvider({ apiKey: "server-secret", model: "gpt-5-mini", fetchImpl, onUsage });
     await expect(provider.answer({ question: "What is staking?", language: "en", topic: "staking" })).resolves.toContain("Staking");
