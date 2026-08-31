@@ -9,6 +9,7 @@ import { createDistributedRateLimiter, getClientIp, InMemoryRateLimiter, type Ra
 import type { AiSearchErrorBody } from "@/types/ai-search";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 const PER_IP_LIMIT = 10;
 const DAILY_LIMIT = 500;

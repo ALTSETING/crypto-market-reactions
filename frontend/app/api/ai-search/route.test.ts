@@ -1,12 +1,16 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { POST } from "@/app/api/ai-search/route";
+import { maxDuration, POST } from "@/app/api/ai-search/route";
 
 function request(body: string, contentType = "application/json", extra: Record<string, string> = {}) {
   return new Request("http://localhost/api/ai-search", { method: "POST", headers: { "content-type": contentType, "x-forwarded-for": "198.51.100.8", ...extra }, body });
 }
 
 describe("POST /api/ai-search", () => {
+  it("allows one bounded retry within the Vercel function duration", () => {
+    expect(maxDuration).toBe(60);
+  });
+
   beforeEach(() => {
     process.env.AI_SEARCH_ENABLED = "true";
     process.env.AI_SEARCH_DATA_ADAPTER = "fixture";
