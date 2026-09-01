@@ -167,7 +167,7 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
   if (!ETF_TERM.test(question) && /\b(?:regulatory|regulator|regulators|SEC|CFTC)\b[^.]{0,60}\b(?:approve|approves|approved|approval|approvals|authorization)\b|\b(?:approve|approves|approved|approval|approvals|authorization)\b[^.]{0,60}\b(?:regulatory|regulator|regulators|SEC|CFTC)\b|регулятор\p{L}*[^.]{0,60}(?:схвал|затверд)/iu.test(question)) {
     Object.assign(facts, { topic: "regulatory_approval", actorType: "unknown", action: "approve", direction: "neutral" });
     facts.category = null;
-  } else if (/\b(?:regulatory|regulator|regulators|SEC|CFTC)\b[^.]{0,60}\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?)\b|\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?)\b[^.]{0,60}\b(?:regulatory|regulator|regulators|SEC|CFTC)\b|регулятор\p{L}*[^.]{0,60}(?:тиск|переслідуван|санкц|штраф)/iu.test(question)) {
+  } else if (/\b(?:regulatory|regulator|regulators|SEC|CFTC)\b[^.]{0,60}\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?|sue|sues|sued|lawsuits?|litigation)\b|\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?|sue|sues|sued|lawsuits?|litigation)\b[^.]{0,60}\b(?:regulatory|regulator|regulators|SEC|CFTC)\b|(?:SEC|регулятор\p{L}*)[^.]{0,60}(?:позов|тиск|переслідуван|санкц|штраф)|позов\p{L}*[^.]{0,60}(?:SEC|регулятор\p{L}*)/iu.test(question)) {
     Object.assign(facts, { topic: "regulatory_enforcement", actorType: "unknown", action: null, direction: "neutral" });
     facts.category = null;
   }
