@@ -61,5 +61,7 @@ describe("AI Search prototype", () => {
     expect(html).toContain('aria-label="Historical evidence"');
     expect(html).toContain("Historical evidence");
     expect(html).toContain("Reaction V2");
+    expect(html).toContain("Matched articles");
+    expect(html).toContain("Independent events");
   });
 });

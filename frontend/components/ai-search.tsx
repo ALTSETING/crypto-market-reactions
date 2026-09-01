@@ -171,11 +171,19 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
         <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
       </dl>
       {data.result.topicFilter && (
-        <p className="mt-3 text-sm text-slate-400">
-          Matched <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize} high-relevance events</span>
-          {" from "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> bounded candidates
-          {data.result.topicFilter.heuristicMatches > 0 ? ` (${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches)` : ""}.
-        </p>
+        <div className="mt-3 text-sm text-slate-400">
+          <p>
+            Matched articles <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize}</span>
+            {" · Independent events "}<span className="font-medium text-slate-200">{data.result.topicFilter.independentEventCount}</span>
+            {" · from "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> bounded candidates
+            {data.result.topicFilter.heuristicMatches > 0 ? ` (${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches)` : ""}.
+          </p>
+          {data.result.topicFilter.entityConcentrationWarning && (
+            <p className="mt-2 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-amber-100">
+              Entity concentration warning: {data.result.topicFilter.largestEntity ?? "one entity"} represents {data.result.topicFilter.largestEntityShare.toFixed(1)}% of independent events.
+            </p>
+          )}
+        </div>
       )}
       {sampleSize > 0 && sampleSize < 10 && (
         <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">

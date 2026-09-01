@@ -168,6 +168,7 @@ export interface AiCitation {
   href: string;
   relevanceConfidence?: number;
   assetRole?: Exclude<AiAssetRole, "any"> | "unknown";
+  groupSize?: number;
 }
 
 export interface SearchAnalyticsResult {
@@ -247,6 +248,12 @@ export interface TopicFilterSummary {
   topic: AiTopic;
   broadSampleSize: number;
   matchedSampleSize: number;
+  independentEventCount: number;
+  duplicateGroupCount: number;
+  largestDuplicateGroup: number;
+  largestEntity: string | null;
+  largestEntityShare: number;
+  entityConcentrationWarning: boolean;
   confidenceThreshold: 0.6;
   heuristicMatches: number;
 }

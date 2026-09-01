@@ -13,13 +13,15 @@ import {
 } from "@/lib/ai-search/semantic-matcher";
 import { HORIZONS } from "@/types/events";
 import type { SourceType } from "@/types/events";
+import { groupIndependentEvents } from "@/lib/ai-search/event-dedup";
 
 const round = (value: number): number => Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
-const cite = (event: AnalyticsEvent, match?: SemanticEventMatch): AiCitation => ({
+const cite = (event: AnalyticsEvent, match?: SemanticEventMatch, groupSize = 1): AiCitation => ({
   eventId: event.eventId,
   title: event.title,
   href: `/events/${encodeURIComponent(event.slug)}`,
   ...(match ? { relevanceConfidence: match.confidence, assetRole: match.assetRole } : {}),
+  ...(groupSize > 1 ? { groupSize } : {}),
 });
 
 function broadFiltered(events: readonly AnalyticsEvent[], intent: AiSearchIntent): AnalyticsEvent[] {
@@ -59,6 +61,12 @@ function filtered(events: readonly AnalyticsEvent[], intent: AiSearchIntent): {
       topic: intent.topic,
       broadSampleSize: broad.length,
       matchedSampleSize: matches.length,
+      independentEventCount: matches.length,
+      duplicateGroupCount: 0,
+      largestDuplicateGroup: matches.length > 0 ? 1 : 0,
+      largestEntity: null,
+      largestEntityShare: 0,
+      entityConcentrationWarning: false,
       confidenceThreshold: SEMANTIC_CONFIDENCE_THRESHOLD,
       heuristicMatches: [...semanticMatches.values()].filter(({ confidence }) => confidence === SEMANTIC_CONFIDENCE_THRESHOLD).length,
     } : undefined,
@@ -138,27 +146,39 @@ function comparisonSide(
 
 export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearchIntent): AnalyticsResult {
   const filteredResult = filtered(events, intent);
-  const matches = filteredResult.matches.sort((a, b) => semanticRelevanceNewest(filteredResult.semanticMatches, a, b));
+  const rankedMatches = filteredResult.matches.sort((a, b) => semanticRelevanceNewest(filteredResult.semanticMatches, a, b));
+  const independent = groupIndependentEvents(rankedMatches, intent, filteredResult.semanticMatches);
+  const matches = independent.representatives;
   const semanticMatch = (event: AnalyticsEvent) => filteredResult.semanticMatches.get(event.eventId);
-  const topic = filteredResult.topicFilter ? { topicFilter: filteredResult.topicFilter } : {};
+  const groupSize = (event: AnalyticsEvent) => independent.groupSizeByRepresentativeId.get(event.eventId) ?? 1;
+  const topicFilter = filteredResult.topicFilter ? {
+    ...filteredResult.topicFilter,
+    independentEventCount: matches.length,
+    duplicateGroupCount: independent.duplicateGroupCount,
+    largestDuplicateGroup: independent.largestGroupSize,
+    largestEntity: independent.largestEntity,
+    largestEntityShare: independent.largestEntityShare,
+    entityConcentrationWarning: independent.largestEntityShare > 50,
+  } : undefined;
+  const topic = topicFilter ? { topicFilter } : {};
   if (intent.intent === "search") {
     const selected = (intent.sort === "oldest" ? [...matches].reverse() : matches).slice(0, intent.limit);
-    return { kind: "search", matched: matches.length, returned: selected.length, citations: selected.map((event) => cite(event, semanticMatch(event))), ...topic };
+    return { kind: "search", matched: matches.length, returned: selected.length, citations: selected.map((event) => cite(event, semanticMatch(event), groupSize(event))), ...topic };
   }
   if (intent.intent === "count") {
     const selected = matches.slice(0, intent.limit);
-    return { kind: "count", value: matches.length, sampleSize: matches.length, citations: selected.map((event) => cite(event, semanticMatch(event))), ...topic };
+    return { kind: "count", value: matches.length, sampleSize: matches.length, citations: selected.map((event) => cite(event, semanticMatch(event), groupSize(event))), ...topic };
   }
 
   const rows = values(matches, intent);
-  const citations = rows.slice(0, intent.limit).map(({ event }) => cite(event, semanticMatch(event)));
+  const citations = rows.slice(0, intent.limit).map(({ event }) => cite(event, semanticMatch(event), groupSize(event)));
   if (intent.intent === "rank") {
     const direction = intent.sort as "gainers" | "losers";
     const ordered = [...rows].sort((a, b) =>
       (direction === "gainers" ? b.value - a.value : a.value - b.value) || a.event.eventId.localeCompare(b.event.eventId),
     ).slice(0, intent.limit);
-    const items = ordered.map(({ event, value }) => ({ ...cite(event, semanticMatch(event)), reaction: value }));
-    return { kind: "ranking", direction, sampleSize: rows.length, items, unit: "percent", citations: items.map(({ eventId, title, href }) => ({ eventId, title, href })), ...topic };
+    const items = ordered.map(({ event, value }) => ({ ...cite(event, semanticMatch(event), groupSize(event)), reaction: value }));
+    return { kind: "ranking", direction, sampleSize: rows.length, items, unit: "percent", citations: ordered.map(({ event }) => cite(event, semanticMatch(event), groupSize(event))), ...topic };
   }
   if (intent.intent === "compare" && intent.comparison) {
     const metric = intent.metric as "mean" | "median";
@@ -168,7 +188,7 @@ export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearch
     const comparisonCitations = rows
       .filter(({ event }) => event.sourceClass === intent.comparison!.left || event.sourceClass === intent.comparison!.right)
       .slice(0, intent.limit)
-      .map(({ event }) => cite(event, semanticMatch(event)));
+      .map(({ event }) => cite(event, semanticMatch(event), groupSize(event)));
     return { kind: "comparison", metric, left, right, difference, unit: "percentage_points", citations: comparisonCitations, ...topic };
   }
   if (intent.metric === "sign_share") {
