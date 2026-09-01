@@ -13,9 +13,29 @@ const TOPIC_PATTERNS: Record<AiTopic, readonly RegExp[]> = {
     /\b(?:8-K|10-K|10-Q|S-1|19b-4)\b/iu,
     /\bregistration\s+statement\b/iu,
   ],
+  regulatory_approval: [
+    /\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b[^.]{0,80}\b(?:approve|approves|approved|approvals?|authori[sz](?:e|es|ed|ation))\b/iu,
+    /\b(?:approve|approves|approved|approvals?|authori[sz](?:e|es|ed|ation))\b[^.]{0,80}\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b/iu,
+  ],
+  regulatory_enforcement: [
+    /\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b[^.]{0,80}\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|lawsuits?)\b/iu,
+    /\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|lawsuits?)\b[^.]{0,80}\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b/iu,
+  ],
   etf: [
     /\bETFs?\b/iu,
     /\bexchange[- ]traded\s+funds?\b/iu,
+  ],
+  etf_approval: [
+    /\b(?:ETFs?|exchange[- ]traded\s+funds?)\b[^.]{0,80}\b(?:approve|approves|approved|approvals?|greenlight(?:s|ed)?)\b/iu,
+    /\b(?:approve|approves|approved|approvals?|greenlight(?:s|ed)?)\b[^.]{0,80}\b(?:ETFs?|exchange[- ]traded\s+funds?)\b/iu,
+  ],
+  etf_rejection: [
+    /\b(?:ETFs?|exchange[- ]traded\s+funds?)\b[^.]{0,80}\b(?:reject|rejects|rejected|denies|denied|rejection)\b/iu,
+    /\b(?:reject|rejects|rejected|denies|denied|rejection)\b[^.]{0,80}\b(?:ETFs?|exchange[- ]traded\s+funds?)\b/iu,
+  ],
+  etf_delay: [
+    /\b(?:ETFs?|exchange[- ]traded\s+funds?)\b[^.]{0,80}\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b/iu,
+    /\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b[^.]{0,80}\b(?:ETFs?|exchange[- ]traded\s+funds?)\b/iu,
   ],
   hack: [
     /\bhack(?:ed|ing|s)?\b/iu,
@@ -43,6 +63,14 @@ const TOPIC_PATTERNS: Record<AiTopic, readonly RegExp[]> = {
     /\bFederal\s+Reserve\b/iu,
     /\bFed\b/iu,
     /\bFOMC\b/iu,
+  ],
+  fed_rate_hike: [
+    /\b(?:Fed(?:eral Reserve)?|FOMC)\b[^.]{0,80}\b(?:rate\s+)?(?:hike|hikes|hiked|raise|raises|raised|increase|increases|increased|tightening)\b/iu,
+    /\b(?:rate\s+)?(?:hike|hikes|hiked|raise|raises|raised|increase|increases|increased|tightening)\b[^.]{0,80}\b(?:Fed(?:eral Reserve)?|FOMC)\b/iu,
+  ],
+  fed_rate_cut: [
+    /\b(?:Fed(?:eral Reserve)?|FOMC)\b[^.]{0,80}\b(?:rate\s+)?(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b/iu,
+    /\b(?:rate\s+)?(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b[^.]{0,80}\b(?:Fed(?:eral Reserve)?|FOMC)\b/iu,
   ],
   cpi: [
     /\bCPI\b/iu,

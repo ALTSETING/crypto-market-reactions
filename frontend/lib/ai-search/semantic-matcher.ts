@@ -28,6 +28,7 @@ export interface SemanticEventInput extends Pick<AnalyticsEvent, "title" | "asse
 export interface SemanticEventMatch {
   matched: boolean;
   confidence: number;
+  relevanceScore: number;
   reasons: string[];
   assetRole: Exclude<AiAssetRole, "any"> | "unknown";
   amount: SemanticAmount | null;
@@ -59,7 +60,7 @@ const ACTION_PATTERNS: ReadonlyArray<readonly [AiAction, RegExp]> = [
   ["invest", /\b(?:invest|invests|invested|investing|investment|investments)\b|інвестиц|інвестув|инвестиц/iu],
   ["buy", /\b(?:buy|buys|buying|bought|purchase|purchases|purchased|accumulates?|accumulated|adds?|added)\b|купівл|купил|придбав|придбан/iu],
   ["deposit", /\b(?:deposit|deposits|deposited|inflow|inflows)\b|приплив|притік|приток/iu],
-  ["approve", /\b(?:approve|approves|approved|approval)\b|схвал|одобр/iu],
+  ["approve", /\b(?:approve|approves|approved|approval|approvals)\b|схвал|одобр/iu],
   ["file", /\b(?:file|files|filed|filing|filings)\b/iu],
   ["sue", /\b(?:sue|sues|sued|lawsuit|lawsuits|litigation)\b|позов|иск/iu],
   ["list", /\b(?:list|lists|listed|listing|listings)\b/iu],
@@ -204,7 +205,7 @@ function topicMatches(
       return role === "primary" && magnitude === "large" && (action === "buy" || action === "invest");
     case "institutional_purchase":
       return role === "primary" && direction === "inflow" && (action === "buy" || action === "invest")
-        && ["institution", "fund", "ETF", "company"].includes(actor);
+        && ["institution", "fund", "ETF", "company", "investor", "whale"].includes(actor);
     case "institutional_selling":
       return role === "primary" && direction === "outflow" && ["sell", "divest", "withdraw", "liquidate"].includes(action ?? "")
         && ["institution", "fund", "ETF", "company", "investor", "whale"].includes(actor);
@@ -230,10 +231,22 @@ function topicMatches(
         && targeted(String.raw`\b(?:outflows?|redemptions?)\b`, 80);
     case "etf":
       return ETF_PATTERN.test(text);
+    case "etf_approval":
+      return ETF_PATTERN.test(text) && action === "approve";
+    case "etf_rejection":
+      return ETF_PATTERN.test(text) && action === "reject";
+    case "etf_delay":
+      return ETF_PATTERN.test(text)
+        && /\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b/iu.test(text);
     case "sec":
       return REGULATOR_PATTERN.test(text);
     case "sec_filings":
       return /\b(?:SEC\s+filings?|8-K|10-K|10-Q|S-1|19b-4|registration statement)\b/iu.test(text);
+    case "regulatory_approval":
+      return REGULATOR_PATTERN.test(text) && action === "approve";
+    case "regulatory_enforcement":
+      return REGULATOR_PATTERN.test(text)
+        && /\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|sued|lawsuits?|litigation)\b/iu.test(text);
     case "hack":
       return HACK_INCIDENT_PATTERN.test(text) && !HACK_NON_INCIDENT_PATTERN.test(text)
         && targeted(String.raw`\b(?:hack|hacks|hacked|hacking|exploit|exploits|exploited|security breach|data breach)\b`, 80);
@@ -245,6 +258,12 @@ function topicMatches(
       return /\b(?:macro(?:economic)?|inflation|interest rates?|central banks?|GDP|payrolls?)\b/iu.test(text);
     case "fed":
       return /\b(?:Federal Reserve|Fed|FOMC)\b/iu.test(text);
+    case "fed_rate_hike":
+      return /\b(?:Federal Reserve|Fed|FOMC)\b/iu.test(text)
+        && /\b(?:rate\s+)?(?:hike|hikes|hiked|raise|raises|raised|increase|increases|increased|tightening)\b/iu.test(text);
+    case "fed_rate_cut":
+      return /\b(?:Federal Reserve|Fed|FOMC)\b/iu.test(text)
+        && /\b(?:rate\s+)?(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b/iu.test(text);
     case "cpi":
       return /\b(?:CPI|consumer price index|inflation report)\b/iu.test(text);
     case "upgrade":
@@ -254,8 +273,8 @@ function topicMatches(
   }
 }
 
-function fail(base: Omit<SemanticEventMatch, "matched" | "confidence" | "reasons">, reason: string): SemanticEventMatch {
-  return { ...base, matched: false, confidence: 0, reasons: [reason] };
+function fail(base: Omit<SemanticEventMatch, "matched" | "confidence" | "relevanceScore" | "reasons">, reason: string): SemanticEventMatch {
+  return { ...base, matched: false, confidence: 0, relevanceScore: 0, reasons: [reason] };
 }
 
 function actionCompatible(intent: AiSearchIntent, actual: AiAction | null): boolean {
@@ -269,9 +288,53 @@ function actionCompatible(intent: AiSearchIntent, actual: AiAction | null): bool
     funding: ["fund", "raise"],
     etf_inflow: ["buy", "invest", "deposit"],
     etf_outflow: ["sell", "divest", "withdraw"],
+    etf_approval: ["approve"],
+    etf_rejection: ["reject"],
+    regulatory_approval: ["approve"],
+    hack: ["hack", "exploit"],
   };
   const compatible = intent.topic ? topicActions[intent.topic] : undefined;
   return compatible ? compatible.includes(actual as AiAction) : actual === intent.action;
+}
+
+const DIRECTIONAL_TOPICS = new Set<AiTopic>([
+  "large_investment", "institutional_purchase", "institutional_selling", "capital_inflow", "capital_outflow",
+  "funding", "etf_inflow", "etf_outflow",
+]);
+
+const TOPIC_CATEGORY_ALIASES: Partial<Record<AiTopic, readonly string[]>> = {
+  sec: ["legal", "legal_action", "official_decision", "policy_statement", "regulation"],
+  sec_filings: ["legal", "official_decision", "regulation"],
+  regulatory_approval: ["official_decision", "policy_statement", "regulation"],
+  regulatory_enforcement: ["legal", "legal_action", "official_decision", "regulation"],
+  etf: ["etf"], etf_approval: ["etf", "official_decision", "regulation"],
+  etf_rejection: ["etf", "official_decision", "regulation"], etf_delay: ["etf", "official_decision", "regulation"],
+  etf_inflow: ["etf"], etf_outflow: ["etf"],
+  hack: ["hack", "security", "security_event"],
+  macro: ["macro"], fed: ["macro"], fed_rate_hike: ["macro"], fed_rate_cut: ["macro"], cpi: ["macro"],
+  institutional_purchase: ["institutional", "institutional_adoption"],
+  institutional_selling: ["institutional", "institutional_adoption"],
+  large_investment: ["institutional", "institutional_adoption"],
+};
+
+function relevanceScore(event: SemanticEventInput, intent: AiSearchIntent, actual: {
+  role: SemanticEventMatch["assetRole"];
+  action: AiAction | null;
+  direction: AiDirection;
+  actorType: AiActorType;
+  magnitude: AiMagnitude;
+}): number {
+  let score = intent.topic ? 50 : 20;
+  if (actual.role === "primary") score += 20;
+  else if (actual.role === "secondary") score += 5;
+  if (intent.topic && TOPIC_CATEGORY_ALIASES[intent.topic]?.includes(event.category)) score += 10;
+  if (intent.action && actual.action === intent.action) score += 10;
+  else if (intent.action && actionCompatible(intent, actual.action)) score += 7;
+  if (intent.direction !== "unknown" && actual.direction === intent.direction) score += 8;
+  if (intent.actorType !== "unknown" && actual.actorType === intent.actorType) score += 8;
+  else if (intent.actorType !== "unknown") score += 5;
+  if (intent.magnitude !== "unknown" && actual.magnitude === intent.magnitude) score += 4;
+  return score;
 }
 
 /**
@@ -302,7 +365,8 @@ export function classifySemanticEvent(event: SemanticEventInput, intent: AiSearc
     || (intent.actorType === "investor" && ["investor", "whale", "institution", "fund", "ETF", "company"].includes(actorType));
   if (intent.actorType !== "unknown" && !compatibleActor) return fail(base, "actor-type-mismatch");
   if (!actionCompatible(intent, action)) return fail(base, "action-mismatch");
-  if (intent.direction !== "unknown" && direction !== intent.direction) return fail(base, "direction-mismatch");
+  const directionIsSemantic = !intent.topic || DIRECTIONAL_TOPICS.has(intent.topic);
+  if (directionIsSemantic && intent.direction !== "unknown" && direction !== intent.direction) return fail(base, "direction-mismatch");
   if (intent.magnitude !== "unknown" && magnitude !== intent.magnitude) return fail(base, "magnitude-mismatch");
   if (intent.amount) {
     if (!amount || amount.currency !== intent.amount.currency || amount.value < intent.amount.value) return fail(base, "amount-below-request");
@@ -324,7 +388,13 @@ export function classifySemanticEvent(event: SemanticEventInput, intent: AiSearc
     }
   }
   if (intent.topic && ["sec", "sec_filings", "etf", "hack"].includes(intent.topic)) confidence = 1;
-  return { ...base, matched: confidence >= SEMANTIC_CONFIDENCE_THRESHOLD, confidence: round(confidence), reasons };
+  return {
+    ...base,
+    matched: confidence >= SEMANTIC_CONFIDENCE_THRESHOLD,
+    confidence: round(confidence),
+    relevanceScore: relevanceScore(event, intent, { role, action, direction, actorType, magnitude }),
+    reasons,
+  };
 }
 
 export function requiresSemanticMatching(intent: AiSearchIntent): boolean {

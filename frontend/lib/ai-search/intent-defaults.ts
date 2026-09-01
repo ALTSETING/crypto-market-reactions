@@ -16,8 +16,8 @@ const ASSET_TERMS = [
   [/(?:\bSOL\b|\bsolana\b|солан(?:а|и|у|ою)?)/iu, "SOL"],
 ] as const;
 const ETF_TERM = /\bETFs?\b|exchange[- ]traded\s+funds?/iu;
-const INFLOW_TERM = /\binflows?\b|приплив\p{L}*|надходжен\p{L}*/iu;
-const OUTFLOW_TERM = /\boutflows?\b|\bwithdrawals?\b|відток\p{L}*|відплив\p{L}*|виведен\p{L}*/iu;
+const INFLOW_TERM = /\binflows?\b|\b(?:money|funds?|capital)\s+(?:enters?|flows?\s+into)\b|приплив\p{L}*|надходжен\p{L}*|кошти\s+надход\p{L}*/iu;
+const OUTFLOW_TERM = /\boutflows?\b|\bwithdrawals?\b|\b(?:money|funds?|capital)\s+(?:leaves?|flows?\s+out)\b|відток\p{L}*|відплив\p{L}*|виведен\p{L}*|кошти\s+(?:виход|залиша)\p{L}*/iu;
 const BUYING_TERM = /\b(?:buy|buys|buying|purchases?|purchasing)\b|купівл\p{L}*|покуп\p{L}*/iu;
 const SELLING_TERM = /\b(?:sell|sells|selling|sales?)\b|продаж\p{L}*|розпродаж\p{L}*/iu;
 
@@ -112,25 +112,45 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.topic = "sec";
     facts.category = null;
   }
+  const etfApproval = /\b(?:approve|approves|approved|approval|approvals|greenlight(?:s|ed)?)\b|схвал\p{L}*|затверд\p{L}*/iu.test(question);
+  const etfRejection = /\b(?:reject|rejects|rejected|rejection|denies|denied)\b|відхил\p{L}*/iu.test(question);
+  const etfDelay = /\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b|відклад\p{L}*|перенес\p{L}*/iu.test(question);
   if (ETF_TERM.test(question) && INFLOW_TERM.test(question)) {
     Object.assign(facts, { topic: "etf_inflow", actorType: "ETF", action: "deposit", direction: "inflow", assetRole: "primary" });
     facts.category = null;
   } else if (ETF_TERM.test(question) && OUTFLOW_TERM.test(question)) {
     Object.assign(facts, { topic: "etf_outflow", actorType: "ETF", action: "withdraw", direction: "outflow", assetRole: "primary" });
     facts.category = null;
+  } else if (ETF_TERM.test(question) && etfApproval) {
+    Object.assign(facts, { topic: "etf_approval", actorType: "unknown", action: "approve", direction: "neutral", assetRole: "primary" });
+    facts.category = null;
+  } else if (ETF_TERM.test(question) && etfRejection) {
+    Object.assign(facts, { topic: "etf_rejection", actorType: "unknown", action: "reject", direction: "neutral", assetRole: "primary" });
+    facts.category = null;
+  } else if (ETF_TERM.test(question) && etfDelay) {
+    Object.assign(facts, { topic: "etf_delay", actorType: "unknown", action: null, direction: "neutral", assetRole: "primary" });
+    facts.category = null;
   } else if (ETF_TERM.test(question)) {
     facts.topic = "etf";
     facts.category = null;
   }
-  if (/\bhack(?:ed|s)?\b|\bexploit(?:ed|s)?\b|злам/iu.test(question)) {
-    facts.topic = "hack";
+  if (/\bhack(?:ed|s|ing)?\b|\bexploit(?:ed|s|ing)?\b|\bsecurity\s+breach(?:es)?\b|злам|експлойт|кібератак/iu.test(question)) {
+    Object.assign(facts, { topic: "hack", action: null, direction: "unknown" });
+    if (/\b(?:exchange|exchanges)\b|бірж/iu.test(question)) facts.actorType = "exchange";
+    else if (/\b(?:protocol|protocols|bridge|bridges)\b|протокол|мост/iu.test(question)) facts.actorType = "protocol";
     facts.category = null;
   }
-  if (/\bCPI\b|consumer\s+price\s+index/iu.test(question)) {
-    facts.topic = "cpi";
+  if (/\bCPI\b|consumer\s+price\s+index|індекс\s+споживчих\s+цін|інфляц/iu.test(question)) {
+    Object.assign(facts, { topic: "cpi", action: null, direction: "unknown" });
     facts.category = null;
-  } else if (/\b(?:Fed|FOMC)\b|Federal\s+Reserve/iu.test(question)) {
-    facts.topic = "fed";
+  } else if (/\b(?:rate|interest\s+rate)s?\b[^.]{0,35}\b(?:hike|hikes|hiked|increase|increases|increased|raise|raises|raised|tightening)\b|\b(?:hike|hikes|hiked|increase|increases|increased|raise|raises|raised|tightening)\b[^.]{0,35}\b(?:rate|interest\s+rates?)\b|підвищен\p{L}*\s+(?:процентн\p{L}*|відсотков\p{L}*)?\s*став|монетарн\p{L}*\s+посиленн/iu.test(question)) {
+    Object.assign(facts, { topic: "fed_rate_hike", action: null, direction: "unknown", actorType: "unknown" });
+    facts.category = null;
+  } else if (/\b(?:rate|interest\s+rate)s?\b[^.]{0,35}\b(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b|\b(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b[^.]{0,35}\b(?:rates?|interest\s+rates?)\b|знижен\p{L}*\s+(?:процентн\p{L}*|відсотков\p{L}*)?\s*став|монетарн\p{L}*\s+пом.?якшенн/iu.test(question)) {
+    Object.assign(facts, { topic: "fed_rate_cut", action: null, direction: "unknown", actorType: "unknown" });
+    facts.category = null;
+  } else if (/\b(?:Fed|FOMC)\b|Federal\s+Reserve|Федеральн\p{L}*\s+резерв/iu.test(question)) {
+    Object.assign(facts, { topic: "fed", action: null, direction: "unknown" });
     facts.category = null;
   } else if (/\bmacro(?:economic)?\b|макро/iu.test(question)) {
     facts.topic = "macro";
@@ -140,8 +160,15 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.topic = "listing";
     facts.category = null;
   }
-  if (/\blawsuit\b|\blitigation\b|позов/iu.test(question)) {
+  if (/\b(?:lawsuits?|litigation|sue|sues|sued)\b|позов/iu.test(question)) {
     facts.topic = "lawsuit";
+    facts.category = null;
+  }
+  if (!ETF_TERM.test(question) && /\b(?:regulatory|regulator|regulators|SEC|CFTC)\b[^.]{0,60}\b(?:approve|approves|approved|approval|approvals|authorization)\b|\b(?:approve|approves|approved|approval|approvals|authorization)\b[^.]{0,60}\b(?:regulatory|regulator|regulators|SEC|CFTC)\b|регулятор\p{L}*[^.]{0,60}(?:схвал|затверд)/iu.test(question)) {
+    Object.assign(facts, { topic: "regulatory_approval", actorType: "unknown", action: "approve", direction: "neutral" });
+    facts.category = null;
+  } else if (/\b(?:regulatory|regulator|regulators|SEC|CFTC)\b[^.]{0,60}\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?)\b|\b(?:enforcement|crackdown|charges?|fines?|penalties|sanctions?)\b[^.]{0,60}\b(?:regulatory|regulator|regulators|SEC|CFTC)\b|регулятор\p{L}*[^.]{0,60}(?:тиск|переслідуван|санкц|штраф)/iu.test(question)) {
+    Object.assign(facts, { topic: "regulatory_enforcement", actorType: "unknown", action: null, direction: "neutral" });
     facts.category = null;
   }
   if (/\bupgrade\b|оновлен/iu.test(question)) {
@@ -161,9 +188,9 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     facts.magnitude = "large";
     facts.assetRole = "primary";
     facts.category = null;
-  } else if (/(?:large\s+)?institutional\s+(?:purchase|purchases|buy|buying)|(?:велик\S*\s+)?інституційн\S*\s+(?:купівл|придбан|покуп)/iu.test(question)) {
+  } else if (/(?:large\s+)?institutional\s+(?:purchase|purchases|buy|buying)|\bwhales?\b[^.]{0,45}\b(?:buy|buys|buying|purchase|purchases|accumulate|accumulates|accumulation)\b|\b(?:buy|buys|buying|purchase|purchases|accumulation)\b[^.]{0,45}\bwhales?\b|(?:велик\S*\s+)?інституційн\S*\s+(?:купівл|придбан|покуп)|кит\p{L}*[^.]{0,45}(?:куп|накопич)|(?:купівл|покуп|накопич)\p{L}*[^.]{0,45}кит\p{L}*/iu.test(question)) {
     facts.topic = "institutional_purchase";
-    facts.actorType = "institution";
+    facts.actorType = /\bwhales?\b|кит/iu.test(question) ? "whale" : "institution";
     facts.action = "buy";
     facts.direction = "inflow";
     facts.magnitude = /\blarge\b|велик/iu.test(question) ? "large" : "unknown";

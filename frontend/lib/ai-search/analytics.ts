@@ -70,6 +70,15 @@ function stableNewest(a: AnalyticsEvent, b: AnalyticsEvent): number {
   return b.publishedAt.localeCompare(a.publishedAt) || a.eventId.localeCompare(b.eventId);
 }
 
+function semanticRelevanceNewest(
+  semanticMatches: ReadonlyMap<string, SemanticEventMatch>,
+  a: AnalyticsEvent,
+  b: AnalyticsEvent,
+): number {
+  return (semanticMatches.get(b.eventId)?.relevanceScore ?? 0) - (semanticMatches.get(a.eventId)?.relevanceScore ?? 0)
+    || stableNewest(a, b);
+}
+
 function values(events: AnalyticsEvent[], intent: AiSearchIntent): Array<{ event: AnalyticsEvent; value: number }> {
   if (!intent.asset || !intent.horizon) return [];
   return events.flatMap((event) => {
@@ -129,7 +138,7 @@ function comparisonSide(
 
 export function runAnalytics(events: readonly AnalyticsEvent[], intent: AiSearchIntent): AnalyticsResult {
   const filteredResult = filtered(events, intent);
-  const matches = filteredResult.matches.sort(stableNewest);
+  const matches = filteredResult.matches.sort((a, b) => semanticRelevanceNewest(filteredResult.semanticMatches, a, b));
   const semanticMatch = (event: AnalyticsEvent) => filteredResult.semanticMatches.get(event.eventId);
   const topic = filteredResult.topicFilter ? { topicFilter: filteredResult.topicFilter } : {};
   if (intent.intent === "search") {
