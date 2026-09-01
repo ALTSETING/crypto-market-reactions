@@ -35,7 +35,7 @@ describe("routed AI Research service", () => {
     const hybrid = await executeAiSearch("What are ETF inflows, and how does BTC react to them historically?", intent, adapter, router, general);
     expect(database.statusCode).toBe(200);
     expect(hybrid.statusCode).toBe(200);
-    if (database.statusCode !== 200 || hybrid.statusCode !== 200 || database.body.mode === "general" || hybrid.body.mode !== "hybrid") return;
+    if (database.statusCode !== 200 || hybrid.statusCode !== 200 || database.body.mode === "general" || database.body.mode === "agent" || hybrid.body.mode !== "hybrid") return;
     expect(hybrid.body.result).toEqual(database.body.result);
     expect(hybrid.body.answer).toBe(database.body.answer);
     expect(hybrid.body.calculation).toBe(database.body.calculation);

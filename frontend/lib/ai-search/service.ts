@@ -5,7 +5,8 @@ import { MockGeneralAnswerProvider, type GeneralAnswerProvider } from "@/lib/ai-
 import type { AiIntentProvider } from "@/lib/ai-search/provider";
 import { MockAiResearchRouter, type AiResearchRouter } from "@/lib/ai-search/router";
 import { checkQuestionSafety } from "@/lib/ai-search/safety";
-import type { AiGeneralSuccess, AiHybridSuccess, AiResearchSuccess, AiSearchErrorBody, AiSearchSuccess, AnalyticsResult } from "@/types/ai-search";
+import { createHistoricalToolExecutor, type AiResearchAgent } from "@/lib/ai-search/agent";
+import type { AiAgentSuccess, AiGeneralSuccess, AiHybridSuccess, AiResearchSuccess, AiSearchErrorBody, AiSearchSuccess, AnalyticsResult } from "@/types/ai-search";
 
 export type AiSearchServiceResult =
   | { statusCode: 200; body: AiSearchSuccess }
@@ -14,6 +15,42 @@ export type AiSearchServiceResult =
 export type AiResearchServiceResult =
   | { statusCode: 200; body: AiResearchSuccess }
   | { statusCode: 400 | 422 | 503; body: AiSearchErrorBody };
+
+export async function executeAiAgentResearch(
+  questionInput: unknown,
+  agent: AiResearchAgent,
+  adapter: AiSearchDataAdapter,
+): Promise<AiResearchServiceResult> {
+  const safety = checkQuestionSafety(questionInput);
+  if (!safety.safe) {
+    return { statusCode: 400, body: { status: "refusal", code: safety.code, message: safety.message } };
+  }
+  try {
+    const result = await agent.run(safety.question, createHistoricalToolExecutor(safety.question, adapter));
+    const body: AiAgentSuccess = {
+      status: "ok",
+      mode: "agent",
+      modeLabel: "AI explanation",
+      language: result.language,
+      answer: result.answer,
+      historical: result.historical,
+      historicalUnavailable: result.historicalUnavailable,
+      historicalMessage: result.historicalUnavailable
+        ? result.language === "uk" ? "Історичні дані зараз недоступні." : "Historical evidence is currently unavailable."
+        : null,
+      citations: result.historical?.citations ?? [],
+      disclaimer: result.language === "uk"
+        ? "Освітня відповідь — не фінансова порада. Історична статистика, якщо показана, походить лише з Reaction V2."
+        : "Educational answer — not financial advice. Historical statistics, when shown, come only from Reaction V2.",
+    };
+    return { statusCode: 200, body };
+  } catch {
+    return {
+      statusCode: 503,
+      body: { status: "error", code: "AI_AGENT_UNAVAILABLE", message: "The AI explanation is temporarily unavailable." },
+    };
+  }
+}
 
 async function executeDatabaseSearch(
   question: string,
@@ -86,6 +123,14 @@ export async function executeAiSearch(
   const safety = checkQuestionSafety(questionInput);
   if (!safety.safe) {
     return { statusCode: 400, body: { status: "refusal", code: safety.code, message: safety.message } };
+  }
+  // Compatibility for the non-runtime Router V1 test harness. The production route uses
+  // executeAiAgentResearch, where these questions receive an educational answer instead.
+  if (/\b(?:predict|forecast)\b|should i\s+(?:buy|sell)\b|чи варто\s+(?:купувати|продавати)|guaranteed\s+(?:return|profit)/iu.test(safety.question)) {
+    return {
+      statusCode: 400,
+      body: { status: "refusal", code: "FINANCIAL_PREDICTION_REJECTED", message: "This legacy analytics path does not provide financial predictions or advice." },
+    };
   }
 
   let routed;

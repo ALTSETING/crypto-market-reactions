@@ -274,7 +274,7 @@ export type AnalyticsResult = CoreAnalyticsResult & {
 export interface AiSearchSuccess {
   status: "ok";
   mode: "database";
-  modeLabel: "Historical database analysis";
+  modeLabel: "Historical database analysis" | "Historical evidence — Reaction V2";
   language: "en" | "uk";
   basedOn: "Reaction V2";
   intent: AiSearchIntent;
@@ -301,7 +301,29 @@ export interface AiHybridSuccess extends Omit<AiSearchSuccess, "mode" | "modeLab
   generalExplanation: string;
 }
 
-export type AiResearchSuccess = AiSearchSuccess | AiGeneralSuccess | AiHybridSuccess;
+export interface AiHistoricalEvidence {
+  basedOn: "Reaction V2";
+  intent: AiSearchIntent;
+  answer: string;
+  calculation: string;
+  result: AnalyticsResult;
+  citations: AiCitation[];
+}
+
+export interface AiAgentSuccess {
+  status: "ok";
+  mode: "agent";
+  modeLabel: "AI explanation";
+  language: "en" | "uk";
+  answer: string;
+  historical: AiHistoricalEvidence | null;
+  historicalUnavailable: boolean;
+  historicalMessage: string | null;
+  citations: AiCitation[];
+  disclaimer: string;
+}
+
+export type AiResearchSuccess = AiSearchSuccess | AiGeneralSuccess | AiHybridSuccess | AiAgentSuccess;
 
 export interface AiSearchErrorBody {
   status: "error" | "clarification" | "refusal" | "live_unsupported";
