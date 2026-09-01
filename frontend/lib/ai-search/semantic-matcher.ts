@@ -200,6 +200,10 @@ function topicMatches(
     String.raw`(?:${targetSource})${clauseGap(distance)}(?:${subjectSource})|(?:${subjectSource})${clauseGap(distance)}(?:${targetSource})`,
     "iu",
   ).test(text);
+  const coLocated = (leftSource: string, rightSource: string, distance: number) => new RegExp(
+    String.raw`(?:${leftSource})${clauseGap(distance)}(?:${rightSource})|(?:${rightSource})${clauseGap(distance)}(?:${leftSource})`,
+    "iu",
+  ).test(text);
   switch (topic) {
     case "large_investment":
       return role === "primary" && magnitude === "large" && (action === "buy" || action === "invest");
@@ -235,7 +239,11 @@ function topicMatches(
       return ETF_PATTERN.test(text) && action === "approve";
     case "etf_rejection":
       return ETF_PATTERN.test(text) && action === "reject"
-        && targeted(String.raw`\b(?:reject|rejects|rejected|rejection|denies|denied)\b`, 80);
+        && coLocated(
+          String.raw`\b(?:ETF|ETFs|exchange[- ]traded funds?)\b`,
+          String.raw`\b(?:reject|rejects|rejected|rejection|denies|denied)\b`,
+          80,
+        );
     case "etf_delay":
       return ETF_PATTERN.test(text)
         && /\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b/iu.test(text);

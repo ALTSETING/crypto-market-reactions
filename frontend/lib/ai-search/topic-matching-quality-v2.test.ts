@@ -139,7 +139,7 @@ describe("AI Topic Matching Quality V2 — precision and false-zero guards", () 
 
   it("binds ETF rejection and regulator enforcement to the requested asset context", () => {
     const etf = runAnalytics([
-      analyticsEvent("wrong-reject", "Analysts Reject Jane Street Manipulation, Bitcoin ETF Demand Rises", "BTC", "etf", "2026-01-01T00:00:00Z"),
+      analyticsEvent("wrong-reject", "Analysts Reject Jane Street Bitcoin Manipulation, Bitcoin ETF Demand Rises", "BTC", "etf", "2026-01-01T00:00:00Z"),
       analyticsEvent("right-reject", "SEC Rejects Bitcoin ETF Application", "BTC", "official_decision", "2025-01-01T00:00:00Z"),
     ], intent("BTC", "etf_rejection", { action: "reject", direction: "neutral" }));
     const regulator = runAnalytics([
