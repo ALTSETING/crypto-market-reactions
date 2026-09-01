@@ -234,7 +234,8 @@ function topicMatches(
     case "etf_approval":
       return ETF_PATTERN.test(text) && action === "approve";
     case "etf_rejection":
-      return ETF_PATTERN.test(text) && action === "reject";
+      return ETF_PATTERN.test(text) && action === "reject"
+        && targeted(String.raw`\b(?:reject|rejects|rejected|rejection|denies|denied)\b`, 80);
     case "etf_delay":
       return ETF_PATTERN.test(text)
         && /\b(?:delay|delays|delayed|postpone|postpones|postponed|defer|defers|deferred)\b/iu.test(text);
@@ -246,7 +247,8 @@ function topicMatches(
       return (REGULATOR_PATTERN.test(text) || ETF_PATTERN.test(text)) && action === "approve";
     case "regulatory_enforcement":
       return REGULATOR_PATTERN.test(text)
-        && /\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|sued|lawsuits?|litigation)\b/iu.test(text);
+        && /\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|sued|lawsuits?|litigation)\b/iu.test(text)
+        && targeted(String.raw`\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|sued|lawsuits?|litigation)\b`, 100);
     case "hack":
       return HACK_INCIDENT_PATTERN.test(text) && !HACK_NON_INCIDENT_PATTERN.test(text)
         && targeted(String.raw`\b(?:hack|hacks|hacked|hacking|exploit|exploits|exploited|security breach|data breach)\b`, 80);
@@ -265,7 +267,8 @@ function topicMatches(
       return /\b(?:Federal Reserve|Fed|FOMC)\b/iu.test(text)
         && /\b(?:rate\s+)?(?:cut|cuts|lower|lowers|lowered|decrease|decreases|decreased|easing)\b/iu.test(text);
     case "cpi":
-      return /\b(?:CPI|consumer price index|inflation report)\b/iu.test(text);
+      return /\b(?:CPI|consumer price index|inflation report)\b/iu.test(text)
+        && !/\b(?:PCE|personal consumption expenditures?)\b/iu.test(text);
     case "upgrade":
       return action === "upgrade";
     case "staking":

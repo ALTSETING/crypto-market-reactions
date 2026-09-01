@@ -52,6 +52,7 @@ describe("AI Topic Matching Quality V2 — 30-query intent matrix", () => {
   it.each([
     "What happens to BTC when money leaves ETFs?",
     "What happens when Solana protocols get hacked?",
+    "How does SOL respond to exploits?",
   ])("keeps conversational database intent off the AI provider path: %s", async (question) => {
     const fetchImpl = () => Promise.reject(new Error("provider must not be called"));
     const openAi = new OpenAiIntentProvider({ apiKey: "unused", model: "test", fetchImpl });
@@ -134,6 +135,27 @@ describe("AI Topic Matching Quality V2 — precision and false-zero guards", () 
       analyticsEvent("eth-flow", "Ethereum ETFs post record inflows", "ETH", "etf", "2026-01-01T00:00:00Z"),
     ], intent("ETH", "regulatory_approval", { action: "approve", direction: "neutral" }));
     expect(result.citations.map(({ eventId }) => eventId)).toEqual(["eth-etf"]);
+  });
+
+  it("binds ETF rejection and regulator enforcement to the requested asset context", () => {
+    const etf = runAnalytics([
+      analyticsEvent("wrong-reject", "Analysts Reject Jane Street Manipulation, Bitcoin ETF Demand Rises", "BTC", "etf", "2026-01-01T00:00:00Z"),
+      analyticsEvent("right-reject", "SEC Rejects Bitcoin ETF Application", "BTC", "official_decision", "2025-01-01T00:00:00Z"),
+    ], intent("BTC", "etf_rejection", { action: "reject", direction: "neutral" }));
+    const regulator = runAnalytics([
+      analyticsEvent("secondary-sol", "After SEC Lawsuit, Kin Migrates to Solana", "SOL", "legal_action", "2026-01-01T00:00:00Z"),
+      analyticsEvent("direct-sol", "SEC Charges Solana Protocol in Enforcement Lawsuit", "SOL", "legal_action", "2025-01-01T00:00:00Z"),
+    ], intent("SOL", "regulatory_enforcement", { direction: "neutral" }));
+    expect(etf.citations.map(({ eventId }) => eventId)).toEqual(["right-reject"]);
+    expect(regulator.citations.map(({ eventId }) => eventId)).toEqual(["direct-sol"]);
+  });
+
+  it("does not conflate PCE with CPI", () => {
+    const result = runAnalytics([
+      analyticsEvent("pce", "Bitcoin rises after soft PCE inflation report", "BTC", "macro", "2026-01-01T00:00:00Z"),
+      analyticsEvent("cpi", "Bitcoin rises after soft CPI inflation report", "BTC", "macro", "2025-01-01T00:00:00Z"),
+    ], intent("BTC", "cpi"));
+    expect(result.citations.map(({ eventId }) => eventId)).toEqual(["cpi"]);
   });
 
   it("ranks category-aligned direct matches before newer weak matches", () => {
