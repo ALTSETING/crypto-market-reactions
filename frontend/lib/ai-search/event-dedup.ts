@@ -141,7 +141,16 @@ function inferEntity(title: string): string | null {
   return words.join("-").toLocaleLowerCase("en-US");
 }
 
+function hasSharedSpecificContext(left: string, right: string): boolean {
+  const contexts = [
+    /\bstak(?:e|ed|ing)\w*\b[^.]{0,45}\b(?:etf|exchange[- ]traded fund)\b|\b(?:etf|exchange[- ]traded fund)\b[^.]{0,45}\bstak(?:e|ed|ing)\w*\b/iu,
+    /\bspot\b[^.]{0,30}\b(?:etf|exchange[- ]traded fund)\b|\b(?:etf|exchange[- ]traded fund)\b[^.]{0,30}\bspot\b/iu,
+  ];
+  return contexts.some((pattern) => pattern.test(left) && pattern.test(right));
+}
+
 function eventType(event: AnalyticsEvent, match: SemanticEventMatch | undefined, intent: AiSearchIntent): string {
+  if (/\b(?:lawsuit|class action|sues?|sued|charges?|charged|enforcement action)\b/iu.test(event.title)) return "legal-action";
   const action = match?.action ?? intent.action;
   if (action === "hack" || action === "exploit") return "security-incident";
   if (action) return action;
@@ -150,7 +159,7 @@ function eventType(event: AnalyticsEvent, match: SemanticEventMatch | undefined,
   if (/\b(?:inflow|inflows|deposit|deposits)\b/iu.test(title)) return "deposit";
   if (/\b(?:reject|rejects|rejected|denies|denied)\b/iu.test(title)) return "reject";
   if (/\b(?:approv|approved|approval|approves)\w*\b/iu.test(title)) return "approve";
-  if (/\b(?:hack|hacked|exploit|exploited|breach)\b/iu.test(title)) return "security-incident";
+  if (/\b(?:hack|hacks|hacked|hacking|exploit|exploits|exploited|breach)\b/iu.test(title)) return "security-incident";
   if (/\b(?:lawsuit|sues?|sued|charges?|charged|enforcement)\b/iu.test(title)) return "legal-action";
   if (/\b(?:minutes|meeting minutes)\b/iu.test(title)) return "macro-minutes";
   if (/\b(?:expect|expected|forecast|preview|ahead|bets?|odds|could|may)\b/iu.test(title)) return "forecast";
@@ -187,6 +196,7 @@ function sameConcreteEvent(
   const overlap = titleOverlap(left.title, right.title);
   const sharedAnchor = hasSharedAnchor(left.title, right.title);
   const conflictingAnchors = hasConflictingAnchors(left.title, right.title);
+  const sharedSpecificContext = hasSharedSpecificContext(left.title, right.title);
   const sameUtcDay = left.publishedAt.slice(0, 10) === right.publishedAt.slice(0, 10);
 
   if (["etf_inflow", "etf_outflow", "capital_inflow", "capital_outflow"].includes(intent.topic ?? "")) {
@@ -197,13 +207,16 @@ function sameConcreteEvent(
   }
   if (intent.topic === "hack") {
     const explicitlyLinkedUpdate = /\b(?:after|following|linked to|related to|tied to|repays?|restores?|freezes?|halts?)\b/iu.test(`${left.title} ${right.title}`);
-    return hours <= 24 * 14 && sameEntity && (sharedAnchor || explicitlyLinkedUpdate || overlap.containment >= 0.58 || overlap.jaccard >= 0.4);
+    return sameEntity && (
+      (hours <= 24 * 14 && (sharedAnchor || overlap.containment >= 0.58 || overlap.jaccard >= 0.4))
+      || (hours <= 24 * 45 && explicitlyLinkedUpdate)
+    );
   }
   if (["cpi", "fed", "fed_rate_hike", "fed_rate_cut", "macro"].includes(intent.topic ?? "")) {
     return hours <= 36 && sameUtcDay && (sameEntity || bothUnknown) && (sharedAnchor || overlap.containment >= 0.42 || overlap.jaccard >= 0.3);
   }
   if (["etf", "etf_approval", "etf_rejection", "etf_delay", "sec", "sec_filings", "regulatory_approval", "regulatory_enforcement", "lawsuit"].includes(intent.topic ?? "")) {
-    return hours <= 72 && sameEntity && (sharedAnchor || overlap.containment >= 0.58 || overlap.jaccard >= 0.42);
+    return hours <= 72 && sameEntity && (sharedAnchor || sharedSpecificContext || overlap.containment >= 0.58 || overlap.jaccard >= 0.42);
   }
   return hours <= 24 && (sameEntity || bothUnknown) && (sharedAnchor || overlap.containment >= 0.82 || overlap.jaccard >= 0.7);
 }

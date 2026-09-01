@@ -117,6 +117,34 @@ describe("historical real-event grouping decisions", () => {
     expect(serialize()).toBe(serialize());
   });
 
+  it("collapses a verified four-article ETF launch while retaining the earlier filing", () => {
+    const events = [
+      event("trading-a", "Ethereum news: BlackRock’s staked ether ETF draws $15 million in first-day trading", "2026-03-13T06:23:09Z", "ETH"),
+      event("trading-b", "BlackRock’s Staked ETH ETF Sees $15.5M on Debut", "2026-03-13T00:00:00Z", "ETH"),
+      event("launch-a", "BlackRock debuts staked ether ETF as demand grows for yield in crypto funds", "2026-03-12T12:00:00Z", "ETH"),
+      event("launch-b", "BlackRock Launches Staked Ethereum ETF Offering Yield", "2026-03-12T00:00:00Z", "ETH"),
+      event("filing", "Bitcoin ETF Giant BlackRock Files to Launch Ethereum Staking ETF", "2025-12-08T18:15:12Z", "ETH"),
+    ];
+    const result = groupIndependentEvents(events, intent("etf", "ETH"), new Map());
+    expect(result.groups.map(({ members }) => members.map(({ eventId }) => eventId))).toEqual([
+      ["launch-b", "launch-a", "trading-b", "trading-a"],
+      ["filing"],
+    ]);
+  });
+
+  it("keeps a hack-related lawsuit separate but joins an explicitly linked later repayment update", () => {
+    const events = [
+      event("repay", "How Solana Exchange Drift Plans to Repay Users After $295 Million Crypto Hack", "2026-05-05T21:25:23Z", "SOL"),
+      event("lawsuit", "Circle Hit With Class Action Suit Over $280M Drift Hack", "2026-04-17T00:00:00Z", "SOL"),
+      event("hack", "Morning Minute: North Korea Hacks Drift for $285M", "2026-04-06T12:18:33Z", "SOL"),
+    ];
+    const result = groupIndependentEvents(events, intent("hack", "SOL"), new Map());
+    expect(result.groups.map(({ members }) => members.map(({ eventId }) => eventId))).toEqual([
+      ["hack", "repay"],
+      ["lawsuit"],
+    ]);
+  });
+
   it("chooses official sources, then earliest publication, then relevance, without using reaction", () => {
     const events = [
       event("news-high-reaction", "SEC approves BlackRock spot Bitcoin ETF", "2024-01-10T09:00:00Z", "BTC", "news_media", 99),
