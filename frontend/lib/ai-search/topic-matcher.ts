@@ -16,6 +16,8 @@ const TOPIC_PATTERNS: Record<AiTopic, readonly RegExp[]> = {
   regulatory_approval: [
     /\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b[^.]{0,80}\b(?:approve|approves|approved|approvals?|authori[sz](?:e|es|ed|ation))\b/iu,
     /\b(?:approve|approves|approved|approvals?|authori[sz](?:e|es|ed|ation))\b[^.]{0,80}\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b/iu,
+    /\b(?:ETFs?|exchange[- ]traded\s+funds?)\b[^.]{0,80}\b(?:approve|approves|approved|approvals?)\b/iu,
+    /\b(?:approve|approves|approved|approvals?)\b[^.]{0,80}\b(?:ETFs?|exchange[- ]traded\s+funds?)\b/iu,
   ],
   regulatory_enforcement: [
     /\b(?:SEC|CFTC|regulator(?:s|y)?|Securities\s+and\s+Exchange\s+Commission)\b[^.]{0,80}\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|lawsuits?)\b/iu,

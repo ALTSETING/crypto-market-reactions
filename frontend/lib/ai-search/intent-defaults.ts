@@ -282,7 +282,7 @@ function explicitFacts(question: string): Partial<AiSearchIntent> {
     Object.assign(facts, { intent: "aggregate", metric: "median", horizon: facts.horizon ?? null });
   } else if (/\baverage\b|\bmean\b|середн/iu.test(question)) {
     Object.assign(facts, { intent: "aggregate", metric: "mean", horizon: facts.horizon ?? null });
-  } else if (/\breact(?:ed|ion)?\b|реаг/iu.test(question)) {
+  } else if (/\breact(?:ed|ion)?\b|\bwhat\s+(?:happens|happened)\b|реаг|\bщо\s+(?:відбувається|відбулося|стається)\b/iu.test(question)) {
     Object.assign(facts, { intent: "aggregate", metric: "mean", horizon: facts.horizon ?? null });
   }
   return facts;

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { runAnalytics } from "@/lib/ai-search/analytics";
-import { MockAiIntentProvider } from "@/lib/ai-search/provider";
+import { MockAiIntentProvider, OpenAiIntentProvider } from "@/lib/ai-search/provider";
 import { validateIntent } from "@/lib/ai-search/schema";
 import type { AiSearchIntent, AiTopic, AnalyticsEvent } from "@/types/ai-search";
 import type { Asset, EventCategory } from "@/types/events";
@@ -47,6 +47,15 @@ describe("AI Topic Matching Quality V2 — 30-query intent matrix", () => {
       status: "ready",
       intent: { asset, topic, horizon: null },
     });
+  });
+
+  it.each([
+    "What happens to BTC when money leaves ETFs?",
+    "What happens when Solana protocols get hacked?",
+  ])("keeps conversational database intent off the AI provider path: %s", async (question) => {
+    const fetchImpl = () => Promise.reject(new Error("provider must not be called"));
+    const openAi = new OpenAiIntentProvider({ apiKey: "unused", model: "test", fetchImpl });
+    await expect(openAi.resolve(question)).resolves.toMatchObject({ status: "ready", intent: { intent: "aggregate" } });
   });
 });
 
@@ -117,6 +126,14 @@ describe("AI Topic Matching Quality V2 — precision and false-zero guards", () 
   it("accepts hack/exploit aliases despite a provider-supplied flow direction and rejects warnings", () => {
     const result = runAnalytics(events, intent("SOL", "hack", { action: "hack", direction: "outflow" }));
     expect(result.citations.map(({ eventId }) => eventId)).toEqual(["hack"]);
+  });
+
+  it("uses ETF approval as a bounded regulatory-approval fallback", () => {
+    const result = runAnalytics([
+      analyticsEvent("eth-etf", "Spot Ethereum ETF gets approved", "ETH", "etf", "2025-01-01T00:00:00Z"),
+      analyticsEvent("eth-flow", "Ethereum ETFs post record inflows", "ETH", "etf", "2026-01-01T00:00:00Z"),
+    ], intent("ETH", "regulatory_approval", { action: "approve", direction: "neutral" }));
+    expect(result.citations.map(({ eventId }) => eventId)).toEqual(["eth-etf"]);
   });
 
   it("ranks category-aligned direct matches before newer weak matches", () => {

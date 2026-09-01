@@ -243,7 +243,7 @@ function topicMatches(
     case "sec_filings":
       return /\b(?:SEC\s+filings?|8-K|10-K|10-Q|S-1|19b-4|registration statement)\b/iu.test(text);
     case "regulatory_approval":
-      return REGULATOR_PATTERN.test(text) && action === "approve";
+      return (REGULATOR_PATTERN.test(text) || ETF_PATTERN.test(text)) && action === "approve";
     case "regulatory_enforcement":
       return REGULATOR_PATTERN.test(text)
         && /\b(?:enforcement|crackdown|charges?|fines?|penalt(?:y|ies)|sanctions?|sues?|sued|lawsuits?|litigation)\b/iu.test(text);
