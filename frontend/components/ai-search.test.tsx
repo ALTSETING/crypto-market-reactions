@@ -1,31 +1,37 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { AiLoadingState, AiMessage, AiResult, AiSearch } from "@/components/ai-search";
+import { AiLoadingState, AiMessage, AiResult, AiSearch, CitationList, ExampleQuestions } from "@/components/ai-search";
 import { MockAiResearchAgent } from "@/lib/ai-search/agent";
 import { FixtureAiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { executeAiAgentResearch } from "@/lib/ai-search/service";
 import type { AiAgentSuccess } from "@/types/ai-search";
 
 describe("AI Search prototype", () => {
-  it("renders examples, states baseline, Reaction V2 provenance, and disclaimer context", () => {
+  it("renders the minimal prompt with examples collapsed by default", () => {
     const html = renderToStaticMarkup(<AiSearch />);
     expect(html).toContain("Ask a question");
-    expect(html).toContain("Based on Reaction V2");
-    expect(html).toContain("How does ETH react to large institutional purchases?");
-    expect(html).toContain("How does ETH react to sales by large investors?");
-    expect(html).toContain("How does BTC react to ETF inflows?");
-    expect(html).toContain("How does SOL react to large purchases?");
+    expect(html).toContain("Example questions");
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('tabindex="-1"');
     expect(html).toContain("What is a Bitcoin ETF?");
-    expect(html).toContain("Why can ETF outflows affect Bitcoin?");
-    expect(html).toContain("Why can ETF outflows hurt Bitcoin, and what happened historically?");
-    expect(html).toContain("Що таке стейкінг?");
-    expect(html).toContain("Ask any crypto research question");
+    expect(html).toContain("How did BTC react to ETF outflows?");
+    expect(html).toContain("How did ETH react to institutional purchases?");
+    expect(html).toContain("How did SOL react to hacks?");
     expect(html).toContain("maxLength=\"500\"");
     expect(html).toContain("<textarea");
-    expect(html).toContain("Shift + Enter");
     expect(html).toContain("min-w-0");
+    expect(html).not.toContain("Based on Reaction V2");
     expect(html).not.toContain("?question=");
+  });
+
+  it("renders the expanded examples accordion with keyboard-accessible questions", () => {
+    const html = renderToStaticMarkup(<ExampleQuestions expanded onSelect={() => undefined} onToggle={() => undefined} />);
+    expect(html).toContain('aria-expanded="true"');
+    expect(html).toContain('aria-hidden="false"');
+    expect(html).not.toContain('tabindex="-1"');
+    expect(html.match(/type="button"/gu)).toHaveLength(6);
   });
 
   it("renders a conversational general answer without historical claims", () => {
@@ -43,6 +49,8 @@ describe("AI Search prototype", () => {
     };
     const html = renderToStaticMarkup(<AiResult data={data} />);
     expect(html).toContain("AI explanation");
+    expect(html).toContain("Не фінансова порада.");
+    expect(html).not.toContain("Загальне освітнє пояснення");
     expect(html).not.toContain("Reaction V2");
   });
 
@@ -60,8 +68,7 @@ describe("AI Search prototype", () => {
       disclaimer: "Educational answer — not financial advice.",
     };
     const html = renderToStaticMarkup(<AiResult data={data} />);
-    expect(html).toContain("Historical evidence unavailable");
-    expect(html).toContain('role="status"');
+    expect(html).toContain("Historical evidence is temporarily unavailable");
     expect(html).not.toContain('aria-label="Historical evidence"');
   });
 
@@ -80,9 +87,13 @@ describe("AI Search prototype", () => {
     expect(html).toContain(">Historical evidence<");
     expect(html).toContain(">Reaction V2<");
     expect(html).toContain("Reaction V2");
-    expect(html).toContain("Matched articles");
-    expect(html).toContain("Independent events");
+    expect(html).toContain("matched articles");
+    expect(html).toContain("independent events");
     expect(html).toContain("overflow-wrap:anywhere");
+    expect(html).not.toContain("Primary asset only");
+    expect(html).not.toContain("Candidate pool");
+    expect(html).not.toContain("rounded-2xl bg-white/[0.035]");
+    expect(html.match(/not financial advice/giu)).toHaveLength(1);
 
     const tableResult = await executeAiAgentResearch(
       "How did SOL react historically?",
@@ -111,7 +122,7 @@ describe("AI Search prototype", () => {
     if (ranking.statusCode !== 200) return;
     const rankingHtml = renderToStaticMarkup(<AiResult data={ranking.body} />);
     expect(rankingHtml).toContain("Insufficient data for a reliable topic ranking");
-    expect(rankingHtml).toContain("minimum of 10 independent Reaction V2 observations");
+    expect(rankingHtml).not.toContain("minimum of 10 independent Reaction V2 observations");
 
     const comparison = await executeAiAgentResearch(
       "ETF approvals or institutional purchases — which had a stronger ETH 24h reaction?",
@@ -121,7 +132,7 @@ describe("AI Search prototype", () => {
     expect(comparison.statusCode).toBe(200);
     if (comparison.statusCode !== 200) return;
     const comparisonHtml = renderToStaticMarkup(<AiResult data={comparison.body} />);
-    expect(comparisonHtml).toContain("Topic comparison");
+    expect(comparisonHtml).toContain("topic comparison");
     expect(comparisonHtml).toContain("ETF approvals");
     expect(comparisonHtml).toContain("Institutional purchases");
 
@@ -156,7 +167,7 @@ describe("AI Search prototype", () => {
     const warningHtml = renderToStaticMarkup(<AiMessage kind="warning" label="Historical evidence unavailable" message="Try again later." />);
     const errorHtml = renderToStaticMarkup(<AiMessage kind="error" label="Unable to complete request" message="Provider unavailable." />);
     expect(loadingHtml).toContain('role="status"');
-    expect(loadingHtml).toContain("Reviewing the question");
+    expect(loadingHtml).toContain("Analyzing");
     expect(warningHtml).toContain('role="status"');
     expect(errorHtml).toContain('role="alert"');
     expect(errorHtml).not.toContain("rounded-2xl border");
@@ -174,6 +185,7 @@ describe("AI Search prototype", () => {
       eventId: `long-source-${index}`,
       href: `/events/long-source-${index}`,
       title: `${index + 1}. Extremely long historical source title about institutional crypto market flows that must wrap without widening the viewport ${"context ".repeat(8)}`,
+      ...(index === 0 ? { groupSize: 3 } : {}),
     }));
     const data: AiAgentSuccess = {
       ...result.body,
@@ -181,9 +193,15 @@ describe("AI Search prototype", () => {
       historical: { ...result.body.historical, citations },
     };
     const html = renderToStaticMarkup(<AiResult data={data} />);
-    expect(html).toContain("Sources · 21");
-    expect(html.match(/href="\/events\/long-source-/gu)).toHaveLength(21);
-    expect(html).toContain("max-w-[800px]");
+    expect(html).toContain(">Sources<");
+    expect(html.match(/href="\/events\/long-source-/gu)).toHaveLength(5);
+    expect(html).toContain("Show 16 more");
+    expect(html).toContain("3 related articles");
+    expect(html).toContain("max-w-[760px]");
     expect(html).toContain("overflow-wrap:anywhere");
+
+    const expandedHtml = renderToStaticMarkup(<CitationList citations={citations} initialExpanded />);
+    expect(expandedHtml.match(/href="\/events\/long-source-/gu)).toHaveLength(21);
+    expect(expandedHtml).toContain("Show less");
   });
 });
