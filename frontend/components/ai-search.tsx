@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useState } from "react";
 
-import { AI_TOPIC_LABELS, type AiAgentSuccess, type AiHybridSuccess, type AiResearchSuccess, type AiSearchErrorBody, type AiSearchSuccess } from "@/types/ai-search";
 import { formatPercent } from "@/lib/ai-search/format";
+import { AI_TOPIC_LABELS, type AiAgentSuccess, type AiHybridSuccess, type AiResearchSuccess, type AiSearchErrorBody, type AiSearchSuccess, type MultiHorizonAnalyticsResult } from "@/types/ai-search";
 import { SOURCE_TYPE_LABELS } from "@/types/events";
 
 const EXAMPLES = [
@@ -33,7 +33,8 @@ export function AiSearch() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmittedQuestion(question.trim());
+    const trimmedQuestion = question.trim();
+    setSubmittedQuestion(trimmedQuestion);
     setState({ kind: "loading" });
     try {
       const response = await fetch("/api/ai-search", {
@@ -56,53 +57,94 @@ export function AiSearch() {
     }
   }
 
+  function handleQuestionKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    if (question.trim().length >= 3 && state.kind !== "loading") event.currentTarget.form?.requestSubmit();
+  }
+
   return (
-    <section className="mt-10 min-w-0 max-w-full rounded-3xl border border-emerald-400/20 bg-slate-900/45 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.18)] sm:p-7" aria-label="AI Research search">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+    <section aria-label="AI Research search" className="mt-8 min-w-0 max-w-full sm:mt-10">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-white">Ask a question</h2>
-          <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">Ask naturally in English or Ukrainian. AI explains the topic and uses Reaction V2 when historical evidence is useful.</p>
+          <h2 className="text-lg font-semibold tracking-tight text-white">Ask a question</h2>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">English or Ukrainian, with Reaction V2 evidence when relevant.</p>
         </div>
-        <span className="w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">Based on Reaction V2 + general explanations</span>
+        <span className="w-fit text-xs font-medium text-emerald-300">Based on Reaction V2 + general explanations</span>
       </div>
 
-      <form className="mt-5" onSubmit={submit}>
-        <label className="sr-only" htmlFor="ai-search-question">Historical market question</label>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
-            className="min-h-12 min-w-0 flex-1 rounded-xl border border-white/15 bg-slate-950/55 px-4 text-sm text-white outline-none placeholder:text-slate-600 focus:border-emerald-400/50"
-            id="ai-search-question"
-            maxLength={500}
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Ask about historical BTC, ETH, or SOL reactions…"
-            value={question}
-          />
-          <button className="min-h-12 rounded-xl bg-emerald-400 px-5 text-sm font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-50" disabled={state.kind === "loading" || question.trim().length < 3} type="submit">
+      <form className="mt-4 rounded-2xl border border-white/10 bg-slate-900/45 p-2 shadow-[0_16px_50px_rgba(2,6,23,0.1)] focus-within:border-emerald-400/40 focus-within:ring-4 focus-within:ring-emerald-400/[0.06]" onSubmit={submit}>
+        <label className="sr-only" htmlFor="ai-search-question">Crypto research question</label>
+        <textarea
+          className="block min-h-24 w-full min-w-0 resize-y bg-transparent px-3 py-3 text-base leading-6 text-white outline-none placeholder:text-slate-600 sm:min-h-16"
+          id="ai-search-question"
+          maxLength={500}
+          onChange={(event) => setQuestion(event.target.value)}
+          onKeyDown={handleQuestionKeyDown}
+          placeholder="Ask about crypto concepts or historical BTC, ETH, and SOL reactions…"
+          rows={2}
+          value={question}
+        />
+        <div className="flex items-center justify-between gap-3 border-t border-white/8 px-2 pt-2">
+          <span className="text-[11px] leading-4 text-slate-500">Enter to analyze · Shift + Enter for a new line</span>
+          <button className="min-h-11 shrink-0 rounded-xl bg-emerald-400 px-4 text-sm font-bold text-slate-950 outline-none transition hover:bg-emerald-300 focus-visible:ring-2 focus-visible:ring-emerald-200 disabled:cursor-not-allowed disabled:opacity-45" disabled={state.kind === "loading" || question.trim().length < 3} type="submit">
             {state.kind === "loading" ? "Analyzing…" : "Analyze"}
           </button>
         </div>
       </form>
 
-      {state.kind === "idle" && <>
-        <div className="mt-3 flex flex-wrap gap-2" aria-label="Quick filters">
-          {QUICK_FILTERS.map((filter) => <button className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-400 hover:text-white" key={filter} onClick={() => setQuestion((value) => `${value}${value ? " " : ""}${filter}`)} type="button">{filter}</button>)}
+      {state.kind === "idle" && (
+        <div className="mt-4">
+          <div aria-label="Quick filters" className="flex flex-wrap gap-2">
+            {QUICK_FILTERS.map((filter) => <button className="min-h-11 rounded-full border border-white/10 px-3 text-xs font-medium text-slate-400 outline-none transition hover:border-white/20 hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" key={filter} onClick={() => setQuestion((value) => `${value}${value ? " " : ""}${filter}`)} type="button">{filter}</button>)}
+          </div>
+          <div aria-label="Example questions" className="mt-3 grid gap-x-6 sm:grid-cols-2">
+            {EXAMPLES.map((example) => (
+              <button className="min-h-11 min-w-0 break-words border-b border-white/8 py-2.5 text-left text-xs leading-5 text-slate-500 outline-none transition hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" key={example} onClick={() => setQuestion(example)} type="button">{example}</button>
+            ))}
+          </div>
         </div>
-        <div className="mt-3 grid gap-2 sm:grid-cols-2" aria-label="Example questions">
-          {EXAMPLES.map((example) => (
-            <button className="min-w-0 break-words rounded-lg border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-xs leading-5 text-slate-400 hover:border-white/20 hover:text-white" key={example} onClick={() => setQuestion(example)} type="button">{example}</button>
-          ))}
-        </div>
-      </>}
+      )}
 
-      <div aria-live="polite" className="mt-5 min-w-0 max-w-full">
+      <div aria-live="polite" className="mt-7 min-w-0 max-w-full">
         {state.kind === "idle" && <p className="text-sm text-slate-500">Ask any crypto research question to begin.</p>}
-        {state.kind !== "idle" && submittedQuestion && <p className="mb-3 min-w-0 break-words text-sm text-slate-500 [overflow-wrap:anywhere]"><span className="font-medium text-slate-300">You:</span> {submittedQuestion}</p>}
-        {state.kind === "loading" && <div className="h-28 animate-pulse rounded-2xl bg-white/[0.035]" />}
-        {state.kind === "refusal" && <p className="rounded-xl border border-amber-200/20 bg-amber-200/5 p-4 text-sm text-amber-100"><span className="font-semibold">Request not supported:</span> {state.message}</p>}
-        {state.kind === "error" && <p className="rounded-xl border border-rose-300/20 bg-rose-300/5 p-4 text-sm text-rose-200">{state.message}</p>}
+        {state.kind !== "idle" && submittedQuestion && (
+          <div className="mb-7 min-w-0 border-l-2 border-emerald-400/35 pl-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">Your question</p>
+            <p className="mt-1 break-words text-sm leading-6 text-slate-300 [overflow-wrap:anywhere]">{submittedQuestion}</p>
+          </div>
+        )}
+        {state.kind === "loading" && <AiLoadingState />}
+        {state.kind === "refusal" && <AiMessage kind="warning" label="Request not supported" message={state.message} />}
+        {state.kind === "error" && <AiMessage kind="error" label="Unable to complete request" message={state.message} />}
         {state.kind === "success" && <AiResult data={state.data} />}
       </div>
     </section>
+  );
+}
+
+export function AiLoadingState() {
+  return (
+    <div aria-label="AI Research is analyzing" className="py-2" role="status">
+      <div className="flex items-center gap-3 text-sm text-slate-400">
+        <span aria-hidden="true" className="size-2 animate-pulse rounded-full bg-emerald-400" />
+        Reviewing the question…
+      </div>
+      <div aria-hidden="true" className="mt-5 grid gap-3">
+        <span className="h-2.5 w-11/12 animate-pulse rounded-full bg-white/5" />
+        <span className="h-2.5 w-4/5 animate-pulse rounded-full bg-white/5" />
+        <span className="h-2.5 w-2/3 animate-pulse rounded-full bg-white/5" />
+      </div>
+    </div>
+  );
+}
+
+export function AiMessage({ kind, label, message }: { kind: "warning" | "error"; label: string; message: string }) {
+  return (
+    <div className={`border-l-2 py-1 pl-4 text-sm leading-6 ${kind === "error" ? "border-rose-400/60 text-rose-200" : "border-amber-300/60 text-amber-100"}`} role={kind === "error" ? "alert" : "status"}>
+      <p className="font-semibold">{label}</p>
+      <p className="mt-1 opacity-80">{message}</p>
+    </div>
   );
 }
 
@@ -110,12 +152,11 @@ export function AiResult({ data }: { data: AiResearchSuccess }) {
   if (data.mode === "agent") return <AgentResult data={data} />;
   if (data.mode === "general") {
     return (
-      <div className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5">
-        <span className="inline-flex max-w-full break-words rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200 [overflow-wrap:anywhere]">{data.modeLabel}</span>
-        <h3 className="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-400">General explanation</h3>
-        <p className="mt-2 min-w-0 whitespace-pre-wrap break-words text-base leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
-        <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
-      </div>
+      <article aria-label="AI explanation" className="mx-auto min-w-0 max-w-[800px]">
+        <ResultEyebrow>{data.modeLabel}</ResultEyebrow>
+        <ProseAnswer text={data.answer} />
+        <ResultDisclaimer>{data.disclaimer}</ResultDisclaimer>
+      </article>
     );
   }
   return <DatabaseResult data={data} />;
@@ -135,21 +176,35 @@ function AgentResult({ data }: { data: AiAgentSuccess }) {
     citations: data.historical.citations,
     disclaimer: data.language === "uk" ? "Лише історичний аналіз — не фінансова порада." : "Historical analysis only — not financial advice.",
   } : null;
+
   return (
-    <div className="grid min-w-0 max-w-full gap-4">
-      <section className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5" aria-label="AI explanation">
-        <span className="inline-flex max-w-full break-words rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200 [overflow-wrap:anywhere]">{data.modeLabel}</span>
-        <p className="mt-4 min-w-0 whitespace-pre-wrap break-words text-base leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
-        {data.historicalUnavailable && (
-          <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
-            {data.historicalMessage ?? "Historical evidence is temporarily unavailable."}
-          </p>
-        )}
-        <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
-      </section>
-      {historicalData && <DatabaseResult data={historicalData} />}
+    <div className="min-w-0 max-w-full">
+      <article aria-label="AI explanation" className="mx-auto min-w-0 max-w-[800px]">
+        <ResultEyebrow>{data.modeLabel}</ResultEyebrow>
+        <ProseAnswer text={data.answer} />
+        {data.historicalUnavailable && <div className="mt-5"><AiMessage kind="warning" label="Historical evidence unavailable" message={data.historicalMessage ?? "Historical evidence is temporarily unavailable."} /></div>}
+        <ResultDisclaimer>{data.disclaimer}</ResultDisclaimer>
+      </article>
+      {historicalData && <div className="mt-8 border-t border-white/10 pt-8"><DatabaseResult data={historicalData} /></div>}
     </div>
   );
+}
+
+function ProseAnswer({ text }: { text: string }) {
+  const paragraphs = text.split(/\n{2,}/u).filter(Boolean);
+  return (
+    <div className="mt-4 min-w-0 space-y-4 break-words text-base leading-7 text-white sm:text-[17px] sm:leading-8 [overflow-wrap:anywhere]">
+      {paragraphs.map((paragraph, index) => <p className="whitespace-pre-wrap" key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>)}
+    </div>
+  );
+}
+
+function ResultEyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300">{children}</p>;
+}
+
+function ResultDisclaimer({ children }: { children: React.ReactNode }) {
+  return <p className="mt-6 border-t border-white/8 pt-3 text-xs leading-5 text-slate-500">{children}</p>;
 }
 
 function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
@@ -178,118 +233,162 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
         : data.result.kind === "topic_ranking"
           ? Math.max(0, ...data.result.items.map((item) => item.independentSampleSize))
           : data.result.kind === "multi_horizon"
-            ? Math.max(...data.result.rows.map((row) => row.sampleSize))
+            ? Math.max(0, ...data.result.rows.map((row) => row.sampleSize))
             : data.result.sampleSize;
+  const requestedRow = data.result.kind === "multi_horizon"
+    ? data.result.rows.find((row) => row.horizon === (data.intent.horizon ?? "24h"))
+    : null;
+  const summaryMetrics = [
+    ...(data.result.topicFilter
+      ? [
+          { label: "Independent events", value: String(data.result.topicFilter.independentEventCount) },
+          { label: "Matched articles", value: String(data.result.topicFilter.matchedSampleSize) },
+        ]
+      : [
+          { label: "Asset", value: data.intent.asset ?? "All" },
+          { label: "Horizon", value: data.intent.horizon ?? "All horizons" },
+        ]),
+    ...(requestedRow
+      ? [
+          { label: `Median ${requestedRow.horizon}`, value: formatPercent(requestedRow.median) },
+          { label: `Positive share ${requestedRow.horizon}`, value: formatPercent(requestedRow.positivePercent, false, 2) },
+        ]
+      : [
+          { label: "Metric", value: metricLabel },
+          { label: "Sample", value: String(sampleSize) },
+        ]),
+  ];
+
   return (
-    <div className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
-      <span className={`inline-flex max-w-full break-words rounded-full border px-3 py-1 text-xs font-semibold [overflow-wrap:anywhere] ${data.mode === "hybrid" ? "border-violet-300/20 bg-violet-300/10 text-violet-200" : "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"}`}>{data.modeLabel}</span>
+    <section aria-label="Historical evidence" className="min-w-0 max-w-full rounded-2xl bg-white/[0.035] px-4 py-5 sm:px-6 sm:py-6">
       {data.mode === "hybrid" && (
-        <section className="mt-4 rounded-xl border border-violet-300/15 bg-violet-300/[0.04] p-4" aria-label="General explanation">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-violet-200">General explanation</h3>
-          <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-200">{data.generalExplanation}</p>
-          <p className="mt-2 text-xs text-slate-500">No live sources or database rows were used for this explanation.</p>
-        </section>
+        <article aria-label="General explanation" className="mx-auto max-w-[800px] pb-7">
+          <ResultEyebrow>General explanation</ResultEyebrow>
+          <ProseAnswer text={data.generalExplanation} />
+        </article>
       )}
-      <section className={`min-w-0 max-w-full ${data.mode === "hybrid" ? "mt-5" : "mt-4"}`} aria-label="Historical evidence">
-      {data.mode === "hybrid" && <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Historical evidence</h3>}
-      <div className="flex flex-wrap gap-2">
-        {chips.map((chip) => <span className="max-w-full break-words rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400 [overflow-wrap:anywhere]" key={chip}>{chip}</span>)}
-      </div>
-      <p className="mt-3 text-base font-semibold leading-7 text-white">{data.answer}</p>
-      {data.answer === "No matching historical events found." && <p className="mt-1 text-sm text-slate-500">Try a broader topic or date range.</p>}
-      <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-        <div><dt className="text-slate-500">Asset</dt><dd className="text-slate-200">{data.intent.asset ?? "All"}</dd></div>
-        <div><dt className="text-slate-500">Horizon</dt><dd className="text-slate-200">{data.intent.horizon ?? "All horizons"}</dd></div>
-        <div><dt className="text-slate-500">Metric</dt><dd className="text-slate-200">{metricLabel}</dd></div>
-        <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
-      </dl>
-      {data.result.topicFilter && (
-        <div className="mt-3 text-sm text-slate-400">
-          <p>
-            Matched articles <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize}</span>
-            {" · Independent events "}<span className="font-medium text-slate-200">{data.result.topicFilter.independentEventCount}</span>
-            {" · from "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> bounded candidates
-            {data.result.topicFilter.heuristicMatches > 0 ? ` (${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches)` : ""}.
-          </p>
-          {data.result.topicFilter.entityConcentrationWarning && (
-            <p className="mt-2 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-amber-100">
-              Entity concentration warning: {data.result.topicFilter.largestEntity ?? "one entity"} represents {data.result.topicFilter.largestEntityShare.toFixed(1)}% of independent events.
+      <div className={data.mode === "hybrid" ? "border-t border-white/10 pt-7" : undefined}>
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="text-lg font-semibold tracking-tight text-white">Historical evidence</h3>
+          <span className="rounded-full bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-300">Reaction V2</span>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
+          {chips.map((chip) => <span className="max-w-full break-words [overflow-wrap:anywhere]" key={chip}>{chip}</span>)}
+        </div>
+
+        <p className="mt-5 max-w-[800px] break-words text-base font-medium leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
+        {data.answer === "No matching historical events found." && <p className="mt-1 text-sm text-slate-500">Try a broader topic or date range.</p>}
+
+        <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-y border-white/8 py-4 text-sm sm:grid-cols-4">
+          {summaryMetrics.map((metric) => <Metric key={metric.label} {...metric} />)}
+        </dl>
+
+        {data.result.topicFilter && (
+          <div className="mt-4 text-xs leading-5 text-slate-500">
+            <p>
+              Candidate pool <strong className="font-semibold text-slate-300">{data.result.topicFilter.broadSampleSize}</strong>
+              {" · Duplicate groups "}<strong className="font-semibold text-slate-300">{data.result.topicFilter.duplicateGroupCount}</strong>
+              {data.result.topicFilter.heuristicMatches > 0 ? ` · ${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches` : ""}
             </p>
-          )}
-        </div>
-      )}
-      {sampleSize > 0 && sampleSize < 10 && (
-        <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
-          {sampleSize < 5 ? "Very small sample — statistical reliability is low." : "Small sample — interpret cautiously."}
-        </p>
-      )}
-      {data.result.kind === "scalar" && data.result.sampleSize > 0 && (
-        <p className="mt-2 text-xs text-slate-500">
-          5% trimmed mean: {formatPercent(data.result.trimmedMean5Percent)}
-          {data.result.standardDeviation !== null ? ` · SD ${formatPercent(data.result.standardDeviation, false)} · SE ${formatPercent(data.result.standardError, false)}` : ""}
-        </p>
-      )}
-      {data.result.kind === "share" && data.result.positive95Ci && (
-        <p className="mt-2 text-xs text-slate-500">Positive-share 95% CI: {formatPercent(data.result.positive95Ci.low, false)}–{formatPercent(data.result.positive95Ci.high, false)}</p>
-      )}
-      {data.result.kind === "multi_horizon" && sampleSize > 0 && (
-        <div className="mt-4 max-w-full overflow-x-auto overscroll-x-contain rounded-lg border border-white/10 text-sm" data-testid="historical-table-scroll">
-          <div className="grid min-w-[540px] grid-cols-5 bg-white/[0.04] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <span>Horizon</span><span className="text-right">Mean</span><span className="text-right">Median</span><span className="text-right">Positive</span><span className="text-right">Sample</span>
+            {data.result.topicFilter.entityConcentrationWarning && <div className="mt-3"><AiMessage kind="warning" label="Entity concentration" message={`${data.result.topicFilter.largestEntity ?? "One entity"} represents ${data.result.topicFilter.largestEntityShare.toFixed(1)}% of independent events.`} /></div>}
           </div>
-          {data.result.rows.map((row) => (
-            <div className="grid min-w-[540px] grid-cols-5 border-t border-white/10 px-3 py-2" key={row.horizon}>
-              <span className="font-medium text-slate-200">{row.horizon}</span>
-              <span className="text-right text-white">{formatPercent(row.mean)}</span>
-              <span className="text-right text-white">{formatPercent(row.median)}</span>
-              <span className="text-right text-white">{formatPercent(row.positivePercent, false, 2)}</span>
-              <span className="text-right text-slate-500">{row.sampleSize}</span>
-            </div>
+        )}
+        {sampleSize > 0 && sampleSize < 10 && <div className="mt-4"><AiMessage kind="warning" label={sampleSize < 5 ? "Very small sample" : "Small sample"} message={sampleSize < 5 ? "Statistical reliability is low." : "Interpret the result cautiously."} /></div>}
+        {data.result.kind === "scalar" && data.result.sampleSize > 0 && (
+          <p className="mt-3 text-xs text-slate-500">5% trimmed mean: {formatPercent(data.result.trimmedMean5Percent)}{data.result.standardDeviation !== null ? ` · SD ${formatPercent(data.result.standardDeviation, false)} · SE ${formatPercent(data.result.standardError, false)}` : ""}</p>
+        )}
+        {data.result.kind === "share" && data.result.positive95Ci && <p className="mt-3 text-xs text-slate-500">Positive-share 95% CI: {formatPercent(data.result.positive95Ci.low, false)}–{formatPercent(data.result.positive95Ci.high, false)}</p>}
+        {data.calculation && data.calculation !== data.answer && <p className="mt-3 max-w-[800px] text-xs leading-5 text-slate-500">{data.calculation}</p>}
+
+        {data.result.kind === "multi_horizon" && sampleSize > 0 && <HistoricalTable rows={data.result.rows} />}
+        {data.result.kind === "ranking" && data.result.items.length > 0 && (
+          <ol className="mt-5 divide-y divide-white/8 border-y border-white/8">
+            {data.result.items.map((item, index) => (
+              <li className="grid min-w-0 gap-1 py-3 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-5" key={item.eventId}>
+                <a className="min-w-0 break-words text-sm text-sky-200 outline-none hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" href={item.href}>{index + 1}. {item.title}</a>
+                <span className={`font-mono text-sm font-semibold tabular-nums ${reactionTone(item.reaction)}`}>{formatPercent(item.reaction)}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+        {data.result.kind === "topic_ranking" && data.result.items.length > 0 && (
+          <ol className="mt-5 divide-y divide-white/8 border-y border-white/8">
+            {data.result.items.map((item, index) => (
+              <li className="grid min-w-0 gap-1 py-3 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-5" key={item.topic}>
+                <p className="break-words text-sm font-medium text-slate-300 [overflow-wrap:anywhere]">{index + 1}. {AI_TOPIC_LABELS[item.topic]}</p>
+                <p className="break-words font-mono text-xs tabular-nums text-white">{formatPercent(item.value, false)} · independent N {item.independentSampleSize} · {data.intent.horizon}</p>
+              </li>
+            ))}
+          </ol>
+        )}
+        {data.result.kind === "topic_comparison" && (
+          <div className="mt-5 grid min-w-0 divide-y divide-white/8 border-y border-white/8 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+            {[data.result.left, data.result.right].map((side) => (
+              <div className="min-w-0 py-4 first:sm:pr-5 last:sm:pl-5" key={side.topic}>
+                <p className="break-words text-xs text-slate-500 [overflow-wrap:anywhere]">{AI_TOPIC_LABELS[side.topic]}</p>
+                <p className="mt-1 break-words font-mono text-sm font-semibold text-white">{formatPercent(side.value, false)} · independent N {side.independentSampleSize}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {data.citations.length > 0 && (
+          <section aria-labelledby="sources-heading" className="mt-7">
+            <h4 className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500" id="sources-heading">Sources · {data.citations.length}</h4>
+            <ol className="mt-2 divide-y divide-white/8 border-t border-white/8">
+              {data.citations.map((citation, index) => (
+                <li className="grid min-w-0 grid-cols-[1.5rem_1fr] gap-2 py-2.5 text-sm" key={citation.eventId}>
+                  <span aria-hidden="true" className="font-mono text-xs leading-5 text-slate-600">{index + 1}</span>
+                  <div className="min-w-0">
+                    <a className="inline-flex min-h-11 break-words py-1 leading-5 text-sky-200 outline-none hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" href={citation.href}>{citation.title}</a>
+                    {citation.groupSize && citation.groupSize > 1 ? <p className="mt-0.5 text-[11px] text-slate-500">Grouped event · {citation.groupSize} articles</p> : null}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+        <p className="mt-5 text-xs leading-5 text-slate-500">{data.basedOn}. {data.disclaimer}</p>
+      </div>
+    </section>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return <div className="min-w-0"><dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">{label}</dt><dd className="mt-1 break-words font-medium text-slate-300 [overflow-wrap:anywhere]">{value}</dd></div>;
+}
+
+function HistoricalTable({ rows }: { rows: MultiHorizonAnalyticsResult["rows"] }) {
+  return (
+    <div className="mt-5 max-w-full overflow-x-auto overscroll-x-contain" data-testid="historical-table-scroll" tabIndex={0}>
+      <table className="w-full min-w-[540px] border-collapse text-sm">
+        <caption className="sr-only">Historical Reaction V2 returns by horizon</caption>
+        <thead>
+          <tr className="border-b border-white/10 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+            <th className="py-2 pr-3 text-left" scope="col">Horizon</th>
+            <th className="px-3 py-2 text-right" scope="col">Mean</th>
+            <th className="px-3 py-2 text-right" scope="col">Median</th>
+            <th className="px-3 py-2 text-right" scope="col">Positive</th>
+            <th className="py-2 pl-3 text-right" scope="col">Sample</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr className="border-b border-white/8 last:border-b-0" key={row.horizon}>
+              <th className="py-3 pr-3 text-left font-medium text-slate-300" scope="row">{row.horizon}</th>
+              <td className={`px-3 py-3 text-right font-mono tabular-nums ${reactionTone(row.mean)}`}>{formatPercent(row.mean)}</td>
+              <td className={`px-3 py-3 text-right font-mono tabular-nums ${reactionTone(row.median)}`}>{formatPercent(row.median)}</td>
+              <td className="px-3 py-3 text-right font-mono tabular-nums text-white">{formatPercent(row.positivePercent, false, 2)}</td>
+              <td className="py-3 pl-3 text-right font-mono tabular-nums text-slate-500">{row.sampleSize}</td>
+            </tr>
           ))}
-        </div>
-      )}
-      {data.calculation && <p className="mt-2 text-sm leading-6 text-slate-400"><span className="font-semibold text-slate-300">Summary:</span> {data.calculation}</p>}
-      {data.result.kind === "ranking" && data.result.items.length > 0 && (
-        <ol className="mt-4 grid gap-2">
-          {data.result.items.map((item, index) => (
-            <li className="rounded-lg border border-white/10 px-3 py-2" key={item.eventId}>
-              <a className="block min-w-0 break-words text-sm text-sky-200 hover:text-white [overflow-wrap:anywhere]" href={item.href}>{index + 1}. {item.title}</a>
-              <p className="mt-1 text-sm font-semibold text-white">{formatPercent(item.reaction)}</p>
-            </li>
-          ))}
-        </ol>
-      )}
-      {data.result.kind === "topic_ranking" && data.result.items.length > 0 && (
-        <ol className="mt-4 grid min-w-0 gap-2">
-          {data.result.items.map((item, index) => (
-            <li className="min-w-0 rounded-lg border border-white/10 px-3 py-2" key={item.topic}>
-              <p className="break-words text-sm font-semibold text-slate-200 [overflow-wrap:anywhere]">{index + 1}. {AI_TOPIC_LABELS[item.topic]}</p>
-              <p className="mt-1 break-words text-sm text-white">{formatPercent(item.value, false)} · independent N {item.independentSampleSize} · {data.intent.horizon}</p>
-            </li>
-          ))}
-        </ol>
-      )}
-      {data.result.kind === "topic_comparison" && (
-        <div className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2">
-          {[data.result.left, data.result.right].map((side) => (
-            <div className="min-w-0 rounded-lg border border-white/10 px-3 py-2" key={side.topic}>
-              <p className="break-words text-sm text-slate-400 [overflow-wrap:anywhere]">{AI_TOPIC_LABELS[side.topic]}</p>
-              <p className="mt-1 break-words text-sm font-semibold text-white">{formatPercent(side.value, false)} · independent N {side.independentSampleSize}</p>
-            </div>
-          ))}
-        </div>
-      )}
-      {data.citations.length > 0 ? (
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {data.citations.map((citation) => (
-            <li key={citation.eventId}>
-              <a className="block min-w-0 break-words rounded-lg border border-white/10 px-3 py-2 text-sm text-sky-200 hover:border-white/20 [overflow-wrap:anywhere]" href={citation.href}>{citation.title}</a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <p className="mt-4 text-xs text-slate-500">{data.basedOn}. {data.disclaimer}</p>
-      </section>
+        </tbody>
+      </table>
     </div>
   );
+}
+
+function reactionTone(value: number | null): string {
+  if (value === null || value === 0) return "text-slate-400";
+  return value > 0 ? "text-emerald-300" : "text-rose-200";
 }

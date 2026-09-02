@@ -43,7 +43,7 @@ export default async function EventsPage() {
         path: "/events",
         breadcrumbs: [{ name: "Home", path: "/" }, { name: "Events", path: "/events" }],
       })} />
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(circle_at_25%_0%,rgba(16,185,129,0.11),transparent_38%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.07),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(circle_at_25%_0%,rgba(16,185,129,0.1),transparent_40%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.05),transparent_34%)]" />
       <div className="mx-auto w-full max-w-6xl px-4 pb-10 pt-20 sm:px-6 sm:py-16 lg:px-8">
         <header className="max-w-4xl">
           <div className="flex items-center gap-3">
@@ -67,13 +67,13 @@ export default async function EventsPage() {
           <EventsExplorer />
         </Suspense>
 
-        <section className="mt-10 rounded-2xl border border-white/10 bg-slate-900/35 p-5 sm:p-6" aria-labelledby="coverage-heading">
+        <section className="mt-12 border-t border-white/8 pt-6" aria-labelledby="coverage-heading">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-400">Coverage transparency</p>
           <h2 className="mt-2 text-xl font-semibold text-white" id="coverage-heading">Events by year</h2>
           <p className="mt-2 text-sm leading-6 text-slate-500">Historical coverage is uneven; counts show archived event pages, not completeness of the news record.</p>
           <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
             {stats.eventsByYear.map(({ year, events }) => (
-              <div className="rounded-xl bg-white/[0.035] px-3 py-2.5" key={year}>
+              <div className="border-l border-white/10 px-3 py-1" key={year}>
                 <dt className="text-xs text-slate-500">{year}</dt>
                 <dd className="mt-1 font-mono text-sm font-semibold text-slate-200">{events.toLocaleString("en-US")}</dd>
               </div>
@@ -87,7 +87,7 @@ export default async function EventsPage() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-xl border border-white/8 bg-white/[0.025] px-2.5 py-3 sm:px-4">
+    <div className="min-w-0 border-l border-white/10 px-2.5 py-2 sm:px-4">
       <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 sm:text-xs">{label}</dt>
       <dd className="mt-1 break-words text-xs font-semibold text-slate-200 min-[390px]:text-sm sm:text-base">{value}</dd>
     </div>

@@ -23,15 +23,15 @@ export default function AiResearchPage() {
         breadcrumbs: [{ name: "Home", path: "/" }, { name: "AI Research", path: "/ai" }],
         about: ["Bitcoin", "Ethereum", "Solana", "Reaction V2"],
       })} />
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] bg-[radial-gradient(circle_at_30%_0%,rgba(16,185,129,0.14),transparent_40%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.08),transparent_32%)]" />
-      <div className="mx-auto w-full min-w-0 max-w-4xl px-4 pb-[max(3.5rem,env(safe-area-inset-bottom))] pt-[calc(6rem+env(safe-area-inset-top))] sm:px-6 sm:pt-[calc(7rem+env(safe-area-inset-top))]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(circle_at_30%_0%,rgba(16,185,129,0.12),transparent_42%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.06),transparent_34%)]" />
+      <div className="mx-auto w-full min-w-0 max-w-5xl px-4 pb-[max(3.5rem,env(safe-area-inset-bottom))] pt-[calc(5.75rem+env(safe-area-inset-top))] sm:px-6 sm:pt-[calc(7rem+env(safe-area-inset-top))]">
         <header className="text-center">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-400">AI Research</p>
-          <h1 className="mt-4 break-words text-balance text-3xl font-semibold tracking-[-0.04em] text-white min-[390px]:text-4xl sm:text-6xl">Ask Crypto Market History</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-7 text-slate-400 sm:text-lg">Ask how BTC, ETH or SOL reacted when similar events happened before. Historical statistics use Reaction V2 and linked archive evidence.</p>
+          <h1 className="mt-3 break-words text-balance text-[2rem] font-semibold leading-[1.08] tracking-[-0.04em] text-white min-[390px]:text-4xl sm:mt-4 sm:text-6xl">Ask Crypto Market History</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-pretty text-[15px] leading-6 text-slate-400 sm:mt-4 sm:text-lg sm:leading-7">Ask how BTC, ETH or SOL reacted when similar events happened before. Historical statistics use Reaction V2 and linked archive evidence.</p>
         </header>
         <AiSearch />
-        <aside className="mt-8 rounded-2xl border border-white/10 bg-slate-900/35 p-5 text-sm leading-6 text-slate-500">
+        <aside className="mt-10 border-t border-white/8 pt-5 text-xs leading-5 text-slate-500">
           AI Research separates general explanations from historical database evidence and does not claim access to live market data. You can also <Link className="font-semibold text-emerald-300 hover:text-emerald-200" href="/events">browse the event archive</Link> directly.
         </aside>
       </div>

@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { AiResult, AiSearch } from "@/components/ai-search";
+import { AiLoadingState, AiMessage, AiResult, AiSearch } from "@/components/ai-search";
 import { MockAiResearchAgent } from "@/lib/ai-search/agent";
 import { FixtureAiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { executeAiAgentResearch } from "@/lib/ai-search/service";
@@ -22,7 +22,8 @@ describe("AI Search prototype", () => {
     expect(html).toContain("Що таке стейкінг?");
     expect(html).toContain("Ask any crypto research question");
     expect(html).toContain("maxLength=\"500\"");
-    expect(html).toContain("sm:flex-row");
+    expect(html).toContain("<textarea");
+    expect(html).toContain("Shift + Enter");
     expect(html).toContain("min-w-0");
     expect(html).not.toContain("?question=");
   });
@@ -45,6 +46,25 @@ describe("AI Search prototype", () => {
     expect(html).not.toContain("Reaction V2");
   });
 
+  it("renders historical unavailability without adding an evidence surface", () => {
+    const data: AiAgentSuccess = {
+      status: "ok",
+      mode: "agent",
+      modeLabel: "AI explanation",
+      language: "en",
+      answer: "A general explanation remains available.",
+      historical: null,
+      historicalUnavailable: true,
+      historicalMessage: "Historical evidence is temporarily unavailable.",
+      citations: [],
+      disclaimer: "Educational answer — not financial advice.",
+    };
+    const html = renderToStaticMarkup(<AiResult data={data} />);
+    expect(html).toContain("Historical evidence unavailable");
+    expect(html).toContain('role="status"');
+    expect(html).not.toContain('aria-label="Historical evidence"');
+  });
+
   it("renders agent explanation and deterministic historical evidence as separate sections", async () => {
     const result = await executeAiAgentResearch(
       "What are ETF inflows, and how does BTC react to them historically?",
@@ -57,7 +77,8 @@ describe("AI Search prototype", () => {
     expect(html).toContain("AI explanation");
     expect(html).toContain('aria-label="AI explanation"');
     expect(html).toContain('aria-label="Historical evidence"');
-    expect(html).toContain("Historical evidence — Reaction V2");
+    expect(html).toContain(">Historical evidence<");
+    expect(html).toContain(">Reaction V2<");
     expect(html).toContain("Reaction V2");
     expect(html).toContain("Matched articles");
     expect(html).toContain("Independent events");
@@ -73,6 +94,10 @@ describe("AI Search prototype", () => {
       const tableHtml = renderToStaticMarkup(<AiResult data={tableResult.body} />);
       expect(tableHtml).toContain('data-testid="historical-table-scroll"');
       expect(tableHtml).toContain("overflow-x-auto");
+      expect(tableHtml).toContain("<table");
+      expect(tableHtml).toContain('scope="col"');
+      expect(tableHtml).toContain('scope="row"');
+      expect(tableHtml).toContain("Historical Reaction V2 returns by horizon");
     }
   });
 
@@ -99,5 +124,66 @@ describe("AI Search prototype", () => {
     expect(comparisonHtml).toContain("Topic comparison");
     expect(comparisonHtml).toContain("ETF approvals");
     expect(comparisonHtml).toContain("Institutional purchases");
+
+    if (ranking.body.mode === "agent" && ranking.body.historical) {
+      const populatedRanking: AiAgentSuccess = {
+        ...ranking.body,
+        historical: {
+          ...ranking.body.historical,
+          answer: "Ranked from deterministic Reaction V2 observations.",
+          calculation: "Eligible topics use the configured minimum independent sample.",
+          result: {
+            kind: "topic_ranking",
+            metric: "positive_share",
+            order: "highest",
+            horizon: "24h",
+            minimumSampleSize: 10,
+            eligibleTopicCount: 1,
+            insufficientData: false,
+            items: [{ topic: "etf_approval", value: 62.5, independentSampleSize: 16, positive95Ci: { low: 38.6, high: 81.5 } }],
+            citations: [],
+          },
+        },
+      };
+      const populatedHtml = renderToStaticMarkup(<AiResult data={populatedRanking} />);
+      expect(populatedHtml).toContain("1. ETF approvals");
+      expect(populatedHtml).toContain("independent N 16");
+    }
+  });
+
+  it("keeps loading, warning, and error feedback lightweight and accessible", () => {
+    const loadingHtml = renderToStaticMarkup(<AiLoadingState />);
+    const warningHtml = renderToStaticMarkup(<AiMessage kind="warning" label="Historical evidence unavailable" message="Try again later." />);
+    const errorHtml = renderToStaticMarkup(<AiMessage kind="error" label="Unable to complete request" message="Provider unavailable." />);
+    expect(loadingHtml).toContain('role="status"');
+    expect(loadingHtml).toContain("Reviewing the question");
+    expect(warningHtml).toContain('role="status"');
+    expect(errorHtml).toContain('role="alert"');
+    expect(errorHtml).not.toContain("rounded-2xl border");
+  });
+
+  it("wraps long prose and a citation list with more than twenty sources", async () => {
+    const result = await executeAiAgentResearch(
+      "What are ETF inflows, and how does BTC react to them historically?",
+      new MockAiResearchAgent(),
+      new FixtureAiSearchDataAdapter(),
+    );
+    expect(result.statusCode).toBe(200);
+    if (result.statusCode !== 200 || result.body.mode !== "agent" || !result.body.historical) return;
+    const citations = Array.from({ length: 21 }, (_, index) => ({
+      eventId: `long-source-${index}`,
+      href: `/events/long-source-${index}`,
+      title: `${index + 1}. Extremely long historical source title about institutional crypto market flows that must wrap without widening the viewport ${"context ".repeat(8)}`,
+    }));
+    const data: AiAgentSuccess = {
+      ...result.body,
+      answer: `Довга українська відповідь має залишатися читабельною на вузькому екрані. ${"Пояснення ринкового контексту. ".repeat(20)}`,
+      historical: { ...result.body.historical, citations },
+    };
+    const html = renderToStaticMarkup(<AiResult data={data} />);
+    expect(html).toContain("Sources · 21");
+    expect(html.match(/href="\/events\/long-source-/gu)).toHaveLength(21);
+    expect(html).toContain("max-w-[800px]");
+    expect(html).toContain("overflow-wrap:anywhere");
   });
 });

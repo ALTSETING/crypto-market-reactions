@@ -1,11 +1,12 @@
 import { spawn } from "node:child_process";
-import { mkdtemp } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 const chrome = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const port = 9444;
 const baseUrl = (process.env.SMOKE_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+const screenshotDir = resolve(process.env.SMOKE_SCREENSHOT_DIR ?? "../reports/ui-redesign-v2");
 const profile = await mkdtemp(join(tmpdir(), "cmr-ai-mobile-"));
 const browser = spawn(chrome, [
   "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
@@ -84,10 +85,28 @@ async function viewport(cdp, width) {
   })()`);
 }
 
+async function screenshot(cdp, name) {
+  await mkdir(screenshotDir, { recursive: true });
+  const result = await cdp.send("Page.captureScreenshot", { format: "png", captureBeyondViewport: true });
+  await writeFile(join(screenshotDir, `${name}.png`), Buffer.from(result.data, "base64"));
+}
+
+async function reset(cdp, width, theme) {
+  await cdp.send("Emulation.setDeviceMetricsOverride", { width, height: width === 1440 ? 1000 : 844, deviceScaleFactor: 1, mobile: width < 600 });
+  await cdp.send("Page.navigate", { url: `${baseUrl}/ai` });
+  await delay(1_000);
+  await evaluate(cdp, `(() => {
+    localStorage.setItem('site-theme', ${JSON.stringify(theme)});
+    document.documentElement.dataset.theme = ${JSON.stringify(theme)};
+    document.documentElement.style.colorScheme = ${JSON.stringify(theme)};
+  })()`);
+  await delay(150);
+}
+
 async function submit(cdp, question) {
   await evaluate(cdp, `(() => {
     const input = document.querySelector('#ai-search-question');
-    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+    const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
     setter.call(input, ${JSON.stringify(question)});
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -100,8 +119,9 @@ async function submit(cdp, question) {
     return true;
   })()`);
   if (!submitted) throw new Error("AI submit button remained disabled.");
+  await delay(100);
   for (let attempt = 0; attempt < 100; attempt += 1) {
-    const ready = await evaluate(cdp, `!document.body.innerText.includes('Analyzing…') && (Boolean(document.querySelector('[aria-label="AI explanation"]')) || document.body.innerText.includes('Request not supported:') || document.body.innerText.includes('unavailable'))`);
+    const ready = await evaluate(cdp, `document.body.innerText.includes(${JSON.stringify(question)}) && !document.body.innerText.includes('Analyzing…') && (Boolean(document.querySelector('[aria-label="AI explanation"]')) || Boolean(document.querySelector('[aria-label="Historical evidence"]')) || document.body.innerText.includes('Request not supported') || document.body.innerText.includes('unavailable'))`);
     if (ready) return;
     await delay(100);
   }
@@ -121,17 +141,33 @@ try {
   await delay(2_000);
 
   const states = {};
-  await submit(cdp, "How did SOL react historically?");
-  for (const width of [320, 360, 375, 390, 430, 1440]) states[width] = await viewport(cdp, width);
+  await reset(cdp, 390, "light");
+  states.emptyMobile = await viewport(cdp, 390);
+  await screenshot(cdp, "ai-390-empty-light");
+  await reset(cdp, 1440, "dark");
+  states.emptyDesktop = await viewport(cdp, 1440);
+  await screenshot(cdp, "ai-1440-empty-dark");
 
+  await reset(cdp, 390, "dark");
+  await submit(cdp, "How did SOL react historically?");
+  await viewport(cdp, 390);
+  await screenshot(cdp, "ai-390-historical-dark");
+  for (const width of [320, 360, 375, 390, 430, 768, 1024, 1440]) states[width] = await viewport(cdp, width);
+  await viewport(cdp, 1440);
+  await screenshot(cdp, "ai-1440-historical-dark");
+
+  await reset(cdp, 390, "light");
   await submit(cdp, "What is Ethereum Layer 2?");
   states.general = await viewport(cdp, 390);
+  await screenshot(cdp, "ai-390-general-light");
   await submit(cdp, "На які новини ETH найчастіше реагував зростанням за 24h?");
   states.topicRanking = await viewport(cdp, 390);
   await submit(cdp, "ETF approvals or institutional purchases — which had a stronger ETH 24h reaction?");
   states.comparison = await viewport(cdp, 390);
+  await reset(cdp, 390, "dark");
   await submit(cdp, "Як ETH реагував на надзвичайно довгу назву інституційної купівлі з поясненням ліквідності та ринкового впливу через 24 години?");
-  states.longUkrainian = await viewport(cdp, 320);
+  states.longUkrainian = await viewport(cdp, 390);
+  await screenshot(cdp, "ai-390-long-uk-dark");
 
   const failures = Object.entries(states).filter(([, state]) => state.overflow !== 0 || !state.navigationClear);
   const tableStates = [320, 360, 375, 390, 430].map((width) => states[width].table);
@@ -141,7 +177,7 @@ try {
   if (failures.length > 0) throw new Error(`Mobile layout failures: ${JSON.stringify(failures)}`);
   const criticalErrors = cdp.errors.filter((message) => !/favicon\.ico|Failed to load resource.*404/iu.test(message));
   if (criticalErrors.length > 0) throw new Error(`Critical browser errors: ${JSON.stringify(criticalErrors)}`);
-  console.log(JSON.stringify({ states, criticalConsoleErrors: criticalErrors.length }, null, 2));
+  console.log(JSON.stringify({ states, screenshots: screenshotDir, criticalConsoleErrors: criticalErrors.length }, null, 2));
 } finally {
   cdp?.close();
   browser.kill();

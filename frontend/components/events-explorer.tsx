@@ -166,7 +166,7 @@ export function EventsExplorer() {
 
   return (
     <section aria-labelledby="events-heading" className="mt-8 sm:mt-10">
-      <div className="rounded-3xl border border-white/10 bg-slate-900/55 p-4 shadow-2xl shadow-black/20 backdrop-blur sm:p-6">
+      <div className="rounded-2xl border border-white/10 bg-slate-900/45 p-4 shadow-[0_16px_50px_rgba(2,6,23,0.1)] backdrop-blur sm:p-5">
         <form key={currentQuery} onSubmit={submitSearch} role="search">
           <label className="text-sm font-semibold text-slate-200" htmlFor="event-search">
             Search historical events
@@ -176,9 +176,9 @@ export function EventsExplorer() {
               <svg aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-slate-500" fill="none" viewBox="0 0 24 24">
                 <path d="m21 21-4.3-4.3m2.3-5.2a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
               </svg>
-              <input aria-describedby="search-hint" autoComplete="off" className="h-[54px] w-full rounded-2xl border border-white/10 bg-slate-950/80 pl-12 pr-4 text-base text-white outline-none transition placeholder:text-slate-600 hover:border-white/20 focus:border-emerald-400/70 focus:ring-4 focus:ring-emerald-400/10" defaultValue={currentQuery} id="event-search" maxLength={120} name="q" placeholder="Try “ethereum etf” or “binance hack”" type="search" />
+              <input aria-describedby="search-hint" autoComplete="off" className="h-[52px] w-full rounded-xl border border-white/10 bg-slate-950/70 pl-12 pr-4 text-base text-white outline-none transition placeholder:text-slate-600 hover:border-white/20 focus:border-emerald-400/70 focus:ring-4 focus:ring-emerald-400/10" defaultValue={currentQuery} id="event-search" maxLength={120} name="q" placeholder="Try “ethereum etf” or “binance hack”" type="search" />
             </div>
-            <button className="h-[54px] w-full shrink-0 rounded-2xl bg-emerald-400 px-6 text-sm font-bold text-slate-950 outline-none transition hover:bg-emerald-300 focus-visible:ring-2 focus-visible:ring-emerald-200 sm:w-auto" type="submit">Search</button>
+            <button className="h-[52px] w-full shrink-0 rounded-xl bg-emerald-400 px-6 text-sm font-bold text-slate-950 outline-none transition hover:bg-emerald-300 focus-visible:ring-2 focus-visible:ring-emerald-200 sm:w-auto" type="submit">Search</button>
           </div>
         </form>
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">

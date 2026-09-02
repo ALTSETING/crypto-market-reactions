@@ -50,7 +50,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         path: "/",
         breadcrumbs: [{ name: "Home", path: "/" }],
       })]} />
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[620px] bg-[radial-gradient(circle_at_25%_0%,rgba(16,185,129,0.14),transparent_40%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.08),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[620px] bg-[radial-gradient(circle_at_25%_0%,rgba(16,185,129,0.12),transparent_42%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.06),transparent_34%)]" />
       <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-24 sm:px-6 sm:pt-32 lg:px-8">
         <header className="max-w-4xl">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-400">Historical crypto market intelligence</p>
@@ -70,11 +70,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Research topics</p>
           <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl" id="topics-title">Browse historical event themes</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">Topic pages use explicit headline matching and deterministic statistics. They do not infer events that are absent from the archive.</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-x-6 gap-y-1 border-y border-white/8 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-white/8">
             {SEO_TOPIC_LANDINGS.map((topic) => (
-              <Link className="rounded-2xl border border-white/10 bg-slate-900/45 p-5 outline-none transition hover:border-emerald-400/35 focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/topics/${topic.slug}`} key={topic.slug}>
+              <Link className="group min-w-0 py-5 outline-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 lg:px-5 lg:first:pl-0 lg:last:pr-0" href={`/topics/${topic.slug}`} key={topic.slug}>
                 <h3 className="font-semibold text-white">{topic.name}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-500">{topic.description}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-500 transition group-hover:text-slate-400">{topic.description}</p>
               </Link>
             ))}
           </div>
@@ -91,5 +91,5 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 }
 
 function Info({ title, children }: { title: string; children: React.ReactNode }) {
-  return <article className="rounded-2xl border border-white/10 bg-slate-900/35 p-5"><h2 className="font-semibold text-white">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-500">{children}</p></article>;
+  return <article className="border-l-2 border-emerald-400/25 py-1 pl-4"><h2 className="font-semibold text-white">{title}</h2><p className="mt-2 text-sm leading-6 text-slate-500">{children}</p></article>;
 }
