@@ -10,8 +10,10 @@ const percent = (value: number | null): string => formatPercent(value);
 export function groundedAnswer(result: AnalyticsResult): { answer: string; calculation: string } {
   const empty = result.kind === "search" ? result.matched === 0
     : result.kind === "comparison" ? result.left.sampleSize + result.right.sampleSize === 0
+      : result.kind === "topic_comparison" ? result.left.independentSampleSize + result.right.independentSampleSize === 0
+        : result.kind === "topic_ranking" ? false
       : result.kind === "multi_horizon" ? result.rows.every((row) => row.sampleSize === 0)
-        : result.sampleSize === 0;
+          : result.sampleSize === 0;
   if (empty) return { answer: "No matching historical events found.", calculation: "" };
   switch (result.kind) {
     case "search":
@@ -50,6 +52,21 @@ export function groundedAnswer(result: AnalyticsResult): { answer: string; calcu
       return {
         answer: "Historical reaction across all horizons.",
         calculation: "Mean, median, positive share, and sample size are shown for each horizon.",
+      };
+    case "topic_ranking":
+      return result.insufficientData
+        ? {
+          answer: `Insufficient data for a reliable topic ranking at ${result.horizon}.`,
+          calculation: `No topic met the minimum of ${result.minimumSampleSize} independent Reaction V2 observations.`,
+        }
+        : {
+          answer: `${result.items.length} deterministically ranked topics are shown below.`,
+          calculation: `${result.metric} ranking at ${result.horizon}; minimum independent sample ${result.minimumSampleSize}.`,
+        };
+    case "topic_comparison":
+      return {
+        answer: "Deterministic topic comparison is shown below.",
+        calculation: `${result.metric} comparison at ${result.horizon}; null Reaction V2 values were excluded.`,
       };
   }
 }

@@ -225,6 +225,8 @@ function canonicalActual(result: AnalyticsResult): unknown {
   if (result.kind === "share") return { kind: result.kind, positivePercent: result.positivePercent, negativePercent: result.negativePercent, neutralPercent: result.neutralPercent, positive95Ci: result.positive95Ci, sampleSize: result.sampleSize, citationIds: citationIds(result), ...topic };
   if (result.kind === "ranking") return { kind: result.kind, direction: result.direction, sampleSize: result.sampleSize, items: result.items.map(({ eventId, reaction }) => ({ eventId, reaction })), citationIds: citationIds(result), ...topic };
   if (result.kind === "multi_horizon") return { kind: result.kind, rows: result.rows, citationIds: citationIds(result), ...topic };
+  if (result.kind === "topic_ranking") return { kind: result.kind, metric: result.metric, items: result.items, citationIds: citationIds(result), ...topic };
+  if (result.kind === "topic_comparison") return { kind: result.kind, metric: result.metric, left: result.left, right: result.right, difference: result.difference, citationIds: citationIds(result), ...topic };
   return { kind: result.kind, metric: result.metric, left: result.left, right: result.right, difference: result.difference, citationIds: citationIds(result), ...topic };
 }
 

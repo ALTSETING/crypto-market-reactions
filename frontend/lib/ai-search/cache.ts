@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { AiSearchDataAdapter } from "@/lib/ai-search/adapter";
-import type { AiSearchIntent, AnalyticsResult, MultiHorizonAnalyticsResult } from "@/types/ai-search";
+import type { AiSearchIntent, AiTopic, AnalyticsResult, HistoricalTopicMetric, MultiHorizonAnalyticsResult, TopicComparisonAnalyticsResult, TopicRankingAnalyticsResult } from "@/types/ai-search";
 
 interface CacheEntry {
   expiresAt: number;
@@ -66,6 +66,26 @@ export class CachedAiSearchDataAdapter implements AiSearchDataAdapter {
     const hit = this.entries.get(key);
     if (hit?.expiresAt && hit.expiresAt > now && hit.result.kind === "multi_horizon") return structuredClone(hit.result);
     const result = await this.delegate.analyzeOverview(intent);
+    this.entries.set(key, { expiresAt: now + this.ttlMs, result: structuredClone(result) });
+    return result;
+  }
+
+  async analyzeTopicRanking(intent: AiSearchIntent, metric: HistoricalTopicMetric, order: "highest" | "lowest", limit: number): Promise<TopicRankingAnalyticsResult> {
+    const key = `topic-ranking:${metric}:${order}:${limit}:${normalizedIntentCacheKey(intent)}`;
+    const now = Date.now();
+    const hit = this.entries.get(key);
+    if (hit?.expiresAt && hit.expiresAt > now && hit.result.kind === "topic_ranking") return structuredClone(hit.result);
+    const result = await this.delegate.analyzeTopicRanking(intent, metric, order, limit);
+    this.entries.set(key, { expiresAt: now + this.ttlMs, result: structuredClone(result) });
+    return result;
+  }
+
+  async analyzeTopicComparison(intent: AiSearchIntent, left: AiTopic, right: AiTopic, metric: HistoricalTopicMetric): Promise<TopicComparisonAnalyticsResult> {
+    const key = `topic-comparison:${left}:${right}:${metric}:${normalizedIntentCacheKey(intent)}`;
+    const now = Date.now();
+    const hit = this.entries.get(key);
+    if (hit?.expiresAt && hit.expiresAt > now && hit.result.kind === "topic_comparison") return structuredClone(hit.result);
+    const result = await this.delegate.analyzeTopicComparison(intent, left, right, metric);
     this.entries.set(key, { expiresAt: now + this.ttlMs, result: structuredClone(result) });
     return result;
   }

@@ -2,12 +2,12 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-import { runAnalytics, runMultiHorizonAnalytics } from "@/lib/ai-search/analytics";
+import { runAnalytics, runMultiHorizonAnalytics, runTopicComparisonAnalytics, runTopicRankingAnalytics } from "@/lib/ai-search/analytics";
 import { CachedAiSearchDataAdapter } from "@/lib/ai-search/cache";
 import { AI_SEARCH_FIXTURES } from "@/lib/ai-search/fixtures";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { requiresSemanticMatching } from "@/lib/ai-search/semantic-matcher";
-import type { AiSearchIntent, AnalyticsEvent, AnalyticsResult, MultiHorizonAnalyticsResult } from "@/types/ai-search";
+import type { AiSearchIntent, AiTopic, AnalyticsEvent, AnalyticsResult, HistoricalTopicMetric, MultiHorizonAnalyticsResult, TopicComparisonAnalyticsResult, TopicRankingAnalyticsResult } from "@/types/ai-search";
 import { ASSETS, EVENT_CATEGORIES, HORIZONS, SOURCE_TYPES, type Asset, type EventCategory, type Horizon, type SourceType } from "@/types/events";
 
 const MAX_SCAN_ROWS = 10_000;
@@ -78,6 +78,8 @@ export class AiSearchDataError extends Error {
 export interface AiSearchDataAdapter {
   analyze(intent: AiSearchIntent): Promise<AnalyticsResult>;
   analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult>;
+  analyzeTopicRanking(intent: AiSearchIntent, metric: HistoricalTopicMetric, order: "highest" | "lowest", limit: number): Promise<TopicRankingAnalyticsResult>;
+  analyzeTopicComparison(intent: AiSearchIntent, left: AiTopic, right: AiTopic, metric: HistoricalTopicMetric): Promise<TopicComparisonAnalyticsResult>;
 }
 
 export class FixtureAiSearchDataAdapter implements AiSearchDataAdapter {
@@ -87,6 +89,14 @@ export class FixtureAiSearchDataAdapter implements AiSearchDataAdapter {
 
   async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
     return runMultiHorizonAnalytics(AI_SEARCH_FIXTURES, intent);
+  }
+
+  async analyzeTopicRanking(intent: AiSearchIntent, metric: HistoricalTopicMetric, order: "highest" | "lowest", limit: number): Promise<TopicRankingAnalyticsResult> {
+    return runTopicRankingAnalytics(AI_SEARCH_FIXTURES, intent, metric, order, limit);
+  }
+
+  async analyzeTopicComparison(intent: AiSearchIntent, left: AiTopic, right: AiTopic, metric: HistoricalTopicMetric): Promise<TopicComparisonAnalyticsResult> {
+    return runTopicComparisonAnalytics(AI_SEARCH_FIXTURES, intent, left, right, metric);
   }
 }
 
@@ -142,6 +152,58 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
         rows.push(...((data ?? []) as unknown as ProductionRow[]));
       }
       return runMultiHorizonAnalytics(this.rowsToEvents(rows, intent, true), intent);
+    } catch (error) {
+      if (error instanceof AiSearchDataError) throw error;
+      throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Historical analytics are temporarily unavailable.");
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  async analyzeTopicRanking(intent: AiSearchIntent, metric: HistoricalTopicMetric, order: "highest" | "lowest", limit: number): Promise<TopicRankingAnalyticsResult> {
+    const events = await this.loadTopicUniverse(intent);
+    return runTopicRankingAnalytics(events, intent, metric, order, limit);
+  }
+
+  async analyzeTopicComparison(intent: AiSearchIntent, left: AiTopic, right: AiTopic, metric: HistoricalTopicMetric): Promise<TopicComparisonAnalyticsResult> {
+    const events = await this.loadTopicUniverse(intent);
+    return runTopicComparisonAnalytics(events, intent, left, right, metric);
+  }
+
+  private async loadTopicUniverse(intent: AiSearchIntent): Promise<AnalyticsEvent[]> {
+    if (!intent.asset || !intent.horizon) throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Choose one asset and horizon.");
+    const broadIntent: AiSearchIntent = {
+      ...intent,
+      topic: null,
+      category: null,
+      actorType: "unknown",
+      action: null,
+      direction: "unknown",
+      magnitude: "unknown",
+      amount: null,
+      entity: null,
+      sourceClass: null,
+      sentiment: null,
+      reactionSign: null,
+    };
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
+      const countQuery = this.baseQuery(broadIntent, "exact").limit(1).abortSignal(controller.signal);
+      const { error: countError, count } = await executeQuery(countQuery);
+      if (countError) throw new Error(countError.message);
+      if ((count ?? 0) > MAX_SCAN_ROWS) throw new AiSearchDataError("QUERY_TOO_BROAD", "Too many events match. Add a date range.");
+      const rows: ProductionRow[] = [];
+      for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
+        const page = this.baseQuery(broadIntent)
+          .order("event_id", { ascending: true })
+          .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
+          .abortSignal(controller.signal);
+        const { data, error } = await executeQuery(page);
+        if (error) throw new Error(error.message);
+        rows.push(...((data ?? []) as unknown as ProductionRow[]));
+      }
+      return this.rowsToEvents(rows, broadIntent);
     } catch (error) {
       if (error instanceof AiSearchDataError) throw error;
       throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Historical analytics are temporarily unavailable.");

@@ -47,6 +47,20 @@ export const AI_TOPICS = [
 ] as const;
 export type AiTopic = (typeof AI_TOPICS)[number];
 
+export const HISTORICAL_OPERATIONS = [
+  "overview",
+  "search",
+  "count",
+  "top_gainers",
+  "top_losers",
+  "topic_ranking",
+  "topic_comparison",
+] as const;
+export type HistoricalOperation = (typeof HISTORICAL_OPERATIONS)[number];
+
+export const HISTORICAL_TOPIC_METRICS = ["positive_share", "mean", "median"] as const;
+export type HistoricalTopicMetric = (typeof HISTORICAL_TOPIC_METRICS)[number];
+
 export const AI_TOPIC_LABELS: Record<AiTopic, string> = {
   sec: "SEC actions",
   sec_filings: "SEC filings",
@@ -244,6 +258,33 @@ export interface MultiHorizonAnalyticsResult {
   topicFilter?: TopicFilterSummary;
 }
 
+export interface TopicRankingAnalyticsResult {
+  kind: "topic_ranking";
+  metric: HistoricalTopicMetric;
+  order: "highest" | "lowest";
+  horizon: Horizon;
+  minimumSampleSize: number;
+  eligibleTopicCount: number;
+  insufficientData: boolean;
+  items: Array<{
+    topic: AiTopic;
+    value: number;
+    independentSampleSize: number;
+    positive95Ci: { low: number; high: number } | null;
+  }>;
+  citations: AiCitation[];
+}
+
+export interface TopicComparisonAnalyticsResult {
+  kind: "topic_comparison";
+  metric: HistoricalTopicMetric;
+  horizon: Horizon;
+  left: { topic: AiTopic; value: number | null; independentSampleSize: number };
+  right: { topic: AiTopic; value: number | null; independentSampleSize: number };
+  difference: number | null;
+  citations: AiCitation[];
+}
+
 export interface TopicFilterSummary {
   topic: AiTopic;
   broadSampleSize: number;
@@ -265,7 +306,9 @@ type CoreAnalyticsResult =
   | ShareAnalyticsResult
   | RankingAnalyticsResult
   | ComparisonAnalyticsResult
-  | MultiHorizonAnalyticsResult;
+  | MultiHorizonAnalyticsResult
+  | TopicRankingAnalyticsResult
+  | TopicComparisonAnalyticsResult;
 
 export type AnalyticsResult = CoreAnalyticsResult & {
   topicFilter?: TopicFilterSummary;
@@ -303,6 +346,7 @@ export interface AiHybridSuccess extends Omit<AiSearchSuccess, "mode" | "modeLab
 
 export interface AiHistoricalEvidence {
   basedOn: "Reaction V2";
+  operation: HistoricalOperation;
   intent: AiSearchIntent;
   answer: string;
   calculation: string;

@@ -1,8 +1,12 @@
 import type {
   AiCitation,
   AiSearchIntent,
+  AiTopic,
   AnalyticsEvent,
   AnalyticsResult,
+  HistoricalTopicMetric,
+  TopicComparisonAnalyticsResult,
+  TopicRankingAnalyticsResult,
 } from "@/types/ai-search";
 import type { MultiHorizonAnalyticsResult } from "@/types/ai-search";
 import {
@@ -16,6 +20,12 @@ import type { SourceType } from "@/types/events";
 import { groupIndependentEvents } from "@/lib/ai-search/event-dedup";
 
 const round = (value: number): number => Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
+export const MIN_TOPIC_RANK_SAMPLE = 10;
+const RANKABLE_TOPICS: readonly AiTopic[] = [
+  "regulatory_approval", "regulatory_enforcement", "etf_approval", "etf_rejection", "etf_delay",
+  "etf_inflow", "etf_outflow", "hack", "listing", "lawsuit", "macro", "fed_rate_hike", "fed_rate_cut",
+  "cpi", "upgrade", "staking", "institutional_purchase", "institutional_selling", "funding", "acquisition", "liquidation",
+];
 const cite = (event: AnalyticsEvent, match?: SemanticEventMatch, groupSize = 1): AiCitation => ({
   eventId: event.eventId,
   title: event.title,
@@ -243,5 +253,109 @@ export function runMultiHorizonAnalytics(events: readonly AnalyticsEvent[], inte
     })),
     citations,
     ...(results[0]?.topicFilter ? { topicFilter: results[0].topicFilter } : {}),
+  };
+}
+
+function topicMetricResult(
+  events: readonly AnalyticsEvent[],
+  intent: AiSearchIntent,
+  topic: AiTopic,
+  metric: HistoricalTopicMetric,
+): { value: number | null; sampleSize: number; positive95Ci: { low: number; high: number } | null; citations: AiCitation[] } {
+  const topicIntent: AiSearchIntent = {
+    ...intent,
+    intent: "aggregate",
+    topic,
+    category: null,
+    actorType: "unknown",
+    action: null,
+    direction: "unknown",
+    magnitude: "unknown",
+    amount: null,
+    entity: null,
+    sourceClass: null,
+    sentiment: null,
+    reactionSign: null,
+    metric: metric === "positive_share" ? "sign_share" : metric,
+    sort: "newest",
+    groupBy: "none",
+    comparison: null,
+  };
+  const result = runAnalytics(events, topicIntent);
+  if (metric === "positive_share" && result.kind === "share") {
+    return { value: result.positivePercent, sampleSize: result.sampleSize, positive95Ci: result.positive95Ci, citations: result.citations };
+  }
+  if ((metric === "mean" || metric === "median") && result.kind === "scalar") {
+    return { value: result.value, sampleSize: result.sampleSize, positive95Ci: null, citations: result.citations };
+  }
+  return { value: null, sampleSize: 0, positive95Ci: null, citations: [] };
+}
+
+export function runTopicRankingAnalytics(
+  events: readonly AnalyticsEvent[],
+  intent: AiSearchIntent,
+  metric: HistoricalTopicMetric,
+  order: "highest" | "lowest",
+  limit: number,
+  minimumSampleSize = MIN_TOPIC_RANK_SAMPLE,
+): TopicRankingAnalyticsResult {
+  if (!intent.horizon) throw new Error("Topic ranking requires one explicit horizon.");
+  const eligible = RANKABLE_TOPICS.flatMap((topic) => {
+    const result = topicMetricResult(events, intent, topic, metric);
+    return result.value === null || result.sampleSize < minimumSampleSize ? [] : [{ topic, ...result }];
+  });
+  eligible.sort((left, right) => {
+    const valueOrder = order === "highest" ? right.value! - left.value! : left.value! - right.value!;
+    if (valueOrder !== 0) return valueOrder;
+    if (metric === "positive_share") {
+      const lowerBoundOrder = order === "highest"
+        ? (right.positive95Ci?.low ?? -Infinity) - (left.positive95Ci?.low ?? -Infinity)
+        : (left.positive95Ci?.low ?? Infinity) - (right.positive95Ci?.low ?? Infinity);
+      if (lowerBoundOrder !== 0) return lowerBoundOrder;
+    }
+    return right.sampleSize - left.sampleSize || left.topic.localeCompare(right.topic);
+  });
+  const selected = eligible.slice(0, Math.max(1, Math.min(10, limit)));
+  const citations = [...new Map(selected.flatMap((item) => item.citations).map((citation) => [citation.eventId, citation])).values()].slice(0, 50);
+  return {
+    kind: "topic_ranking",
+    metric,
+    order,
+    horizon: intent.horizon,
+    minimumSampleSize,
+    eligibleTopicCount: eligible.length,
+    insufficientData: eligible.length === 0,
+    items: selected.map(({ topic, value, sampleSize, positive95Ci }) => ({
+      topic,
+      value: value!,
+      independentSampleSize: sampleSize,
+      positive95Ci,
+    })),
+    citations,
+  };
+}
+
+export function runTopicComparisonAnalytics(
+  events: readonly AnalyticsEvent[],
+  intent: AiSearchIntent,
+  leftTopic: AiTopic,
+  rightTopic: AiTopic,
+  metric: HistoricalTopicMetric,
+): TopicComparisonAnalyticsResult {
+  if (!intent.horizon) throw new Error("Topic comparison requires one explicit horizon.");
+  const leftResult = topicMetricResult(events, intent, leftTopic, metric);
+  const rightResult = topicMetricResult(events, intent, rightTopic, metric);
+  const difference = leftResult.value === null || rightResult.value === null
+    ? null
+    : round(leftResult.value - rightResult.value);
+  const citations = [...new Map([...leftResult.citations, ...rightResult.citations].map((citation) => [citation.eventId, citation])).values()].slice(0, 50);
+  return {
+    kind: "topic_comparison",
+    metric,
+    horizon: intent.horizon,
+    left: { topic: leftTopic, value: leftResult.value, independentSampleSize: leftResult.sampleSize },
+    right: { topic: rightTopic, value: rightResult.value, independentSampleSize: rightResult.sampleSize },
+    difference,
+    citations,
   };
 }

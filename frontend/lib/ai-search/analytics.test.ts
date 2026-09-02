@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { runAnalytics } from "@/lib/ai-search/analytics";
+import { runAnalytics, runTopicComparisonAnalytics, runTopicRankingAnalytics } from "@/lib/ai-search/analytics";
 import { AI_SEARCH_FIXTURES } from "@/lib/ai-search/fixtures";
 import { validateIntent } from "@/lib/ai-search/schema";
-import type { AiSearchIntent } from "@/types/ai-search";
+import type { AiSearchIntent, AnalyticsEvent } from "@/types/ai-search";
+import { HORIZONS, type Asset, type Horizon } from "@/types/events";
 
 const base: AiSearchIntent = {
   intent: "aggregate", asset: "ETH", dateFrom: "2024-01-01", dateTo: "2024-12-31",
@@ -12,6 +13,29 @@ const base: AiSearchIntent = {
   reactionSign: null, importance: null,
   horizon: "24h", metric: "mean", sort: "newest", groupBy: "none", comparison: null, limit: 50,
 };
+
+function topicEvents(topic: "hack" | "staking", count: number, positives: number): AnalyticsEvent[] {
+  return Array.from({ length: count }, (_, index) => {
+    const reactionV2 = Object.fromEntries((["BTC", "ETH", "SOL"] as Asset[]).map((asset) => [
+      asset,
+      Object.fromEntries(HORIZONS.map((horizon) => [horizon, null])) as Record<Horizon, number | null>,
+    ])) as AnalyticsEvent["reactionV2"];
+    reactionV2.ETH["24h"] = index < positives ? 1 : -1;
+    return {
+      eventId: `${topic}-${index}`,
+      slug: `${topic}-${index}`,
+      title: topic === "hack" ? `Ethereum Protocol${index} hack exploit incident` : `Validator${index} Ethereum staking announcement`,
+      publishedAt: new Date(Date.UTC(2020, 0, 1 + index * 32)).toISOString(),
+      assets: ["ETH"],
+      primaryAsset: "ETH",
+      category: topic === "hack" ? "security_event" : "staking",
+      sourceClass: "official_announcement",
+      sentiment: null,
+      importance: null,
+      reactionV2,
+    };
+  });
+}
 
 describe("deterministic Reaction V2 analytics", () => {
   it("calculates mean and excludes nulls rather than replacing them with zero", () => {
@@ -47,5 +71,39 @@ describe("deterministic Reaction V2 analytics", () => {
 
   it("produces byte-identical repeated output", () => {
     expect(JSON.stringify(runAnalytics(AI_SEARCH_FIXTURES, base))).toBe(JSON.stringify(runAnalytics(AI_SEARCH_FIXTURES, base)));
+  });
+
+  it("requires ten independent observations and uses Wilson lower-bound then sample size for positive-share topic ties", () => {
+    const intent = { ...base, dateFrom: null, dateTo: null, category: null, sourceClass: null, topic: null };
+    const result = runTopicRankingAnalytics(
+      [...topicEvents("hack", 10, 8), ...topicEvents("staking", 20, 16)],
+      intent,
+      "positive_share",
+      "highest",
+      5,
+    );
+    expect(result).toMatchObject({ kind: "topic_ranking", minimumSampleSize: 10, insufficientData: false });
+    expect(result.items[0]).toMatchObject({ topic: "staking", value: 80, independentSampleSize: 20 });
+    expect(result.items.find(({ topic }) => topic === "hack")).toMatchObject({ value: 80, independentSampleSize: 10 });
+
+    const insufficient = runTopicRankingAnalytics(topicEvents("hack", 9, 9), intent, "positive_share", "highest", 5);
+    expect(insufficient).toMatchObject({ eligibleTopicCount: 0, insufficientData: true, items: [] });
+  });
+
+  it("compares two topics deterministically without model arithmetic", () => {
+    const intent = { ...base, dateFrom: null, dateTo: null, category: null, sourceClass: null, topic: null };
+    const result = runTopicComparisonAnalytics(
+      [...topicEvents("hack", 10, 6), ...topicEvents("staking", 10, 8)],
+      intent,
+      "hack",
+      "staking",
+      "positive_share",
+    );
+    expect(result).toMatchObject({
+      kind: "topic_comparison",
+      left: { topic: "hack", value: 60, independentSampleSize: 10 },
+      right: { topic: "staking", value: 80, independentSampleSize: 10 },
+      difference: -20,
+    });
   });
 });
