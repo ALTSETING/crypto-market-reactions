@@ -29,7 +29,7 @@ describe("AI Research Agent V2", () => {
     expect(requestBody).not.toHaveProperty("response_format");
     expect(HISTORICAL_REACTIONS_TOOL.strict).toBe(true);
     expect(HISTORICAL_REACTIONS_TOOL.parameters.additionalProperties).toBe(false);
-    expect(HISTORICAL_REACTIONS_TOOL.description).toContain("reacts/responds");
+    expect(HISTORICAL_REACTIONS_TOOL.description).toContain("what happens to it when/after");
   });
 
   it("executes a valid tool call and returns a separate deterministic evidence block", async () => {

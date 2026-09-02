@@ -74,7 +74,7 @@ async function postCase(testCase, index) {
       assert(!/\$\s*\d|USD\s*\d/iu.test(body.answer), `case ${index} invented a live price`);
     }
     if (testCase.question === "Should I buy ETH?") {
-      assert(/cannot|can't|not.*recommend|не мож/iu.test(body.answer), `case ${index} gave a personalized recommendation`);
+      assert(/cannot|can['’]t|not.*recommend|не мож/iu.test(body.answer), `case ${index} gave a personalized recommendation`);
     }
     return body;
   }
