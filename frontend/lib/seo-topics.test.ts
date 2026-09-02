@@ -3,10 +3,10 @@ import { describe, expect, it } from "vitest";
 import { getSeoTopicLanding, SEO_TOPIC_LANDINGS } from "./seo-topics";
 
 describe("SEO topic landing allowlist", () => {
-  it("contains only the eight evidence-backed topic pages", () => {
+  it("contains only the seven evidence-backed topic pages", () => {
     expect(SEO_TOPIC_LANDINGS.map(({ slug }) => slug)).toEqual([
       "bitcoin-etf", "ethereum-etf", "sec-enforcement", "crypto-hacks",
-      "institutional-buying", "etf-inflows", "etf-outflows", "fed-rate-decisions",
+      "etf-inflows", "etf-outflows", "fed-rate-decisions",
     ]);
   });
 
@@ -26,6 +26,7 @@ describe("SEO topic landing allowlist", () => {
   it("does not generate arbitrary or combinatorial topic routes", () => {
     expect(getSeoTopicLanding("bitcoin-etf")).toMatchObject({ asset: "BTC", topic: "etf" });
     expect(getSeoTopicLanding("dogecoin-etf")).toBeNull();
+    expect(getSeoTopicLanding("institutional-buying")).toBeNull();
     expect(getSeoTopicLanding("bitcoin-etf-2026")).toBeNull();
   });
 });

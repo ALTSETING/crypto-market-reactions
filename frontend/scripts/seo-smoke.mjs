@@ -1,7 +1,7 @@
 const baseUrl = (process.env.SMOKE_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 const expectedSiteUrl = (process.env.SITE_URL ?? baseUrl).replace(/\/$/, "");
 let expectedEventCount = Number(process.env.EXPECTED_EVENT_COUNT ?? "");
-const topicPaths = ["bitcoin-etf", "ethereum-etf", "sec-enforcement", "crypto-hacks", "institutional-buying", "etf-inflows", "etf-outflows", "fed-rate-decisions"].map((slug) => `/topics/${slug}`);
+const topicPaths = ["bitcoin-etf", "ethereum-etf", "sec-enforcement", "crypto-hacks", "etf-inflows", "etf-outflows", "fed-rate-decisions"].map((slug) => `/topics/${slug}`);
 const corePaths = ["/", "/events", "/ai", ...topicPaths];
 const googlebot = { headers: { "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" } };
 

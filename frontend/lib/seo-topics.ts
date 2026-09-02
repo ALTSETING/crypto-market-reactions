@@ -64,18 +64,6 @@ export const SEO_TOPIC_LANDINGS: readonly SeoTopicLanding[] = [
     category: null,
   },
   {
-    slug: "institutional-buying",
-    name: "Institutional Crypto Buying",
-    seoTitle: "Institutional Crypto Buying Reactions | Historical Data",
-    description: "Explore historical crypto reactions after explicitly reported institutional purchases, treasury buys and other large professional buying events.",
-    intro: "This page groups archived reports that explicitly describe institutional or treasury buying. General adoption stories without a purchase are excluded.",
-    topic: "institutional_purchase",
-    candidateQuery: "institutional OR treasury",
-    asset: null,
-    summaryAsset: "BTC",
-    category: null,
-  },
-  {
     slug: "etf-inflows",
     name: "Crypto ETF Inflows",
     seoTitle: "Crypto ETF Inflows & Historical Reactions | BTC and ETH",

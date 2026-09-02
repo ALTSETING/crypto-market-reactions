@@ -17,13 +17,13 @@ describe("sitemap", () => {
     const { default: sitemap } = await import("./sitemap");
     const rows = await sitemap();
     const urls = rows.map(({ url }) => url);
-    expect(urls).toHaveLength(13);
+    expect(urls).toHaveLength(12);
     expect(urls.slice(0, 3)).toEqual([
       "https://crypto.example/",
       "https://crypto.example/events",
       "https://crypto.example/ai",
     ]);
-    expect(urls.filter((url) => url.includes("/topics/"))).toHaveLength(8);
+    expect(urls.filter((url) => url.includes("/topics/"))).toHaveLength(7);
     expect(urls.filter((url) => url.includes("/events/")).length).toBe(2);
     expect(urls.every((url) => !url.includes("?") && !url.includes("#"))).toBe(true);
     expect(new Set(urls).size).toBe(urls.length);
