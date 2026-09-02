@@ -60,8 +60,7 @@ function eventAssets(event: SeoEventData): Asset[] {
 function reactionLabel(event: SeoEventData): string {
   const assets = eventAssets(event);
   if (assets.length === 0) return "Crypto Reaction";
-  if (assets.length === 1) return `${assets[0]} Reaction`;
-  return `${assets.slice(0, 2).join(" & ")} Reaction`;
+  return `${event.primary_asset ?? assets[0]} Reaction`;
 }
 
 function assetNames(event: SeoEventData): string {
@@ -92,11 +91,10 @@ export function siteUrl(pathname = "/", environment?: SiteEnvironment): string {
 export function buildEventSeoTitle(event: SeoEventData): string {
   const date = Number.isNaN(new Date(event.published_at).valueOf()) ? "Historical" : new Date(event.published_at).toISOString().slice(0, 10);
   const prefix = `${reactionLabel(event)} to `;
-  const suffix = ` — ${date}`;
+  const suffix = ` — ${date} | ${SITE_NAME}`;
   const original = normalizeWhitespace(event.title) || "Historical crypto event";
-  const disambiguator = ` · ${event.slug.slice(-8)}`;
-  const topicBudget = Math.max(12, 65 - prefix.length - suffix.length - disambiguator.length);
-  return `${prefix}${trimMiddle(original, topicBudget)}${disambiguator}${suffix}`;
+  const topicBudget = Math.max(4, 65 - prefix.length - suffix.length);
+  return `${prefix}${trimMiddle(original, topicBudget)}${suffix}`;
 }
 
 export function buildEventSeoDescription(event: SeoEventData): string {

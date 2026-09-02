@@ -27,7 +27,7 @@ describe("SEO helpers", () => {
     expect(title.length).toBeLessThanOrEqual(65);
     expect(title).toContain("ETH Reaction to");
     expect(title).toContain("2024-05-23");
-    expect(title).toContain("a1b2c3d4");
+    expect(title.endsWith("| Crypto Market Reactions")).toBe(true);
     expect(event.title).toContain("Latest Public Filings");
   });
 
