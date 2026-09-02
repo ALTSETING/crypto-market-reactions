@@ -5,15 +5,19 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 
 import { ReactionTable } from "@/components/reaction-table";
+import { SeoJsonLd } from "@/components/seo-json-ld";
 import { SourceTypeBadge } from "@/components/source-type-badge";
+import { matchesTopic } from "@/lib/ai-search/topic-matcher";
 import { getEventBySlug } from "@/lib/data/events";
 import { formatDate, formatImportance, safeExternalUrl } from "@/lib/format";
 import {
   buildEventSeoDescription,
   buildEventSeoTitle,
+  buildWebPageStructuredData,
   SITE_NAME,
   siteUrl,
 } from "@/lib/seo";
+import { SEO_TOPIC_LANDINGS } from "@/lib/seo-topics";
 
 export const revalidate = 3_600;
 
@@ -52,8 +56,7 @@ export async function generateMetadata({ params, searchParams }: EventPageProps)
       title,
       description,
       url: canonical,
-      type: "article",
-      publishedTime: event.published_at,
+      type: "website",
       siteName: SITE_NAME,
     },
     twitter: {
@@ -70,29 +73,24 @@ export default async function EventPage({ params }: EventPageProps) {
   if (!event) notFound();
 
   const sourceUrl = safeExternalUrl(event.source_url);
-  const canonical = siteUrl(`/events/${event.slug}`);
-  const structuredData = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: event.title,
-    headline: event.title,
-    description: buildEventSeoDescription(event),
-    datePublished: event.published_at,
-    url: canonical,
-    citation: sourceUrl,
-    about: event.related_assets.map((asset) => ({ "@type": "Thing", name: asset })),
-    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: siteUrl("/") },
-  }).replace(/</g, "\\u003c");
+  const relatedTopics = SEO_TOPIC_LANDINGS.filter((topic) =>
+    (!topic.asset || event.related_assets.includes(topic.asset)) && matchesTopic(event, topic.topic)
+  ).slice(0, 3);
 
   return (
     <main className="min-h-screen">
-      <script
-        dangerouslySetInnerHTML={{ __html: structuredData }}
-        type="application/ld+json"
-      />
+      <SeoJsonLd data={buildWebPageStructuredData({
+        name: event.title,
+        description: buildEventSeoDescription(event),
+        path: `/events/${event.slug}`,
+        breadcrumbs: [{ name: "Home", path: "/" }, { name: "Events", path: "/events" }, { name: event.title, path: `/events/${event.slug}` }],
+        datePublished: event.published_at,
+        citation: sourceUrl,
+        about: [...event.related_assets, event.category.replaceAll("_", " "), "Reaction V2"],
+      })} />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.1),transparent_45%)]" />
       <div className="mx-auto w-full max-w-5xl px-4 pb-8 pt-20 sm:px-6 sm:py-12 lg:px-8">
-        <Link className="inline-flex rounded-lg py-2 text-sm font-semibold text-slate-400 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href="/">
+        <Link className="inline-flex rounded-lg py-2 text-sm font-semibold text-slate-400 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href="/events">
           <span aria-hidden="true">←</span>&nbsp; Back to events
         </Link>
 
@@ -146,6 +144,13 @@ export default async function EventPage({ params }: EventPageProps) {
             )}
           </header>
 
+          <section className="mt-8 rounded-2xl border border-white/10 bg-slate-900/35 p-5 sm:p-6" aria-labelledby="event-summary-title">
+            <h2 className="text-lg font-semibold text-white" id="event-summary-title">Event summary</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              {event.source} published this {event.category.replaceAll("_", " ")} event on {formatDate(event.published_at, true)} UTC. The archive associates it with {event.related_assets.length ? event.related_assets.join(", ") : "the broader crypto market"}; the tables below report observed post-publication returns without asserting causality.
+            </p>
+          </section>
+
           <section className="mt-10" aria-labelledby="reactions-title">
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Historical market reactions</p>
@@ -195,17 +200,22 @@ export default async function EventPage({ params }: EventPageProps) {
           <nav aria-label="Explore related events" className="mt-8 rounded-2xl border border-white/10 bg-slate-900/35 p-5 sm:p-6">
             <h2 className="text-sm font-semibold text-white">Explore the archive</h2>
             <div className="mt-3 grid gap-2 min-[420px]:flex min-[420px]:flex-wrap">
-              <Link className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-center text-sm text-slate-300 outline-none hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href="/">
+              <Link className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-center text-sm text-slate-300 outline-none hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href="/events">
                 All events
               </Link>
               {event.related_assets.map((asset) => (
-                <Link className="min-h-11 rounded-xl border border-emerald-400/20 px-3 py-2.5 text-center text-sm text-emerald-200 outline-none hover:border-emerald-300/50 focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/?asset=${asset}`} key={asset}>
+                <Link className="min-h-11 rounded-xl border border-emerald-400/20 px-3 py-2.5 text-center text-sm text-emerald-200 outline-none hover:border-emerald-300/50 focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/events?asset=${asset}`} key={asset}>
                   {asset} events
                 </Link>
               ))}
-              <Link className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-center text-sm text-slate-300 outline-none hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/?source=${encodeURIComponent(event.source)}`}>
+              <Link className="min-h-11 rounded-xl border border-white/10 px-3 py-2.5 text-center text-sm text-slate-300 outline-none hover:border-white/25 hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/events?source=${encodeURIComponent(event.source)}`}>
                 More from {event.source}
               </Link>
+              {relatedTopics.map((topic) => (
+                <Link className="min-h-11 rounded-xl border border-sky-400/20 px-3 py-2.5 text-center text-sm text-sky-200 outline-none hover:border-sky-300/50 focus-visible:ring-2 focus-visible:ring-emerald-300" href={`/topics/${topic.slug}`} key={topic.slug}>
+                  {topic.name}
+                </Link>
+              ))}
             </div>
           </nav>
         </article>
