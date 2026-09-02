@@ -69,7 +69,7 @@ for (const path of corePaths) {
   const { response, body } = await read(`${baseUrl}${path}`);
   assert(response.status === 200, `${path} returned HTTP ${response.status}`);
   auditedBodies.push(body);
-  const expectedCanonical = `${expectedSiteUrl}${path === "/" ? "/" : path}`;
+  const expectedCanonical = `${expectedSiteUrl}${path === "/" ? "" : path}`;
   const title = tagContent(body, /<title>(.*?)<\/title>/s);
   const description = body.match(/<meta[^>]+name="description"[^>]+content="([^"]+)"/)?.[1] ?? "";
   const heading = tagContent(body, /<h1[^>]*>(.*?)<\/h1>/s);

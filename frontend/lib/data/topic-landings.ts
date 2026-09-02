@@ -1,6 +1,7 @@
 import "server-only";
 
 import { runMultiHorizonAnalytics } from "@/lib/ai-search/analytics";
+import { groupIndependentEvents } from "@/lib/ai-search/event-dedup";
 import { matchesTopic } from "@/lib/ai-search/topic-matcher";
 import { EVENT_LIST_SELECT, EventsDataError } from "@/lib/data/events";
 import { getSeoTopicLanding } from "@/lib/seo-topics";
@@ -16,6 +17,7 @@ export interface TopicLandingData {
   matchedRecords: number;
   independentEvents: number;
   assetBreakdown: Record<Asset, number>;
+  summaryAsset: Asset;
   overview: MultiHorizonAnalyticsResult;
 }
 
@@ -50,7 +52,7 @@ function toAnalyticsEvent(event: EventListItem): AnalyticsEvent {
   };
 }
 
-function overviewIntent(asset: Asset, topic: NonNullable<AiSearchIntent["topic"]>, category: AiSearchIntent["category"]): AiSearchIntent {
+function overviewIntent(asset: Asset, topic: AiSearchIntent["topic"], category: AiSearchIntent["category"]): AiSearchIntent {
   return {
     intent: "aggregate", asset, dateFrom: null, dateTo: null, category, topic,
     actorType: "unknown", action: null, direction: "unknown", magnitude: "unknown",
@@ -84,22 +86,28 @@ export async function getTopicLandingData(slug: string): Promise<TopicLandingDat
   }
   if (candidates.length >= MAX_CANDIDATES) throw new EventsDataError("Topic landing query is too broad.");
 
-  const titleMatches = candidates.filter((event) => matchesTopic(toAnalyticsEvent(event), landing.topic));
+  const titleMatches = candidates.filter((event) => matchesTopic(event, landing.topic));
   if (titleMatches.length < MIN_INDEXABLE_MATCHES) return null;
   const assetBreakdown = Object.fromEntries(ASSETS.map((asset) => [
     asset,
     titleMatches.filter((event) => event.related_assets.includes(asset)).length,
   ])) as Record<Asset, number>;
-  const overview = runMultiHorizonAnalytics(
-    candidates.map(toAnalyticsEvent),
-    overviewIntent(landing.summaryAsset, landing.topic, landing.category),
+  const summaryAsset = ASSETS.reduce((selected, asset) =>
+    assetBreakdown[asset] > assetBreakdown[selected] ? asset : selected,
+    landing.summaryAsset,
   );
-  const matchedRecords = overview.topicFilter?.matchedSampleSize ?? titleMatches.length;
-  if (matchedRecords < MIN_INDEXABLE_MATCHES) return null;
+  const exactMatches = titleMatches.map(toAnalyticsEvent);
+  const topicIntent = overviewIntent(summaryAsset, landing.topic, landing.category);
+  const independent = groupIndependentEvents(exactMatches, topicIntent, new Map());
+  const overview = runMultiHorizonAnalytics(
+    independent.representatives,
+    overviewIntent(summaryAsset, null, null),
+  );
   return {
-    matchedRecords,
-    independentEvents: overview.topicFilter?.independentEventCount ?? matchedRecords,
+    matchedRecords: titleMatches.length,
+    independentEvents: independent.representatives.length,
     assetBreakdown,
+    summaryAsset,
     overview,
   };
 }

@@ -54,7 +54,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
         description: landing.description,
         path: `/topics/${landing.slug}`,
         breadcrumbs: [{ name: "Home", path: "/" }, { name: landing.name, path: `/topics/${landing.slug}` }],
-        about: [landing.name, landing.summaryAsset, "Reaction V2"],
+        about: [landing.name, data.summaryAsset, "Reaction V2"],
       })} />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[500px] bg-[radial-gradient(circle_at_35%_0%,rgba(16,185,129,0.12),transparent_42%)]" />
       <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-24 sm:px-6 sm:pt-28">
@@ -72,7 +72,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
         <section className="mt-12" aria-labelledby="reaction-summary">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">Reaction V2</p>
-          <h2 className="mt-2 text-2xl font-semibold text-white" id="reaction-summary">{landing.summaryAsset} reaction summary</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-white" id="reaction-summary">{data.summaryAsset} reaction summary</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">Deterministic historical returns after each recorded publication timestamp. The sample varies by horizon, missing values are not estimated, and association does not establish causality.</p>
           <div className="mt-5 overflow-x-auto rounded-2xl border border-white/10">
             <table className="w-full min-w-[560px] border-collapse text-sm">
