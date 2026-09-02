@@ -106,7 +106,7 @@ describe("POST /api/ai-search", () => {
     }
     expect(response?.status).toBe(429);
     expect(response?.headers.get("ratelimit-limit")).toBe("10");
-    expect(response?.headers.get("ai-daily-limit")).toBe("500");
+    expect(response?.headers.get("ai-daily-limit")).toBeNull();
     expect(response?.headers.get("retry-after")).toBeTruthy();
   });
 });

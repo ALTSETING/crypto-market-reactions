@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getAiSearchDataAdapter } from "@/lib/ai-search/adapter";
 import { getAiResearchAgent } from "@/lib/ai-search/agent";
 import { executeAiAgentResearch } from "@/lib/ai-search/service";
+import { checkQuestionSafety } from "@/lib/ai-search/safety";
 import { createDistributedRateLimiter, getClientIp, InMemoryRateLimiter, type RateLimiter, type RateLimitResult } from "@/lib/rate-limit";
 import type { AiSearchErrorBody } from "@/types/ai-search";
 
@@ -53,8 +54,8 @@ function rateHeaders(result: RateLimitResult): Record<string, string> {
   };
 }
 
-function error(status: number, code: string, message: string, headers: Record<string, string>) {
-  return NextResponse.json<AiSearchErrorBody>({ status: "error", code, message }, { status, headers });
+function error(status: number, code: string, message: string, headers: Record<string, string>, bodyStatus: AiSearchErrorBody["status"] = "error") {
+  return NextResponse.json<AiSearchErrorBody>({ status: bodyStatus, code, message }, { status, headers: { ...headers, "Cache-Control": "private, no-store" } });
 }
 
 export async function POST(request: Request) {
@@ -63,38 +64,55 @@ export async function POST(request: Request) {
     return error(503, "AI_SEARCH_DISABLED", "AI Search is currently unavailable.", {});
   }
   if (!isSameOrigin(request)) return error(403, "ORIGIN_REJECTED", "Cross-origin requests are not allowed.", {});
+  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
+    return error(415, "JSON_REQUIRED", "Content-Type must be application/json.", {});
+  }
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > 4_096) {
+    return error(413, "REQUEST_TOO_LARGE", "Request body is too large.", {});
+  }
+
+  let question: string;
+  try {
+    const rawBody = await request.text();
+    if (new TextEncoder().encode(rawBody).byteLength > 4_096) {
+      return error(413, "REQUEST_TOO_LARGE", "Request body is too large.", {});
+    }
+    const payload = JSON.parse(rawBody) as { question?: unknown };
+    const safety = checkQuestionSafety(payload?.question);
+    if (!safety.safe) return error(400, safety.code, safety.message, {}, "refusal");
+    question = safety.question;
+  } catch (caught) {
+    if (caught instanceof SyntaxError) return error(400, "INVALID_JSON", "Request body must be valid JSON.", {});
+    return error(400, "INVALID_REQUEST", "Request body is invalid.", {});
+  }
+
   const limiters = getAiLimiters();
   if (!limiters) return error(503, "RATE_LIMITER_UNAVAILABLE", "AI Search is temporarily unavailable.", {});
   const rate = await limiters.perIp.consume(`ai-search:ip:${getClientIp(request.headers)}`);
+  const rateOnlyHeaders = rateHeaders(rate);
+  if (!rate.allowed) {
+    return error(429, "RATE_LIMITED", "Too many AI Search requests. Please try again shortly.", {
+      ...rateOnlyHeaders,
+      "Retry-After": String(Math.max(1, Math.ceil((rate.resetAt - Date.now()) / 1000))),
+    });
+  }
   const daily = await limiters.daily.consume("ai-search:global:daily");
   const headers = {
-    ...rateHeaders(rate),
+    ...rateOnlyHeaders,
     "AI-Daily-Limit": String(daily.limit),
     "AI-Daily-Remaining": String(daily.remaining),
     "AI-Daily-Reset": String(Math.ceil(daily.resetAt / 1000)),
   };
-  if (!rate.allowed || !daily.allowed) {
-    const resetAt = Math.max(rate.allowed ? 0 : rate.resetAt, daily.allowed ? 0 : daily.resetAt);
+  if (!daily.allowed) {
     return error(429, "RATE_LIMITED", "Too many AI Search requests. Please try again shortly.", {
       ...headers,
-      "Retry-After": String(Math.max(1, Math.ceil((resetAt - Date.now()) / 1000))),
+      "Retry-After": String(Math.max(1, Math.ceil((daily.resetAt - Date.now()) / 1000))),
     });
-  }
-  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
-    return error(415, "JSON_REQUIRED", "Content-Type must be application/json.", headers);
-  }
-  const contentLength = Number(request.headers.get("content-length") ?? "0");
-  if (Number.isFinite(contentLength) && contentLength > 4_096) {
-    return error(413, "REQUEST_TOO_LARGE", "Request body is too large.", headers);
   }
 
   try {
-    const rawBody = await request.text();
-    if (new TextEncoder().encode(rawBody).byteLength > 4_096) {
-      return error(413, "REQUEST_TOO_LARGE", "Request body is too large.", headers);
-    }
-    const payload = JSON.parse(rawBody) as { question?: unknown };
-    const result = await executeAiAgentResearch(payload?.question, getAiResearchAgent(), getAiSearchDataAdapter());
+    const result = await executeAiAgentResearch(question, getAiResearchAgent(), getAiSearchDataAdapter());
     console.info("AI Search request completed", {
       statusCode: result.statusCode,
       latencyMs: Math.round(performance.now() - startedAt),
@@ -104,7 +122,6 @@ export async function POST(request: Request) {
       headers: { ...headers, "Cache-Control": "private, no-store" },
     });
   } catch (caught) {
-    if (caught instanceof SyntaxError) return error(400, "INVALID_JSON", "Request body must be valid JSON.", headers);
     console.error("Unexpected AI Search API error", { name: caught instanceof Error ? caught.name : "UnknownError" });
     return error(503, "SERVICE_UNAVAILABLE", "AI Search is temporarily unavailable.", headers);
   }
