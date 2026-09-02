@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -16,6 +17,7 @@ import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+const GA_MEASUREMENT_ID = "G-57LB5R97PG";
 const themeScript = `(function(){try{var t=localStorage.getItem('site-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}})()`;
 
 export const metadata: Metadata = {
@@ -55,6 +57,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </nav>
         <ThemeToggle />
         {children}
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+        </Script>
       </body>
     </html>
   );
