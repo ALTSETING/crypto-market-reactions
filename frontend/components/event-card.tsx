@@ -23,7 +23,7 @@ interface EventCardProps {
 
 export function EventCard({ event, selectedAsset, selectedHorizon }: EventCardProps) {
   return (
-    <article className="group min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.12)] transition hover:border-emerald-400/30 hover:bg-slate-950/75 sm:p-6">
+    <article className="group min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 transition hover:border-emerald-400/30 hover:bg-slate-950/55 sm:p-6">
       <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-400">
         <time dateTime={event.published_at}>{formatDate(event.published_at, true)} UTC</time>
         <span aria-hidden="true">•</span>

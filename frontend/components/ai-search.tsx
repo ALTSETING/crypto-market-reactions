@@ -1,23 +1,17 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useState } from "react";
 
-import { AI_TOPIC_LABELS, type AiAgentSuccess, type AiHybridSuccess, type AiResearchSuccess, type AiSearchErrorBody, type AiSearchSuccess } from "@/types/ai-search";
 import { formatPercent } from "@/lib/ai-search/format";
-import { SOURCE_TYPE_LABELS } from "@/types/events";
+import { AI_TOPIC_LABELS, type AiAgentSuccess, type AiCitation, type AiHybridSuccess, type AiResearchSuccess, type AiSearchErrorBody, type AiSearchSuccess, type MultiHorizonAnalyticsResult } from "@/types/ai-search";
 
 const EXAMPLES = [
-  "How does ETH react to large institutional purchases?",
-  "How does ETH react to sales by large investors?",
-  "How does BTC react to ETF inflows?",
-  "How does SOL react to large purchases?",
   "What is a Bitcoin ETF?",
-  "Why can ETF outflows affect Bitcoin?",
-  "Why can ETF outflows hurt Bitcoin, and what happened historically?",
-  "Що таке стейкінг?",
-  "Що таке стейкінг і як ETH історично реагує на новини про стейкінг?",
+  "How did BTC react to ETF outflows?",
+  "How did ETH react to institutional purchases?",
+  "How did SOL react to hacks?",
+  "На які новини ETH найчастіше реагував зростанням?",
 ] as const;
-const QUICK_FILTERS = ["BTC", "ETH", "SOL", "ETF", "SEC", "Macro"] as const;
 
 type State =
   | { kind: "idle" }
@@ -30,10 +24,12 @@ export function AiSearch() {
   const [question, setQuestion] = useState("");
   const [submittedQuestion, setSubmittedQuestion] = useState("");
   const [state, setState] = useState<State>({ kind: "idle" });
+  const [examplesOpen, setExamplesOpen] = useState(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmittedQuestion(question.trim());
+    const trimmedQuestion = question.trim();
+    setSubmittedQuestion(trimmedQuestion);
     setState({ kind: "loading" });
     try {
       const response = await fetch("/api/ai-search", {
@@ -56,211 +52,125 @@ export function AiSearch() {
     }
   }
 
-  return (
-    <section className="mt-10 min-w-0 max-w-full rounded-3xl border border-emerald-400/20 bg-slate-900/45 p-5 shadow-[0_24px_80px_rgba(2,6,23,0.18)] sm:p-7" aria-label="AI Research search">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-white">Ask a question</h2>
-          <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">Ask naturally in English or Ukrainian. AI explains the topic and uses Reaction V2 when historical evidence is useful.</p>
-        </div>
-        <span className="w-fit rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">Based on Reaction V2 + general explanations</span>
-      </div>
+  function handleQuestionKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
+    event.preventDefault();
+    if (question.trim().length >= 3 && state.kind !== "loading") event.currentTarget.form?.requestSubmit();
+  }
 
-      <form className="mt-5" onSubmit={submit}>
-        <label className="sr-only" htmlFor="ai-search-question">Historical market question</label>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
-            className="min-h-12 min-w-0 flex-1 rounded-xl border border-white/15 bg-slate-950/55 px-4 text-sm text-white outline-none placeholder:text-slate-600 focus:border-emerald-400/50"
-            id="ai-search-question"
-            maxLength={500}
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Ask about historical BTC, ETH, or SOL reactions…"
-            value={question}
-          />
-          <button className="min-h-12 rounded-xl bg-emerald-400 px-5 text-sm font-bold text-slate-950 disabled:cursor-not-allowed disabled:opacity-50" disabled={state.kind === "loading" || question.trim().length < 3} type="submit">
-            {state.kind === "loading" ? "Analyzing…" : "Analyze"}
-          </button>
+  return (
+    <section aria-label="AI Research search" className="mt-6 min-w-0 max-w-full sm:mt-9">
+      <div>
+        <h2 className="text-base font-semibold tracking-tight text-white">Ask a question</h2>
+        <p className="mt-1 text-sm leading-5 text-slate-500">English or Ukrainian.</p>
+      </div>
+      <form className="mt-3 rounded-2xl border border-white/10 bg-slate-900/45 p-2 focus-within:border-emerald-400/40 focus-within:ring-4 focus-within:ring-emerald-400/[0.05]" onSubmit={submit}>
+        <label className="sr-only" htmlFor="ai-search-question">Crypto research question</label>
+        <textarea className="block min-h-20 w-full min-w-0 resize-y bg-transparent px-3 py-2.5 text-base leading-6 text-white outline-none placeholder:text-slate-600 sm:min-h-16" id="ai-search-question" maxLength={500} onChange={(event) => setQuestion(event.target.value)} onKeyDown={handleQuestionKeyDown} placeholder="Ask about crypto concepts or historical BTC, ETH, and SOL reactions…" rows={2} value={question} />
+        <div className="flex items-center justify-between gap-3 border-t border-white/8 px-2 pt-2">
+          <span className="text-[11px] leading-4 text-slate-500">AI explanations · Reaction V2 history</span>
+          <button className="min-h-10 shrink-0 rounded-xl bg-emerald-400 px-4 text-sm font-semibold text-slate-950 outline-none transition hover:bg-emerald-300 active:translate-y-px focus-visible:ring-2 focus-visible:ring-emerald-200 disabled:cursor-not-allowed disabled:opacity-45" disabled={state.kind === "loading" || question.trim().length < 3} type="submit">{state.kind === "loading" ? "Analyzing…" : "Analyze"}</button>
         </div>
       </form>
-
-      {state.kind === "idle" && <>
-        <div className="mt-3 flex flex-wrap gap-2" aria-label="Quick filters">
-          {QUICK_FILTERS.map((filter) => <button className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-400 hover:text-white" key={filter} onClick={() => setQuestion((value) => `${value}${value ? " " : ""}${filter}`)} type="button">{filter}</button>)}
-        </div>
-        <div className="mt-3 grid gap-2 sm:grid-cols-2" aria-label="Example questions">
-          {EXAMPLES.map((example) => (
-            <button className="min-w-0 break-words rounded-lg border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-xs leading-5 text-slate-400 hover:border-white/20 hover:text-white" key={example} onClick={() => setQuestion(example)} type="button">{example}</button>
-          ))}
-        </div>
-      </>}
-
-      <div aria-live="polite" className="mt-5">
-        {state.kind === "idle" && <p className="text-sm text-slate-500">Ask any crypto research question to begin.</p>}
-        {state.kind !== "idle" && submittedQuestion && <p className="mb-3 text-sm text-slate-500"><span className="font-medium text-slate-300">You:</span> {submittedQuestion}</p>}
-        {state.kind === "loading" && <div className="h-28 animate-pulse rounded-2xl bg-white/[0.035]" />}
-        {state.kind === "refusal" && <p className="rounded-xl border border-amber-200/20 bg-amber-200/5 p-4 text-sm text-amber-100"><span className="font-semibold">Request not supported:</span> {state.message}</p>}
-        {state.kind === "error" && <p className="rounded-xl border border-rose-300/20 bg-rose-300/5 p-4 text-sm text-rose-200">{state.message}</p>}
+      {state.kind === "idle" && <ExampleQuestions expanded={examplesOpen} onSelect={setQuestion} onToggle={() => setExamplesOpen((open) => !open)} />}
+      <div aria-live="polite" className={state.kind === "idle" ? "sr-only" : "mt-7 min-w-0 max-w-full"}>
+        {state.kind !== "idle" && submittedQuestion && <div className="mb-7 min-w-0"><p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">Your question</p><p className="mt-1 break-words text-sm font-medium leading-6 text-slate-300 [overflow-wrap:anywhere]">{submittedQuestion}</p></div>}
+        {state.kind === "loading" && <AiLoadingState />}
+        {state.kind === "refusal" && <AiMessage kind="warning" label="Request not supported" message={state.message} />}
+        {state.kind === "error" && <AiMessage kind="error" label="Unable to complete request" message={state.message} />}
         {state.kind === "success" && <AiResult data={state.data} />}
       </div>
     </section>
   );
 }
 
+export function ExampleQuestions({ expanded, onSelect, onToggle }: { expanded: boolean; onSelect: (question: string) => void; onToggle: () => void }) {
+  return (
+    <div className="mt-3">
+      <button aria-controls="ai-example-questions" aria-expanded={expanded} className="inline-flex min-h-10 items-center gap-2 rounded-lg px-1 text-sm font-medium text-slate-500 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300 motion-reduce:transition-none" onClick={onToggle} type="button">
+        Example questions
+        <span aria-hidden="true" className={`text-xs transition-transform duration-150 motion-reduce:transition-none ${expanded ? "rotate-180" : ""}`}>⌄</span>
+      </button>
+      <div aria-hidden={!expanded} className={`grid transition-[grid-template-rows,opacity] duration-150 motion-reduce:transition-none ${expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`} id="ai-example-questions">
+        <div className="min-h-0 overflow-hidden"><div className="grid gap-x-6 pb-1 pt-1 sm:grid-cols-2">
+          {EXAMPLES.map((example) => <button className="min-h-11 min-w-0 break-words border-b border-white/8 py-2.5 text-left text-xs leading-5 text-slate-500 outline-none transition hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" key={example} onClick={() => onSelect(example)} tabIndex={expanded ? 0 : -1} type="button">{example}</button>)}
+        </div></div>
+      </div>
+    </div>
+  );
+}
+
+export function AiLoadingState() {
+  return <div aria-label="AI Research is analyzing" className="py-1" role="status"><div className="flex items-center gap-3 text-sm text-slate-400"><span aria-hidden="true" className="size-2 animate-pulse rounded-full bg-emerald-400 motion-reduce:animate-none" />Analyzing…</div></div>;
+}
+
+export function AiMessage({ kind, label, message }: { kind: "warning" | "error"; label: string; message: string }) {
+  return <div className={`py-1 text-sm leading-6 ${kind === "error" ? "text-rose-200" : "text-amber-100"}`} role={kind === "error" ? "alert" : "status"}><p className="font-semibold">{label}</p><p className="mt-1 opacity-80">{message}</p></div>;
+}
+
 export function AiResult({ data }: { data: AiResearchSuccess }) {
   if (data.mode === "agent") return <AgentResult data={data} />;
-  if (data.mode === "general") {
-    return (
-      <div className="rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5">
-        <span className="inline-flex rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200">{data.modeLabel}</span>
-        <h3 className="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-400">General explanation</h3>
-        <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-white">{data.answer}</p>
-        <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
-      </div>
-    );
-  }
+  if (data.mode === "general") return <article aria-label="AI explanation" className="mx-auto min-w-0 max-w-[760px]"><ResultEyebrow>AI explanation</ResultEyebrow><ProseAnswer text={data.answer} /><ResultDisclaimer>{compactDisclaimer(data.language)}</ResultDisclaimer></article>;
   return <DatabaseResult data={data} />;
 }
 
 function AgentResult({ data }: { data: AiAgentSuccess }) {
   const historicalData: AiSearchSuccess | null = data.historical ? {
-    status: "ok",
-    mode: "database",
-    modeLabel: "Historical evidence — Reaction V2",
-    language: data.language,
-    basedOn: data.historical.basedOn,
-    intent: data.historical.intent,
-    answer: data.historical.answer,
-    calculation: data.historical.calculation,
-    result: data.historical.result,
-    citations: data.historical.citations,
+    status: "ok", mode: "database", modeLabel: "Historical evidence — Reaction V2", language: data.language, basedOn: data.historical.basedOn, intent: data.historical.intent, answer: data.historical.answer, calculation: data.historical.calculation, result: data.historical.result, citations: data.historical.citations,
     disclaimer: data.language === "uk" ? "Лише історичний аналіз — не фінансова порада." : "Historical analysis only — not financial advice.",
   } : null;
+  return <div className="min-w-0 max-w-full"><article aria-label="AI explanation" className="mx-auto min-w-0 max-w-[760px]"><ResultEyebrow>{data.modeLabel}</ResultEyebrow><ProseAnswer text={data.answer} />{data.historicalUnavailable && <p className="mt-6 text-sm text-slate-500">{data.historicalMessage ?? "Historical evidence is temporarily unavailable."}</p>}{!historicalData && <ResultDisclaimer>{compactDisclaimer(data.language)}</ResultDisclaimer>}</article>{historicalData && <div className="mt-9 border-t border-white/10 pt-8"><DatabaseResult data={historicalData} /></div>}</div>;
+}
+
+function ProseAnswer({ text }: { text: string }) {
+  const paragraphs = text.split(/\n{2,}/u).filter(Boolean);
+  return <div className="mt-3 min-w-0 space-y-4 break-words text-base leading-[1.65] text-white sm:text-[17px] sm:leading-[1.7] [overflow-wrap:anywhere]">{paragraphs.map((paragraph, index) => <p className="whitespace-pre-wrap" key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>)}</div>;
+}
+
+function ResultEyebrow({ children }: { children: React.ReactNode }) { return <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">{children}</p>; }
+function ResultDisclaimer({ children }: { children: React.ReactNode }) { return <p className="mt-6 text-xs leading-5 text-slate-500">{children}</p>; }
+function compactDisclaimer(language: "en" | "uk"): string { return language === "uk" ? "Не фінансова порада." : "Not financial advice."; }
+
+function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
+  const context = [data.intent.asset, data.intent.topic ? AI_TOPIC_LABELS[data.intent.topic] : null, data.intent.horizon ?? "All horizons"].filter((item): item is string => Boolean(item));
+  const sampleSize = data.result.kind === "search" ? data.result.matched : data.result.kind === "comparison" ? data.result.left.sampleSize + data.result.right.sampleSize : data.result.kind === "multi_horizon" ? Math.max(0, ...data.result.rows.map((row) => row.sampleSize)) : data.result.sampleSize;
+  const requestedRow = data.result.kind === "multi_horizon" ? data.result.rows.find((row) => row.horizon === (data.intent.horizon ?? "24h")) : null;
+  const observationSummary = data.result.topicFilter ? `${data.result.topicFilter.independentEventCount} independent events · ${data.result.topicFilter.matchedSampleSize} matched articles` : `${sampleSize} observations`;
+
   return (
-    <div className="grid gap-4">
-      <section className="rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5" aria-label="AI explanation">
-        <span className="inline-flex rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200">{data.modeLabel}</span>
-        <p className="mt-4 whitespace-pre-wrap text-base leading-7 text-white">{data.answer}</p>
-        {data.historicalUnavailable && (
-          <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
-            {data.historicalMessage ?? "Historical evidence is temporarily unavailable."}
-          </p>
-        )}
-        <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
-      </section>
-      {historicalData && <DatabaseResult data={historicalData} />}
-    </div>
+    <section aria-label="Historical evidence" className="min-w-0 max-w-full">
+      {data.mode === "hybrid" && <article aria-label="General explanation" className="mx-auto max-w-[760px] pb-8"><ResultEyebrow>General explanation</ResultEyebrow><ProseAnswer text={data.generalExplanation} /></article>}
+      <div className={data.mode === "hybrid" ? "border-t border-white/10 pt-8" : undefined}>
+        <div className="flex flex-wrap items-center gap-2"><h3 className="text-lg font-semibold tracking-tight text-white">Historical evidence</h3><span className="rounded-full bg-emerald-400/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-300">Reaction V2</span></div>
+        <p className="mt-2 break-words text-sm leading-6 text-slate-500 [overflow-wrap:anywhere]">{observationSummary}{context.length > 0 ? ` · ${context.join(" · ")}` : ""}</p>
+        <p className="mt-4 max-w-[760px] break-words text-base font-medium leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
+        {data.answer === "No matching historical events found." && <p className="mt-1 text-sm text-slate-500">Try a broader topic or date range.</p>}
+        {requestedRow && <dl className="mt-5 flex flex-wrap gap-x-7 gap-y-3 rounded-xl bg-white/[0.035] px-4 py-3.5 text-sm"><InlineMetric label={`Median ${requestedRow.horizon}`} value={formatPercent(requestedRow.median)} tone={reactionTone(requestedRow.median)} /><InlineMetric label="Positive" value={formatPercent(requestedRow.positivePercent, false, 2)} /><InlineMetric label="Sample" value={String(requestedRow.sampleSize)} /></dl>}
+        {data.result.topicFilter?.entityConcentrationWarning && <p className="mt-4 text-xs leading-5 text-amber-100">One entity represents {data.result.topicFilter.largestEntityShare.toFixed(1)}% of independent events.</p>}
+        {sampleSize > 0 && sampleSize < 10 && <p className="mt-4 text-xs leading-5 text-amber-100">{sampleSize < 5 ? "Very small sample; interpret cautiously." : "Small sample; interpret cautiously."}</p>}
+        {data.result.kind === "multi_horizon" && sampleSize > 0 && <HistoricalTable rows={data.result.rows} />}
+        {data.result.kind === "ranking" && data.result.items.length > 0 && <ol className="mt-5 divide-y divide-white/8 border-y border-white/8">{data.result.items.map((item, index) => <li className="grid min-w-0 gap-1 py-3 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-5" key={item.eventId}><a className="min-w-0 break-words text-sm text-sky-200 outline-none hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" href={item.href}>{index + 1}. {item.title}</a><span className={`font-mono text-sm font-semibold tabular-nums ${reactionTone(item.reaction)}`}>{formatPercent(item.reaction)}</span></li>)}</ol>}
+        {data.citations.length > 0 && <CitationList citations={data.citations} />}
+        <p className="mt-7 text-xs leading-5 text-slate-500">{data.disclaimer}</p>
+      </div>
+    </section>
   );
 }
 
-function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
-  const metricLabel = data.result.kind === "count" ? "Count" : data.result.kind === "ranking" ? "Reaction ranking" : data.result.kind === "multi_horizon" ? "Reaction overview" : data.intent.metric === "mean" ? "Average reaction" : data.intent.metric === "median" ? "Median reaction" : "Historical events";
-  const chips = [
-    data.intent.asset,
-    data.intent.horizon,
-    data.intent.topic ? AI_TOPIC_LABELS[data.intent.topic] : null,
-    data.intent.direction !== "unknown" ? data.intent.direction === "inflow" ? "Capital inflow" : data.intent.direction === "outflow" ? "Capital outflow" : "Neutral direction" : null,
-    data.intent.magnitude === "large" ? "Large transactions (≥ $50M)" : null,
-    data.intent.assetRole === "primary" ? "Primary asset only" : data.intent.assetRole === "secondary" ? "Secondary context" : null,
-    data.intent.sourceClass ? SOURCE_TYPE_LABELS[data.intent.sourceClass] : null,
-    data.intent.category ? data.intent.category.replaceAll("_", " ").replace(/^./, (letter) => letter.toUpperCase()) : null,
-  ].filter((chip): chip is string => Boolean(chip));
-  const sampleSize = data.result.kind === "search"
-    ? data.result.matched
-    : data.result.kind === "comparison"
-      ? data.result.left.sampleSize + data.result.right.sampleSize
-      : data.result.kind === "multi_horizon"
-        ? Math.max(...data.result.rows.map((row) => row.sampleSize))
-        : data.result.sampleSize;
-  return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
-      <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${data.mode === "hybrid" ? "border-violet-300/20 bg-violet-300/10 text-violet-200" : "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"}`}>{data.modeLabel}</span>
-      {data.mode === "hybrid" && (
-        <section className="mt-4 rounded-xl border border-violet-300/15 bg-violet-300/[0.04] p-4" aria-label="General explanation">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-violet-200">General explanation</h3>
-          <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-200">{data.generalExplanation}</p>
-          <p className="mt-2 text-xs text-slate-500">No live sources or database rows were used for this explanation.</p>
-        </section>
-      )}
-      <section className={data.mode === "hybrid" ? "mt-5" : "mt-4"} aria-label="Historical evidence">
-      {data.mode === "hybrid" && <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Historical evidence</h3>}
-      <div className="flex flex-wrap gap-2">
-        {chips.map((chip) => <span className="rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400" key={chip}>{chip}</span>)}
-      </div>
-      <p className="mt-3 text-base font-semibold leading-7 text-white">{data.answer}</p>
-      {data.answer === "No matching historical events found." && <p className="mt-1 text-sm text-slate-500">Try a broader topic or date range.</p>}
-      <dl className="mt-3 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
-        <div><dt className="text-slate-500">Asset</dt><dd className="text-slate-200">{data.intent.asset ?? "All"}</dd></div>
-        <div><dt className="text-slate-500">Horizon</dt><dd className="text-slate-200">{data.intent.horizon ?? "All horizons"}</dd></div>
-        <div><dt className="text-slate-500">Metric</dt><dd className="text-slate-200">{metricLabel}</dd></div>
-        <div><dt className="text-slate-500">Sample size</dt><dd className="text-slate-200">{sampleSize}</dd></div>
-      </dl>
-      {data.result.topicFilter && (
-        <div className="mt-3 text-sm text-slate-400">
-          <p>
-            Matched articles <span className="font-medium text-slate-200">{data.result.topicFilter.matchedSampleSize}</span>
-            {" · Independent events "}<span className="font-medium text-slate-200">{data.result.topicFilter.independentEventCount}</span>
-            {" · from "}<span className="font-medium text-slate-200">{data.result.topicFilter.broadSampleSize}</span> bounded candidates
-            {data.result.topicFilter.heuristicMatches > 0 ? ` (${data.result.topicFilter.heuristicMatches} lower-confidence phrase matches)` : ""}.
-          </p>
-          {data.result.topicFilter.entityConcentrationWarning && (
-            <p className="mt-2 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-amber-100">
-              Entity concentration warning: {data.result.topicFilter.largestEntity ?? "one entity"} represents {data.result.topicFilter.largestEntityShare.toFixed(1)}% of independent events.
-            </p>
-          )}
-        </div>
-      )}
-      {sampleSize > 0 && sampleSize < 10 && (
-        <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
-          {sampleSize < 5 ? "Very small sample — statistical reliability is low." : "Small sample — interpret cautiously."}
-        </p>
-      )}
-      {data.result.kind === "scalar" && data.result.sampleSize > 0 && (
-        <p className="mt-2 text-xs text-slate-500">
-          5% trimmed mean: {formatPercent(data.result.trimmedMean5Percent)}
-          {data.result.standardDeviation !== null ? ` · SD ${formatPercent(data.result.standardDeviation, false)} · SE ${formatPercent(data.result.standardError, false)}` : ""}
-        </p>
-      )}
-      {data.result.kind === "share" && data.result.positive95Ci && (
-        <p className="mt-2 text-xs text-slate-500">Positive-share 95% CI: {formatPercent(data.result.positive95Ci.low, false)}–{formatPercent(data.result.positive95Ci.high, false)}</p>
-      )}
-      {data.result.kind === "multi_horizon" && sampleSize > 0 && (
-        <div className="mt-4 overflow-x-auto rounded-lg border border-white/10 text-sm">
-          <div className="grid min-w-[540px] grid-cols-5 bg-white/[0.04] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <span>Horizon</span><span className="text-right">Mean</span><span className="text-right">Median</span><span className="text-right">Positive</span><span className="text-right">Sample</span>
-          </div>
-          {data.result.rows.map((row) => (
-            <div className="grid min-w-[540px] grid-cols-5 border-t border-white/10 px-3 py-2" key={row.horizon}>
-              <span className="font-medium text-slate-200">{row.horizon}</span>
-              <span className="text-right text-white">{formatPercent(row.mean)}</span>
-              <span className="text-right text-white">{formatPercent(row.median)}</span>
-              <span className="text-right text-white">{formatPercent(row.positivePercent, false, 2)}</span>
-              <span className="text-right text-slate-500">{row.sampleSize}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {data.calculation && <p className="mt-2 text-sm leading-6 text-slate-400"><span className="font-semibold text-slate-300">Summary:</span> {data.calculation}</p>}
-      {data.result.kind === "ranking" && data.result.items.length > 0 && (
-        <ol className="mt-4 grid gap-2">
-          {data.result.items.map((item, index) => (
-            <li className="rounded-lg border border-white/10 px-3 py-2" key={item.eventId}>
-              <a className="text-sm text-sky-200 hover:text-white" href={item.href}>{index + 1}. {item.title}</a>
-              <p className="mt-1 text-sm font-semibold text-white">{formatPercent(item.reaction)}</p>
-            </li>
-          ))}
-        </ol>
-      )}
-      {data.citations.length > 0 ? (
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {data.citations.map((citation) => (
-            <li key={citation.eventId}>
-              <a className="block rounded-lg border border-white/10 px-3 py-2 text-sm text-sky-200 hover:border-white/20" href={citation.href}>{citation.title}</a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <p className="mt-4 text-xs text-slate-500">{data.basedOn}. {data.disclaimer}</p>
-      </section>
-    </div>
-  );
+function InlineMetric({ label, tone = "text-white", value }: { label: string; tone?: string; value: string }) { return <div className="min-w-0"><dt className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-600">{label}</dt><dd className={`mt-0.5 font-mono font-medium tabular-nums ${tone}`}>{value}</dd></div>; }
+
+export function CitationList({ citations, initialExpanded = false }: { citations: AiCitation[]; initialExpanded?: boolean }) {
+  const [expanded, setExpanded] = useState(initialExpanded);
+  const visibleCitations = expanded ? citations : citations.slice(0, 5);
+  const remaining = Math.max(0, citations.length - visibleCitations.length);
+  return <section aria-labelledby="sources-heading" className="mt-8"><h4 className="text-sm font-semibold text-white" id="sources-heading">Sources</h4><ol className="mt-3 space-y-1">{visibleCitations.map((citation, index) => <li className="grid min-w-0 grid-cols-[1.5rem_1fr] gap-2 py-1.5 text-sm" key={citation.eventId}><span aria-hidden="true" className="font-mono text-xs leading-6 text-slate-600">{index + 1}</span><div className="min-w-0"><a className="inline-flex min-h-10 break-words py-1 leading-5 text-sky-200 outline-none hover:text-white focus-visible:rounded focus-visible:ring-2 focus-visible:ring-emerald-300 [overflow-wrap:anywhere]" href={citation.href}>{citation.title}</a>{citation.groupSize && citation.groupSize > 1 ? <p className="text-[11px] text-slate-500">{citation.groupSize} related articles</p> : null}</div></li>)}</ol>{citations.length > 5 && <button aria-expanded={expanded} className="mt-2 min-h-10 rounded-lg px-1 text-sm font-medium text-slate-500 outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-emerald-300" onClick={() => setExpanded((open) => !open)} type="button">{expanded ? "Show less" : `Show ${remaining} more`}</button>}</section>;
+}
+
+function HistoricalTable({ rows }: { rows: MultiHorizonAnalyticsResult["rows"] }) {
+  return <div className="mt-5 max-w-full overflow-x-auto overscroll-x-contain" data-testid="historical-table-scroll" tabIndex={0}><table className="w-full min-w-[460px] border-collapse text-sm"><caption className="sr-only">Historical Reaction V2 returns by horizon</caption><thead><tr className="border-b border-white/10 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500"><th className="py-2 pr-3 text-left" scope="col">Horizon</th><th className="px-3 py-2 text-right" scope="col">Mean</th><th className="px-3 py-2 text-right" scope="col">Median</th><th className="py-2 pl-3 text-right" scope="col">Positive</th></tr></thead><tbody>{rows.map((row) => <tr className="border-b border-white/8 last:border-b-0" key={row.horizon}><th className="py-3 pr-3 text-left font-medium text-slate-300" scope="row">{row.horizon}</th><td className={`px-3 py-3 text-right font-mono tabular-nums ${reactionTone(row.mean)}`}>{formatPercent(row.mean)}</td><td className={`px-3 py-3 text-right font-mono tabular-nums ${reactionTone(row.median)}`}>{formatPercent(row.median)}</td><td className="py-3 pl-3 text-right font-mono tabular-nums text-white">{formatPercent(row.positivePercent, false, 2)}</td></tr>)}</tbody></table></div>;
+}
+
+function reactionTone(value: number | null): string {
+  if (value === null || value === 0) return "text-slate-400";
+  return value > 0 ? "text-emerald-300" : "text-rose-200";
 }

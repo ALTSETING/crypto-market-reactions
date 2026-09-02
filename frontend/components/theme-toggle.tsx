@@ -37,7 +37,7 @@ export function ThemeToggle() {
     <button
       aria-label={`Switch to ${dark ? "light" : "dark"} theme`}
       aria-pressed={dark}
-      className="fixed right-3 top-3 z-50 inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3.5 text-sm font-semibold text-[var(--text-medium)] shadow-lg shadow-slate-950/10 outline-none backdrop-blur transition hover:border-emerald-500/45 focus-visible:ring-2 focus-visible:ring-emerald-400 sm:right-5 sm:top-5"
+      className="fixed right-3 top-[max(0.6rem,env(safe-area-inset-top))] z-50 inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)]/90 px-3 text-xs font-medium text-[var(--text-medium)] shadow-md shadow-slate-950/10 outline-none backdrop-blur-xl transition hover:border-emerald-500/35 hover:text-[var(--text-strong)] focus-visible:ring-2 focus-visible:ring-emerald-400 sm:right-5 sm:top-[max(1rem,env(safe-area-inset-top))]"
       onClick={toggleTheme}
       type="button"
     >

@@ -16,6 +16,7 @@
   --grid: rgba(15, 23, 42, 0.035);
   --positive: #047857;
   --negative: #be123c;
+  --warning: #92400e;
   --info: #0369a1;
   --accent: #047857;
 }
@@ -36,6 +37,7 @@ html[data-theme="dark"] {
   --grid: rgba(255, 255, 255, 0.018);
   --positive: #6ee7b7;
   --negative: #fda4af;
+  --warning: #fde68a;
   --info: #bae6fd;
   --accent: #6ee7b7;
 }
@@ -63,8 +65,13 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline-offset: 3px;
 }
 
 ::selection {
@@ -85,6 +92,7 @@ select {
 .text-rose-100,
 .text-rose-200,
 .text-rose-300 { color: var(--negative); }
+.text-amber-100 { color: var(--warning); }
 .text-sky-200 { color: var(--info); }
 
 .border-white\/8,
