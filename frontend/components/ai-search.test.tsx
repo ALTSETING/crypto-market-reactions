@@ -61,5 +61,43 @@ describe("AI Search prototype", () => {
     expect(html).toContain("Reaction V2");
     expect(html).toContain("Matched articles");
     expect(html).toContain("Independent events");
+    expect(html).toContain("overflow-wrap:anywhere");
+
+    const tableResult = await executeAiAgentResearch(
+      "How did SOL react historically?",
+      new MockAiResearchAgent(),
+      new FixtureAiSearchDataAdapter(),
+    );
+    expect(tableResult.statusCode).toBe(200);
+    if (tableResult.statusCode === 200) {
+      const tableHtml = renderToStaticMarkup(<AiResult data={tableResult.body} />);
+      expect(tableHtml).toContain('data-testid="historical-table-scroll"');
+      expect(tableHtml).toContain("overflow-x-auto");
+    }
+  });
+
+  it("renders deterministic topic ranking insufficiency and topic comparison without model-authored values", async () => {
+    const ranking = await executeAiAgentResearch(
+      "На які новини ETH найчастіше реагував зростанням за 24h?",
+      new MockAiResearchAgent(),
+      new FixtureAiSearchDataAdapter(),
+    );
+    expect(ranking.statusCode).toBe(200);
+    if (ranking.statusCode !== 200) return;
+    const rankingHtml = renderToStaticMarkup(<AiResult data={ranking.body} />);
+    expect(rankingHtml).toContain("Insufficient data for a reliable topic ranking");
+    expect(rankingHtml).toContain("minimum of 10 independent Reaction V2 observations");
+
+    const comparison = await executeAiAgentResearch(
+      "ETF approvals or institutional purchases — which had a stronger ETH 24h reaction?",
+      new MockAiResearchAgent(),
+      new FixtureAiSearchDataAdapter(),
+    );
+    expect(comparison.statusCode).toBe(200);
+    if (comparison.statusCode !== 200) return;
+    const comparisonHtml = renderToStaticMarkup(<AiResult data={comparison.body} />);
+    expect(comparisonHtml).toContain("Topic comparison");
+    expect(comparisonHtml).toContain("ETF approvals");
+    expect(comparisonHtml).toContain("Institutional purchases");
   });
 });

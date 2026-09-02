@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html data-theme="light" lang="en" suppressHydrationWarning>
       <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
       <body className={`${geist.variable} ${geistMono.variable}`}>
-        <nav aria-label="Primary" className="fixed left-4 top-4 z-50 flex rounded-full border border-white/10 bg-slate-950/85 p-1 text-sm shadow-xl backdrop-blur sm:left-6">
+        <nav aria-label="Primary" className="fixed left-4 top-[max(1rem,env(safe-area-inset-top))] z-50 flex max-w-[calc(100vw-5.25rem)] rounded-full border border-white/10 bg-slate-950/90 p-1 text-sm shadow-xl backdrop-blur sm:left-6">
           <Link className="rounded-full px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white" href="/">Home</Link>
           <Link className="rounded-full px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white" href="/events">Events</Link>
           <Link className="rounded-full px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white" href="/ai">AI Research</Link>

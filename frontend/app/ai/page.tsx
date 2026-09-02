@@ -24,7 +24,7 @@ export default function AiResearchPage() {
         about: ["Bitcoin", "Ethereum", "Solana", "Reaction V2"],
       })} />
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] bg-[radial-gradient(circle_at_30%_0%,rgba(16,185,129,0.14),transparent_40%),radial-gradient(circle_at_80%_15%,rgba(56,189,248,0.08),transparent_32%)]" />
-      <div className="mx-auto w-full max-w-4xl px-4 pb-14 pt-24 sm:px-6 sm:pt-28">
+      <div className="mx-auto w-full min-w-0 max-w-4xl px-4 pb-[max(3.5rem,env(safe-area-inset-bottom))] pt-[calc(6rem+env(safe-area-inset-top))] sm:px-6 sm:pt-[calc(7rem+env(safe-area-inset-top))]">
         <header className="text-center">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-400">AI Research</p>
           <h1 className="mt-4 break-words text-balance text-3xl font-semibold tracking-[-0.04em] text-white min-[390px]:text-4xl sm:text-6xl">Ask Crypto Market History</h1>

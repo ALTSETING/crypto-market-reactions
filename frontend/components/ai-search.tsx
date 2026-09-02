@@ -94,9 +94,9 @@ export function AiSearch() {
         </div>
       </>}
 
-      <div aria-live="polite" className="mt-5">
+      <div aria-live="polite" className="mt-5 min-w-0 max-w-full">
         {state.kind === "idle" && <p className="text-sm text-slate-500">Ask any crypto research question to begin.</p>}
-        {state.kind !== "idle" && submittedQuestion && <p className="mb-3 text-sm text-slate-500"><span className="font-medium text-slate-300">You:</span> {submittedQuestion}</p>}
+        {state.kind !== "idle" && submittedQuestion && <p className="mb-3 min-w-0 break-words text-sm text-slate-500 [overflow-wrap:anywhere]"><span className="font-medium text-slate-300">You:</span> {submittedQuestion}</p>}
         {state.kind === "loading" && <div className="h-28 animate-pulse rounded-2xl bg-white/[0.035]" />}
         {state.kind === "refusal" && <p className="rounded-xl border border-amber-200/20 bg-amber-200/5 p-4 text-sm text-amber-100"><span className="font-semibold">Request not supported:</span> {state.message}</p>}
         {state.kind === "error" && <p className="rounded-xl border border-rose-300/20 bg-rose-300/5 p-4 text-sm text-rose-200">{state.message}</p>}
@@ -110,10 +110,10 @@ export function AiResult({ data }: { data: AiResearchSuccess }) {
   if (data.mode === "agent") return <AgentResult data={data} />;
   if (data.mode === "general") {
     return (
-      <div className="rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5">
-        <span className="inline-flex rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200">{data.modeLabel}</span>
+      <div className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5">
+        <span className="inline-flex max-w-full break-words rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200 [overflow-wrap:anywhere]">{data.modeLabel}</span>
         <h3 className="mt-4 text-sm font-semibold uppercase tracking-wide text-slate-400">General explanation</h3>
-        <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-white">{data.answer}</p>
+        <p className="mt-2 min-w-0 whitespace-pre-wrap break-words text-base leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
         <p className="mt-4 text-xs text-slate-500">{data.disclaimer}</p>
       </div>
     );
@@ -136,10 +136,10 @@ function AgentResult({ data }: { data: AiAgentSuccess }) {
     disclaimer: data.language === "uk" ? "Лише історичний аналіз — не фінансова порада." : "Historical analysis only — not financial advice.",
   } : null;
   return (
-    <div className="grid gap-4">
-      <section className="rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5" aria-label="AI explanation">
-        <span className="inline-flex rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200">{data.modeLabel}</span>
-        <p className="mt-4 whitespace-pre-wrap text-base leading-7 text-white">{data.answer}</p>
+    <div className="grid min-w-0 max-w-full gap-4">
+      <section className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-violet-300/20 bg-slate-950/45 p-4 sm:p-5" aria-label="AI explanation">
+        <span className="inline-flex max-w-full break-words rounded-full border border-violet-300/20 bg-violet-300/10 px-3 py-1 text-xs font-semibold text-violet-200 [overflow-wrap:anywhere]">{data.modeLabel}</span>
+        <p className="mt-4 min-w-0 whitespace-pre-wrap break-words text-base leading-7 text-white [overflow-wrap:anywhere]">{data.answer}</p>
         {data.historicalUnavailable && (
           <p className="mt-3 rounded-lg border border-amber-300/20 bg-amber-300/5 px-3 py-2 text-sm text-amber-100">
             {data.historicalMessage ?? "Historical evidence is temporarily unavailable."}
@@ -153,7 +153,12 @@ function AgentResult({ data }: { data: AiAgentSuccess }) {
 }
 
 function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
-  const metricLabel = data.result.kind === "count" ? "Count" : data.result.kind === "ranking" ? "Reaction ranking" : data.result.kind === "multi_horizon" ? "Reaction overview" : data.intent.metric === "mean" ? "Average reaction" : data.intent.metric === "median" ? "Median reaction" : "Historical events";
+  const metricLabel = data.result.kind === "count" ? "Count"
+    : data.result.kind === "ranking" ? "Reaction ranking"
+      : data.result.kind === "topic_ranking" ? "Topic ranking"
+        : data.result.kind === "topic_comparison" ? "Topic comparison"
+          : data.result.kind === "multi_horizon" ? "Reaction overview"
+            : data.intent.metric === "mean" ? "Average reaction" : data.intent.metric === "median" ? "Median reaction" : "Historical events";
   const chips = [
     data.intent.asset,
     data.intent.horizon,
@@ -168,12 +173,16 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
     ? data.result.matched
     : data.result.kind === "comparison"
       ? data.result.left.sampleSize + data.result.right.sampleSize
-      : data.result.kind === "multi_horizon"
-        ? Math.max(...data.result.rows.map((row) => row.sampleSize))
-        : data.result.sampleSize;
+      : data.result.kind === "topic_comparison"
+        ? data.result.left.independentSampleSize + data.result.right.independentSampleSize
+        : data.result.kind === "topic_ranking"
+          ? Math.max(0, ...data.result.items.map((item) => item.independentSampleSize))
+          : data.result.kind === "multi_horizon"
+            ? Math.max(...data.result.rows.map((row) => row.sampleSize))
+            : data.result.sampleSize;
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
-      <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${data.mode === "hybrid" ? "border-violet-300/20 bg-violet-300/10 text-violet-200" : "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"}`}>{data.modeLabel}</span>
+    <div className="min-w-0 max-w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-950/45 p-4 sm:p-5">
+      <span className={`inline-flex max-w-full break-words rounded-full border px-3 py-1 text-xs font-semibold [overflow-wrap:anywhere] ${data.mode === "hybrid" ? "border-violet-300/20 bg-violet-300/10 text-violet-200" : "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"}`}>{data.modeLabel}</span>
       {data.mode === "hybrid" && (
         <section className="mt-4 rounded-xl border border-violet-300/15 bg-violet-300/[0.04] p-4" aria-label="General explanation">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-violet-200">General explanation</h3>
@@ -181,10 +190,10 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
           <p className="mt-2 text-xs text-slate-500">No live sources or database rows were used for this explanation.</p>
         </section>
       )}
-      <section className={data.mode === "hybrid" ? "mt-5" : "mt-4"} aria-label="Historical evidence">
+      <section className={`min-w-0 max-w-full ${data.mode === "hybrid" ? "mt-5" : "mt-4"}`} aria-label="Historical evidence">
       {data.mode === "hybrid" && <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-emerald-300">Historical evidence</h3>}
       <div className="flex flex-wrap gap-2">
-        {chips.map((chip) => <span className="rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400" key={chip}>{chip}</span>)}
+        {chips.map((chip) => <span className="max-w-full break-words rounded-full bg-white/5 px-2.5 py-1 font-mono text-xs text-slate-400 [overflow-wrap:anywhere]" key={chip}>{chip}</span>)}
       </div>
       <p className="mt-3 text-base font-semibold leading-7 text-white">{data.answer}</p>
       {data.answer === "No matching historical events found." && <p className="mt-1 text-sm text-slate-500">Try a broader topic or date range.</p>}
@@ -224,7 +233,7 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
         <p className="mt-2 text-xs text-slate-500">Positive-share 95% CI: {formatPercent(data.result.positive95Ci.low, false)}–{formatPercent(data.result.positive95Ci.high, false)}</p>
       )}
       {data.result.kind === "multi_horizon" && sampleSize > 0 && (
-        <div className="mt-4 overflow-x-auto rounded-lg border border-white/10 text-sm">
+        <div className="mt-4 max-w-full overflow-x-auto overscroll-x-contain rounded-lg border border-white/10 text-sm" data-testid="historical-table-scroll">
           <div className="grid min-w-[540px] grid-cols-5 bg-white/[0.04] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
             <span>Horizon</span><span className="text-right">Mean</span><span className="text-right">Median</span><span className="text-right">Positive</span><span className="text-right">Sample</span>
           </div>
@@ -244,17 +253,37 @@ function DatabaseResult({ data }: { data: AiSearchSuccess | AiHybridSuccess }) {
         <ol className="mt-4 grid gap-2">
           {data.result.items.map((item, index) => (
             <li className="rounded-lg border border-white/10 px-3 py-2" key={item.eventId}>
-              <a className="text-sm text-sky-200 hover:text-white" href={item.href}>{index + 1}. {item.title}</a>
+              <a className="block min-w-0 break-words text-sm text-sky-200 hover:text-white [overflow-wrap:anywhere]" href={item.href}>{index + 1}. {item.title}</a>
               <p className="mt-1 text-sm font-semibold text-white">{formatPercent(item.reaction)}</p>
             </li>
           ))}
         </ol>
       )}
+      {data.result.kind === "topic_ranking" && data.result.items.length > 0 && (
+        <ol className="mt-4 grid min-w-0 gap-2">
+          {data.result.items.map((item, index) => (
+            <li className="min-w-0 rounded-lg border border-white/10 px-3 py-2" key={item.topic}>
+              <p className="break-words text-sm font-semibold text-slate-200 [overflow-wrap:anywhere]">{index + 1}. {AI_TOPIC_LABELS[item.topic]}</p>
+              <p className="mt-1 break-words text-sm text-white">{formatPercent(item.value, false)} · independent N {item.independentSampleSize} · {data.intent.horizon}</p>
+            </li>
+          ))}
+        </ol>
+      )}
+      {data.result.kind === "topic_comparison" && (
+        <div className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2">
+          {[data.result.left, data.result.right].map((side) => (
+            <div className="min-w-0 rounded-lg border border-white/10 px-3 py-2" key={side.topic}>
+              <p className="break-words text-sm text-slate-400 [overflow-wrap:anywhere]">{AI_TOPIC_LABELS[side.topic]}</p>
+              <p className="mt-1 break-words text-sm font-semibold text-white">{formatPercent(side.value, false)} · independent N {side.independentSampleSize}</p>
+            </div>
+          ))}
+        </div>
+      )}
       {data.citations.length > 0 ? (
         <ul className="mt-4 grid gap-2 sm:grid-cols-2">
           {data.citations.map((citation) => (
             <li key={citation.eventId}>
-              <a className="block rounded-lg border border-white/10 px-3 py-2 text-sm text-sky-200 hover:border-white/20" href={citation.href}>{citation.title}</a>
+              <a className="block min-w-0 break-words rounded-lg border border-white/10 px-3 py-2 text-sm text-sky-200 hover:border-white/20 [overflow-wrap:anywhere]" href={citation.href}>{citation.title}</a>
             </li>
           ))}
         </ul>
