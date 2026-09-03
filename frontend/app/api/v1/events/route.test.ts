@@ -19,7 +19,7 @@ const EVENT: PublicEvent = {
   id: "evt18-api-test",
   slug: "api-test-event",
   title: "API test event",
-  publishedAt: "2025-05-01T12:00:00.000Z",
+  publishedAt: "2025-05-01T12:00:00+00:00",
   source: "test-source",
   sourceUrl: "https://example.com/event",
   primaryAsset: "BTC",
@@ -54,15 +54,28 @@ describe("GET /api/v1/events", () => {
     expect(mocks.listEvents).toHaveBeenCalledWith(expect.objectContaining({ asset: "BTC", limit: 1 }));
   });
 
-  it("emits and verifies a bounded cursor", async () => {
+  it("accepts its Supabase-format cursor with the same filters and without filters", async () => {
     mocks.listEvents.mockResolvedValueOnce({ items: [EVENT], hasMore: true });
-    const first = await getEvents(request("/api/v1/events?limit=1"));
+    const first = await getEvents(request("/api/v1/events?asset=BTC&category=etf&search=API&limit=1"));
     const cursor = (await first.json()).pagination.nextCursor;
     expect(cursor).toEqual(expect.any(String));
     mocks.listEvents.mockResolvedValueOnce({ items: [], hasMore: false });
-    const second = await getEvents(request(`/api/v1/events?limit=1&cursor=${encodeURIComponent(cursor)}`));
+    const second = await getEvents(request(`/api/v1/events?asset=BTC&category=etf&search=API&limit=1&cursor=${encodeURIComponent(cursor)}`));
     expect(second.status).toBe(200);
     expect(mocks.listEvents).toHaveBeenLastCalledWith(expect.objectContaining({
+      asset: "BTC",
+      category: "etf",
+      search: "API",
+      cursor: { id: EVENT.id, publishedAt: EVENT.publishedAt },
+    }));
+
+    mocks.listEvents.mockResolvedValueOnce({ items: [], hasMore: false });
+    const cursorOnly = await getEvents(request(`/api/v1/events?cursor=${encodeURIComponent(cursor)}`));
+    expect(cursorOnly.status).toBe(200);
+    expect(mocks.listEvents).toHaveBeenLastCalledWith(expect.objectContaining({
+      asset: null,
+      category: null,
+      search: "",
       cursor: { id: EVENT.id, publishedAt: EVENT.publishedAt },
     }));
   });
@@ -102,4 +115,3 @@ describe("GET /api/v1/events/{slug}", () => {
     await expect(missing.json()).resolves.toMatchObject({ error: { code: "EVENT_NOT_FOUND" } });
   });
 });
-

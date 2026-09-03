@@ -5,6 +5,8 @@ import type { ApiCursor } from "@/lib/api-v1/types";
 
 const MAX_CURSOR_LENGTH = 512;
 const EVENT_ID = /^[A-Za-z0-9_-]{1,96}$/u;
+const BASE64URL = /^[A-Za-z0-9_-]+$/u;
+const UTC_TIMESTAMP = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(?:Z|\+00:00)$/u;
 
 function signature(payload: string, secret: string): Buffer {
   return createHmac("sha256", secret).update(`cmr-api-v1-cursor:${payload}`, "utf8").digest();
@@ -12,8 +14,16 @@ function signature(payload: string, secret: string): Buffer {
 
 function validTimestamp(value: unknown): value is string {
   if (typeof value !== "string" || value.length < 20 || value.length > 32) return false;
-  const parsed = new Date(value);
-  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString() === value;
+  const match = UTC_TIMESTAMP.exec(value);
+  if (!match) return false;
+  const [, rawYear, rawMonth, rawDay, rawHour, rawMinute, rawSecond] = match;
+  const [year, month, day, hour, minute, second] = [rawYear, rawMonth, rawDay, rawHour, rawMinute, rawSecond].map(Number);
+  const leapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return year >= 1
+    && month >= 1 && month <= 12
+    && day >= 1 && day <= daysInMonth[month - 1]
+    && hour <= 23 && minute <= 59 && second <= 59;
 }
 
 export function encodeCursor(cursor: ApiCursor, secret: string): string {
@@ -27,6 +37,7 @@ export function decodeCursor(value: string | null, secret: string): ApiCursor | 
     if (value.length < 16 || value.length > MAX_CURSOR_LENGTH) throw new Error("invalid length");
     const parts = value.split(".");
     if (parts.length !== 2 || !parts[0] || !parts[1]) throw new Error("invalid shape");
+    if (!BASE64URL.test(parts[0]) || !BASE64URL.test(parts[1])) throw new Error("invalid encoding");
     const supplied = Buffer.from(parts[1], "base64url");
     const expected = signature(parts[0], secret);
     if (supplied.length !== expected.length || !timingSafeEqual(supplied, expected)) throw new Error("invalid signature");
@@ -38,4 +49,3 @@ export function decodeCursor(value: string | null, secret: string): ApiCursor | 
     throw new ApiV1Error(400, "INVALID_CURSOR", "cursor is invalid or has expired.");
   }
 }
-
