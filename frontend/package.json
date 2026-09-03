@@ -12,6 +12,7 @@
     "test": "vitest run",
     "smoke:browser": "node scripts/browser-smoke.mjs",
     "smoke:seo": "node scripts/seo-smoke.mjs",
+    "smoke:seo-final": "node scripts/seo-final-smoke.mjs",
     "smoke:security": "node scripts/access-security-smoke.mjs",
     "smoke:ai-search": "node scripts/ai-search-smoke.mjs",
     "smoke:ai-research-router": "node scripts/ai-research-router-smoke.mjs",
