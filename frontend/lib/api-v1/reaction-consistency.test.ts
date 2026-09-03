@@ -27,22 +27,27 @@ function event(id: string, title: string, sourceClass: AnalyticsEvent["sourceCla
 }
 
 class LocalPipelineAdapter implements AiSearchDataAdapter {
+  lastOverviewIntent: AiSearchIntent | null = null;
+
   constructor(private readonly events: AnalyticsEvent[]) {}
   async analyze(): Promise<AnalyticsResult> {
     throw new Error("Not used by API V1 reaction summaries");
   }
   async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
+    this.lastOverviewIntent = intent;
     return runMultiHorizonAnalytics(this.events, intent);
   }
 }
 
 describe("API V1 Reaction V2 consistency", () => {
   it("uses Topic Matching V2 and Dedup V3 sample sizes without recalculating reactions", async () => {
-    const service = new ApiV1ReactionService(new LocalPipelineAdapter([
+    const adapter = new LocalPipelineAdapter([
       event("first", "BlackRock Bitcoin ETF records $100m outflows", "primary_document", -1),
       event("second", "BlackRock Bitcoin ETF reports $100m outflows", "news_media", -2),
-    ]));
+    ]);
+    const service = new ApiV1ReactionService(adapter);
     const [row] = await service.query({ asset: "BTC", topic: "etf_outflow", horizon: "24h", dateFrom: null, dateTo: null, direction: null });
+    expect(adapter.lastOverviewIntent).toMatchObject({ asset: "BTC", horizon: "24h", topic: "etf_outflow" });
     expect(row).toMatchObject({
       matchedArticles: 2,
       independentEvents: 1,

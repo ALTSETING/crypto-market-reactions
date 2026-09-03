@@ -124,16 +124,17 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
 
   async analyzeOverview(intent: AiSearchIntent): Promise<MultiHorizonAnalyticsResult> {
     if (!intent.asset) throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Choose BTC, ETH or SOL.");
+    const allHorizons = intent.horizon === null;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), this.timeoutMs);
     try {
-      const countQuery = this.baseQuery(intent, "exact", true).limit(1).abortSignal(controller.signal);
+      const countQuery = this.baseQuery(intent, "exact", allHorizons).limit(1).abortSignal(controller.signal);
       const { error: countError, count } = await executeQuery(countQuery);
       if (countError) throw new Error(countError.message);
       if ((count ?? 0) > MAX_SCAN_ROWS) throw new AiSearchDataError("QUERY_TOO_BROAD", "Too many events match. Try a topic or date range.");
       const rows: ProductionRow[] = [];
       for (let from = 0; from < (count ?? 0); from += PAGE_SIZE) {
-        const page = this.baseQuery(intent, undefined, true)
+        const page = this.baseQuery(intent, undefined, allHorizons)
           .order("event_id", { ascending: true })
           .range(from, Math.min(from + PAGE_SIZE - 1, (count ?? 0) - 1))
           .abortSignal(controller.signal);
@@ -141,7 +142,7 @@ export class ProductionAiSearchDataAdapter implements AiSearchDataAdapter {
         if (error) throw new Error(error.message);
         rows.push(...((data ?? []) as unknown as ProductionRow[]));
       }
-      return runMultiHorizonAnalytics(this.rowsToEvents(rows, intent, true), intent);
+      return runMultiHorizonAnalytics(this.rowsToEvents(rows, intent, allHorizons), intent);
     } catch (error) {
       if (error instanceof AiSearchDataError) throw error;
       throw new AiSearchDataError("AI_DATA_UNAVAILABLE", "Historical analytics are temporarily unavailable.");

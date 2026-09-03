@@ -296,7 +296,7 @@ export class ApiV1ReactionService {
       sentiment: null,
       reactionSign: params.direction,
       importance: null,
-      horizon: null,
+      horizon: params.horizon,
       metric: "mean",
       sort: "newest",
       groupBy: "none",

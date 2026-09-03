@@ -5,7 +5,7 @@ import { parseReactionsQuery } from "@/lib/api-v1/validation";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 15;
+export const maxDuration = 30;
 
 export function GET(request: Request): Promise<Response> {
   return withApiV1(request, async () => {
