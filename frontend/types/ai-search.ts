@@ -234,11 +234,14 @@ export interface MultiHorizonAnalyticsResult {
     mean: number | null;
     median: number | null;
     positivePercent: number | null;
+    negativePercent: number | null;
+    neutralPercent: number | null;
     sampleSize: number;
     standardDeviation: number | null;
     standardError: number | null;
     trimmedMean5Percent: number | null;
     positive95Ci: { low: number; high: number } | null;
+    topicFilter?: TopicFilterSummary;
   }>;
   citations: AiCitation[];
   topicFilter?: TopicFilterSummary;

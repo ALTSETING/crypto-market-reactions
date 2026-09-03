@@ -21,6 +21,7 @@ function event(index, sourceType = "news_media") {
       ? "https://www.sec.gov/Archives/edgar/data/example"
       : "https://www.coindesk.com/example",
     source_type: sourceType,
+    source_class_v2: sourceType,
     primary_asset: "ETH",
     related_assets: ["ETH", "BTC"],
     category: "regulation",

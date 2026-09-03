@@ -15,6 +15,7 @@
     "smoke:security": "node scripts/access-security-smoke.mjs",
     "smoke:ai-search": "node scripts/ai-search-smoke.mjs",
     "smoke:ai-research-router": "node scripts/ai-research-router-smoke.mjs",
+    "smoke:api-v1": "node scripts/api-v1-smoke.mjs",
     "security:bundle": "node scripts/check-client-bundle.mjs"
   },
   "dependencies": {
