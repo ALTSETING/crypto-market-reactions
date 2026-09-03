@@ -203,14 +203,26 @@ export class ApiV1DataService {
   }
 
   async getEventBySlug(slug: string): Promise<PublicEvent | null> {
-    const cacheKey = `event:${slug}`;
+    return this.getEventByUniqueColumn("slug", slug, `event:${slug}`);
+  }
+
+  async getEventById(eventId: string): Promise<PublicEvent | null> {
+    return this.getEventByUniqueColumn("event_id", eventId, `event-id:${eventId}`);
+  }
+
+  private async getEventByUniqueColumn(
+    column: "event_id" | "slug",
+    value: string,
+    cacheKey: string,
+  ): Promise<PublicEvent | null> {
     const cached = this.readCache<PublicEvent | null>(cacheKey);
     if (cached !== undefined) return cached ? structuredClone(cached) : null;
     try {
       const { data, error } = await this.client
         .from("events")
         .select(API_EVENT_SELECT)
-        .eq("slug", slug)
+        .eq(column, value)
+        .limit(1)
         .maybeSingle();
       if (error) throw error;
       const result = data ? publicEvent(data as unknown as ApiEventRow, null) : null;

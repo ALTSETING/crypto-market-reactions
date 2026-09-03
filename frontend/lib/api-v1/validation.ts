@@ -23,6 +23,9 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
 const MAX_URL_LENGTH = 2_048;
 const MAX_SEARCH_LENGTH = 160;
 const MAX_DATE_SPAN_DAYS = 3_660;
+export const API_EVENT_ID_MAX_LENGTH = 96;
+export const API_EVENT_ID_PATTERN = "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$";
+const EVENT_ID_REFERENCE = new RegExp(API_EVENT_ID_PATTERN, "u");
 
 function invalid(message: string): never {
   throw new ApiV1Error(400, "INVALID_PARAMETER", message);
@@ -113,6 +116,13 @@ export function parseEventsQuery(request: Request): EventsApiQuery {
 export function assertNoQueryParameters(request: Request): void {
   const params = requestUrl(request).searchParams;
   if ([...params.keys()].length > 0) invalid("This endpoint does not accept query parameters.");
+}
+
+export function parseEventIdReference(value: string): string {
+  if (value.length > API_EVENT_ID_MAX_LENGTH || !EVENT_ID_REFERENCE.test(value)) {
+    invalid("eventId is invalid.");
+  }
+  return value;
 }
 
 export function parseReactionsQuery(request: Request): ReactionsApiQuery {

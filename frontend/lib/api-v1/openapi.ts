@@ -1,6 +1,7 @@
 import { AI_TOPICS } from "@/types/ai-search";
 import { ASSETS, EVENT_CATEGORIES, HORIZONS, SOURCE_TYPES } from "@/types/events";
 import { API_DIRECTIONS, API_MAX_LIMIT } from "@/lib/api-v1/types";
+import { API_EVENT_ID_MAX_LENGTH, API_EVENT_ID_PATTERN } from "@/lib/api-v1/validation";
 
 const errorResponse = {
   description: "Error",
@@ -175,6 +176,28 @@ export const OPENAPI_V1_SCHEMA = {
         operationId: "getEvent",
         parameters: [{ name: "slug", in: "path", required: true, schema: { type: "string", minLength: 1, maxLength: 180 } }],
         responses: { "200": { description: "One event", content: { "application/json": { schema: { type: "object", properties: { data: eventSchema } } } } }, "404": errorResponse, ...authenticatedErrors },
+      },
+    },
+    "/api/v1/events/by-id/{eventId}": {
+      get: {
+        operationId: "getEventById",
+        description: "Return at most one event using exact equality on the internal event ID primary key.",
+        parameters: [{
+          name: "eventId",
+          in: "path",
+          required: true,
+          description: "Internal event ID returned as data[].id by GET /api/v1/events.",
+          schema: { type: "string", minLength: 1, maxLength: API_EVENT_ID_MAX_LENGTH, pattern: API_EVENT_ID_PATTERN },
+        }],
+        responses: {
+          "200": { description: "One event", content: { "application/json": { schema: { type: "object", required: ["data"], properties: { data: eventSchema } } } } },
+          "400": errorResponse,
+          "401": errorResponse,
+          "404": errorResponse,
+          "429": errorResponse,
+          "500": errorResponse,
+          "503": errorResponse,
+        },
       },
     },
     "/api/v1/reactions": {

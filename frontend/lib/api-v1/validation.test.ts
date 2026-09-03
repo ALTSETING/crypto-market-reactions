@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { assertNoQueryParameters, parseEventsQuery, parseReactionsQuery } from "@/lib/api-v1/validation";
+import { assertNoQueryParameters, parseEventIdReference, parseEventsQuery, parseReactionsQuery } from "@/lib/api-v1/validation";
 import { ApiV1Error } from "@/lib/api-v1/errors";
 
 const request = (path: string) => new Request(`http://localhost${path}`);
@@ -37,5 +37,13 @@ describe("API V1 query validation", () => {
   it("rejects parameters on fixed metadata endpoints", () => {
     expect(() => assertNoQueryParameters(request("/api/v1/meta?fields=secrets"))).toThrowError(ApiV1Error);
     expect(() => assertNoQueryParameters(request("/api/v1/meta"))).not.toThrow();
+  });
+
+  it.each(["evt18-f8f02c2fa52c8b617f08", "bf3-1e87e26fd5d94c022992"])("accepts production event ID format %s", (eventId) => {
+    expect(parseEventIdReference(eventId)).toBe(eventId);
+  });
+
+  it.each(["", "../event", "event id", "event.id", "évent", "x".repeat(97)])("rejects malformed event ID reference %s", (eventId) => {
+    expect(() => parseEventIdReference(eventId)).toThrowError(ApiV1Error);
   });
 });

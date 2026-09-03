@@ -4,6 +4,7 @@ import type { PublicEvent } from "@/lib/api-v1/types";
 
 const mocks = vi.hoisted(() => ({
   listEvents: vi.fn(),
+  getEventById: vi.fn(),
   getEventBySlug: vi.fn(),
 }));
 
@@ -13,6 +14,7 @@ vi.mock("@/lib/api-v1/data", () => ({
 
 import { GET as getEvents } from "@/app/api/v1/events/route";
 import { GET as getEvent } from "@/app/api/v1/events/[slug]/route";
+import { GET as getEventById } from "@/app/api/v1/events/by-id/[eventId]/route";
 
 const API_KEY = "test-cmr-api-key-0123456789abcdef";
 const EVENT: PublicEvent = {
@@ -41,6 +43,7 @@ describe("GET /api/v1/events", () => {
   beforeEach(() => {
     process.env.CMR_API_KEY = API_KEY;
     mocks.listEvents.mockReset().mockResolvedValue({ items: [EVENT], hasMore: false });
+    mocks.getEventById.mockReset().mockResolvedValue(EVENT);
     mocks.getEventBySlug.mockReset().mockResolvedValue(EVENT);
   });
 
@@ -113,5 +116,57 @@ describe("GET /api/v1/events/{slug}", () => {
     expect(missing.status).toBe(404);
     expect(malformed.status).toBe(404);
     await expect(missing.json()).resolves.toMatchObject({ error: { code: "EVENT_NOT_FOUND" } });
+  });
+});
+
+describe("GET /api/v1/events/by-id/{eventId}", () => {
+  beforeEach(() => {
+    process.env.CMR_API_KEY = API_KEY;
+    mocks.getEventById.mockReset().mockResolvedValue(EVENT);
+    mocks.getEventBySlug.mockReset().mockResolvedValue(EVENT);
+  });
+
+  it("returns the same serialized event as the existing slug lookup", async () => {
+    const byId = await getEventById(request(`/api/v1/events/by-id/${EVENT.id}`), {
+      params: Promise.resolve({ eventId: EVENT.id }),
+    });
+    const bySlug = await getEvent(request(`/api/v1/events/${EVENT.slug}`), {
+      params: Promise.resolve({ slug: EVENT.slug }),
+    });
+    const idBody = await byId.json();
+    const slugBody = await bySlug.json();
+
+    expect(byId.status).toBe(200);
+    expect(bySlug.status).toBe(200);
+    expect(idBody.data).toEqual(slugBody.data);
+    expect(idBody.data).toMatchObject({ id: EVENT.id, slug: EVENT.slug, reactionV2: EVENT.reactionV2 });
+    expect(mocks.getEventById).toHaveBeenCalledWith(EVENT.id);
+  });
+
+  it("returns 404 for an unknown structurally valid event ID", async () => {
+    mocks.getEventById.mockResolvedValueOnce(null);
+    const eventId = "evt18-00000000000000000000";
+    const response = await getEventById(request(`/api/v1/events/by-id/${eventId}`), {
+      params: Promise.resolve({ eventId }),
+    });
+    expect(response.status).toBe(404);
+    await expect(response.json()).resolves.toMatchObject({ error: { code: "EVENT_NOT_FOUND" } });
+  });
+
+  it.each(["../bad", "event id", "x".repeat(97)])("returns 400 for invalid event ID %s", async (eventId) => {
+    const response = await getEventById(request(`/api/v1/events/by-id/${encodeURIComponent(eventId)}`), {
+      params: Promise.resolve({ eventId }),
+    });
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toMatchObject({ error: { code: "INVALID_PARAMETER" } });
+    expect(mocks.getEventById).not.toHaveBeenCalled();
+  });
+
+  it("rejects query parameters instead of turning the lookup into search", async () => {
+    const response = await getEventById(request(`/api/v1/events/by-id/${EVENT.id}?search=ETF`), {
+      params: Promise.resolve({ eventId: EVENT.id }),
+    });
+    expect(response.status).toBe(400);
+    expect(mocks.getEventById).not.toHaveBeenCalled();
   });
 });

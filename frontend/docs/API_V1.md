@@ -94,6 +94,10 @@ Response:
 
 Returns one event as `{ "data": { ... } }`. An unknown or malformed slug returns a real HTTP `404`, not a soft 404.
 
+### `GET /api/v1/events/by-id/{eventId}`
+
+Returns the same `{ "data": { ... } }` event representation using exact equality on the internal `event_id` primary key. Use the `id` returned by `GET /api/v1/events`; this endpoint does not accept search or pagination parameters and returns at most one row. IDs are opaque ASCII references, not UUIDs. A malformed reference returns `400`; a structurally valid unknown ID returns `404`.
+
 ### `GET /api/v1/reactions`
 
 This endpoint reads stored Reaction V2 values and invokes the existing deterministic `Topic Matching V2 → Dedup V3 → Reaction V2` analytics pipeline. It does not recalculate reactions and does not call OpenAI.
@@ -167,4 +171,3 @@ Errors never contain stack traces:
 HTTP statuses: `200` success, `400` invalid input or cursor, `401` missing/invalid key, `404` unknown event, `429` rate limit, and `503` unavailable server/data provider.
 
 The owner-key defaults are 60 requests per minute and 10,000 requests per day per running API instance. Responses include `RateLimit-*` and `X-Daily-*` headers. A `429` also includes `Retry-After`. Authentication and all error responses are `private, no-store`; historical success responses use short private cache headers and normalized server-side caches. No endpoint enables wildcard CORS.
-
